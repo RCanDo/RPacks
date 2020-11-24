@@ -1,32 +1,52 @@
-########################################################################################################################—•°
+## --------------------------------------------------------------------------------------------------------------------
 ## LOADER OF ALL PacksAK to the separate environments
-########################################################################################################################—•°
+## --------------------------------------------------------------------------------------------------------------------
 #rm(list=ls())     ## czyszczenie przestrzeni roboczej
-########################################################################################################################—•°
-#!   ################################################################################################—•°
-########################################################################################################################—•°
+## --------------------------------------------------------------------------------------------------------------------
 
-## LOADER FUNCTION #####################################################################################################—•°
-source_to_env <- function(files,path,env){
-   if(any(search()==env)) detach(env, unload=TRUE, character.only=TRUE)
+## --------------------------------------------------------------------------------------------------------------------
+## LOADER FUNCTION ----------------------------------------------------------------------------------------------------
+
+r_files_in_path_from_list <- function(files, path){
+## Finding R files in the given directory (`path``)
+## which names agree with those from a list (`files``)
+## where extensions in the `files` may be wrong (.R or .r)
+## or may not be present at all.
+   
+   files0 = gsub("\\.r", "", files, ignore.case = T)
+   
+   lf = list.files( path )
+   lfr = grep("\\.r$", lf, value = T, ignore.case = T)
+   lfr0 = gsub("\\.r", "", lfr, ignore.case = T)
+   lfr[lfr0 %in% files0]
+}   
+## Example for this file
+## path = file.path(PATH$packs, "DM")
+## r_files_in_path_from_list(files$DM, path)
+
+source_to_env <- function(files, path, env){
+   ## Proper loader function
+   if(any(search() == env)) detach(env, unload = TRUE, character.only = TRUE)
    env <- attach(NULL, name = env)
-   sapply( files, FUN = function(x) sys.source(paste(path,x,sep='/'),env) )
+   files = r_files_in_path_from_list(files, path)
+   sapply( files, FUN = function(f){ sys.source(file.path(path, f), env) })
    print(ls(env))
 }
-########################################################################################################################—•°
 
-########################################################################################################################—•°
+## --------------------------------------------------------------------------------------------------------------------
+
+## --------------------------------------------------------------------------------------------------------------------
 loadPacksAK <- local({
 
 ## the main suffix for the names of packs (proto-pack_names)
 sig = "AK"
 sep = "_"
 
-## FOLDERS #############################################################################################################—•°
+## FOLDERS ------------------------------------------------------------------------------------------------------------
 PATH$functions = list()
-PATH$functions[[sig]] = PATH$packs  ## from .GlobalEnv   —— demanded main packs directory
+PATH$functions[[sig]] = PATH$packs  ## from .GlobalEnv   ?? demanded main packs directory
 
-if(!exists("pack_names",where=.GlobalEnv)){
+if(!exists("pack_names", where=.GlobalEnv)){
 pack_names <- c( "ScoringOld"
                 , "DM"
                 , "StatMath"
@@ -42,25 +62,29 @@ pack_names <- c( "ScoringOld"
                ) }
 
 for(nam in pack_names){
-   PATH$functions[[nam]] <- paste(PATH$functions[[sig]],nam,sep="/")  ## specific packs subdirectories
+   ## specific packs subdirectories
+   PATH$functions[[nam]] <- file.path(PATH$functions[[sig]], nam)  
 }
 PATH$functions
 
-## PACKAGES ############################################################################################################—•°
+## PACKAGES -----------------------------------------------------------------------------------------------------------
 
 files = list()
 
-
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "ScoringOld"
 if(pack %in% pack_names){
 cat(pack,"\n")
 # cat(list.files(PATH$functions[[pack]]),sep="\"\n,\"")
-files[[pack]] = c("graf.r","pomocnicze_a.r","skupienia.r")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+files[[pack]] = c("graf.r", "pomocnicze_a.r", "skupienia.r")
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "DM"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -110,10 +134,14 @@ files[[pack]] = c(
 ,"whileif.R"
 ,"Write.R"
 )
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "StatMath"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -124,32 +152,46 @@ files[[pack]] = c("chisq.multi.test.r"
 ,"nulls.imput.r"
 ,"ranges.r"
 ,"transformations_a.R")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "Graphics"
 if(pack %in% pack_names){
 cat(pack,"\n")
 # cat(list.files(PATH$functions[[pack]]),sep="\"\n,\"")
-files[[pack]] = c("barplot.confint.R"
+files[[pack]] = c("windows.R"
+,"barplot.confint.R"
 ,"parGraphical.R"
 ,"plot.means.r"
 ,"univariate.models.plots.r")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+
+## --------------------------------------------------------
 pack <- "Variable"
 if(pack %in% pack_names){
 cat(pack,"\n")
 # cat(list.files(PATH$functions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("extract.variable.r"
 ,"plot.variable.r")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "Condapply"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -159,10 +201,14 @@ files[[pack]] = c("condapply.R"
 ,"create.logging.df.R"
 ,"transform.by.trans.list.r"
 ,"update.logging.df.R")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "SumMod"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -176,10 +222,14 @@ files[[pack]] = c(
 ,"misc.gam.panova.R"
 ,"moditem.create.R"
 ,"summary.gam.ak.R")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "EfficiencyCurves"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -208,10 +258,14 @@ files[[pack]] = c(
 ,"tlm.curves_by_groups.R"
 )
 library(gam)
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "RefineAssignment"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -223,10 +277,14 @@ files[[pack]] = c(#"make_assignment.R"
 ,"o2p1_sub2.R"
 #,"o2p1.R"
 ,"refine.assignment.R")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "Threshold"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -234,10 +292,14 @@ cat(pack,"\n")
 files[[pack]] = c("set.threshold.r"
 ,"thresh.aggr.table.r"
 ,"threshold.tables.r")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 pack <- "Split"
 if(pack %in% pack_names){
 cat(pack,"\n")
@@ -249,28 +311,40 @@ files[[pack]] = c("plot.split.r"
 ,"split.rand.nrows.R"
 ,"split.rand.portion.r"
 ,"split.stats.r")
-source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+source_to_env( 
+   files = files[[pack]],
+   path = PATH$functions[[pack]],
+   env = paste(pack, sig, sep=sep) 
+   )
 }
 
-###########################################################—•°
+## --------------------------------------------------------
 #cat(pack <- pack_names[11],"\n")  # = ""
 #cat(list.files(PATH$functions[[pack]]),sep="\"\n,\"")
 #files[[pack]] = c("")
 #source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep="") )
 
-########################################################################################################################—•°
+## --------------------------------------------------------------------------------------------------------------------
 cat("\n")
 print(search())
 
-sapply(paste(names(files),sig,sep=sep),function(x)rm(list=intersect(ls(x),ls(pos=1)),pos=1))
+## removing these functions from .GlobalEnv
+sapply(
+   paste(names(files), sig, sep=sep),
+   function(x) rm(list=intersect(ls(x), ls(pos=1)), pos=1)
+   )
 
 function( pack ){
-   source_to_env( files = files[[pack]] , path = PATH$functions[[pack]] , env = paste(pack,sig,sep=sep) )
+   # single pack reloader -- returned from the whole local({...})
+   source_to_env(
+      files = files[[pack]],
+      path = PATH$functions[[pack]],
+      env = paste(pack, sig, sep=sep) 
+      )
 }
 
 })
-########################################################################################################################—•°
-
+## --------------------------------------------------------------------------------------------------------------------
 
 #files = list(
 #Variable = c("extract.variable.r"

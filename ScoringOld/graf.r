@@ -59,6 +59,6 @@ wspzm <- wsp_zmiennosci(data.frame(
 dane[,zmienne.graf]
 ))
 
-Data.graf <- skupienia(M,r,nazwy,Y,wspzm,ver)   ##2 - jeœli nowa wersja, 1 - stara wersja
-list("wariancja" = variance, "korelacja zmiennych zaleznych" = M, "korelacja ze zmienn¹ objaœnian¹"=Y, "mean/dev" = wspzm, "summary" = summary(data.frame(dane[,zmienne.graf])))
+Data.graf <- skupienia(M,r,nazwy,Y,wspzm,ver)   ##2 - jesli nowa wersja, 1 - stara wersja
+list("wariancja" = variance, "korelacja zmiennych zaleznych" = M, "korelacja ze zmienna objasniana"=Y, "mean/dev" = wspzm, "summary" = summary(data.frame(dane[,zmienne.graf])))
 }

@@ -1,14 +1,14 @@
-########################################################################################################################•°
+########################################################################################################################??
 ## FUNCTIONS HERE
 ##  plot.variable()
 ##
 ## DEPENDENCIES
 ##
-########################################################################################################################•°
+########################################################################################################################??
 plot.variable = function( variable
 		, as.factor = FALSE
       , FUN = function(x)x
-      , what = c("hist","ecdf","density","cloud","bars","cvs")
+      , what = c("hist", "ecdf", "density", "cloud", "bars", "cvs")
       , pch = "." , cex = 1
       , coldef = "black"
       , breaks = NULL         ## breaks for histogram or bar plot
@@ -29,7 +29,7 @@ plot.variable = function( variable
       , inherits = TRUE
 )
 {
-########################################################################################################################•°
+########################################################################################################################??
 ## Basic plots for the given variable at one window with common scale and value breaks;
 ## mainly in order to localize extreme observations.
 ## If however  user.window = TRUE  then all plots will be drawn on externally defined window
@@ -46,7 +46,7 @@ plot.variable = function( variable
 ##                        Moreover, you may also turn the 'variable' into a factor via FUN writing as.facator(x) within the body of FUN.
 ##  FUN = function(x)x    variable may be transformed before plotting with the function FUN;
 ##                        Notice that 'as.factor' is applied before FUN.
-##  what = c("hist","ecdf","density","cloud","bars","cvs")     
+##  what = c("hist", "ecdf", "density", "cloud", "bars", "cvs")     
 ##                        types of plot:
 ##           "hist"       histogram
 ##           "bars"       barplot
@@ -84,8 +84,8 @@ plot.variable = function( variable
 ##								  for which "Sturges" breaks are default;
 ##  idx = NULL            indices of variable and cvs.covariate to be used as a common selection of theirs values;
 ##                        if NULL then idx = 1:length(variable)
-##  envir = 1             argument passed to get( ,envir ) thus relevant only when variable to plot is passed as character;
-##  inherits = TRUE       argument passed to get( ,inherits ) thus relevant only when variable to plot is passed as character;
+##  envir = 1             argument passed to get( , envir ) thus relevant only when variable to plot is passed as character;
+##  inherits = TRUE       argument passed to get( , inherits ) thus relevant only when variable to plot is passed as character;
 ##
 ##  If the variable is a factor then only bar plot is drawn 
 ##  and all options are ignored except 
@@ -93,11 +93,11 @@ plot.variable = function( variable
 ##  user.window   as described above.
 ##
 ## No value returned.
-########################################################################################################################•°
+########################################################################################################################??
 
 if(is.character(variable)){
    var.name = variable
-   variable = get(variable,envir=if(is.numeric(envir)){as.environment(envir)}else{envir},inherits=TRUE)
+   variable = get(variable, envir=if(is.numeric(envir)){as.environment(envir)}else{envir}, inherits=TRUE)
 }else{
    var.name = if(!missing(variable)){deparse(substitute(variable))}
 }
@@ -112,7 +112,7 @@ variable = variable[!is.na.variable]
 
 if( is.null(xlab)){ xlab = var.name }
 
-## if(length(unique(variable))==1){    stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+## if(length(unique(variable))==1){    stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
 
 if( is.numeric(as.factor) ){
   as.factor = as.factor >= length(unique(variable))
@@ -124,7 +124,7 @@ if( is.logical(as.factor) ){
 
 if(! (is.factor(variable)|is.numeric(variable)) ){
   variable = as.factor(variable)
-  warning("Variable '",var.name,"' is neither numeric nor factor and it is coerced to factor.
+  warning("Variable '", var.name, "' is neither numeric nor factor and it is coerced to factor.
   It is sensible for class 'character' but in case of 'date' or 'time' it may be not what you have expected.
   Nonetheless date/time classes are not supported yet. To be repaired soon!")
 }
@@ -137,15 +137,15 @@ variable = FUN(variable)
 if( is.factor(variable) ){
 ###___factor___###  
 
-  plot.fac = function(variable,xlab,cex){ #,pch,breaks,breaks.lines,xlim=xlim){
-	#      if(length(unique(variable))==1){  stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+  plot.fac = function(variable, xlab, cex){ #, pch, breaks, breaks.lines, xlim=xlim){
+	#      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
 		##
       b = length(levels(variable))
-      if(b>1024){variable = variable[sample(1:b,1024)]; b=1024}
-      palette( rainbow( max(b,2) ) )
+      if(b>1024){variable = variable[sample(1:b, 1024)]; b=1024}
+      palette( rainbow( max(b, 2) ) )
       plot( variable #table(variable)  #, freq=TRUE
               #, names.arg = 1:b #, las = 2
-              , xlab=xlab       #,pch = pch , cex = cex
+              , xlab=xlab       #, pch = pch , cex = cex
               , ylab = "counts"
               , col=b:1
               , cex.names = cex
@@ -159,12 +159,12 @@ if( is.factor(variable) ){
   if(!user.window){
     b = length(levels(variable))
     old = par()
-    windows(height=4,width=max(b*.1,4) )
+    windows(height=4, width=max(b*.1, 4) )
     marginsMy();
     coldef(coldef)  
   }
   
-  plot.fac(variable,var.name,cex)
+  plot.fac(variable, var.name, cex)
 
 }else{
 ###___numeric___###
@@ -178,12 +178,12 @@ if( is.factor(variable) ){
       breaks = "Sturges"      ## "Sturges" are default breaks for hist()
   }else if(is.numeric(breaks) & length(breaks)>1){
       rv = range(variable)
-      if(min(breaks)>rv[1]){ breaks = c(rv[1],breaks) }
-      if(max(breaks)<rv[2]){ breaks = c(breaks,rv[2]) }
+      if(min(breaks)>rv[1]){ breaks = c(rv[1], breaks) }
+      if(max(breaks)<rv[2]){ breaks = c(breaks, rv[2]) }
   }
 
   if(!(is.numeric(breaks) & length(breaks)>1)){
-    breaks = hist(variable,plot=FALSE,breaks=breaks)$breaks
+    breaks = hist(variable, plot=FALSE, breaks=breaks)$breaks
   }
 
   if(is.null(xlim)){xlim = range(variable)}
@@ -192,7 +192,7 @@ if( is.factor(variable) ){
   
     if( length(layout) >= 2 & is.numeric(layout) ){
       h = layout[1]; w = layout[2];
-      what = what[ 1:min(lw,h*w) ] 
+      what = what[ 1:min(lw, h*w) ] 
       lw=length(what)
     }else if(lw==0){ stop("Option 'what' is empty -- no type of plot selected. 
       Possible values of 'what' are \"hist\",\"ecdf\",\"density\",\"cloud\",\"bars\",\"cvs\". 
@@ -204,34 +204,34 @@ if( is.factor(variable) ){
     }else if(lw>=5){ if(horizontal){  h = 2 ; w = 3 }else{  h = 3 ; w = 2 } }
   
     old = par()
-    windows(height=plot.height*h+1,width=plot.width*w+1)
+    windows(height=plot.height*h+1, width=plot.width*w+1)
     marginsMy();
     coldef(coldef) ## coldef("black")
-    par(mfrow = c(h,w),oma=c(0,0,1.5,0))
+    par(mfrow = c(h, w), oma=c(0, 0, 1.5, 0))
   
   }
 
-  if(any(c("hist","bars")%in%what)){
-      var.tab <- table(cut(variable,breaks,include.lowest = TRUE))   ## to be printed
+  if(any(c("hist", "bars")%in%what)){
+      var.tab <- table(cut(variable, breaks, include.lowest = TRUE))   ## to be printed
   }
  ## print(var.tab)
   
-  plot.hist = function(variable,xlab,pch,cex,breaks,breaks.lines,xlim=xlim,col=col){
-		#      if(length(unique(variable))==1){  stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+  plot.hist = function(variable, xlab, pch, cex, breaks, breaks.lines, xlim=xlim, col=col){
+		#      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
       b = length(breaks)-1
-      palette(rainbow(max(b,2)))
-      hist(variable,freq=TRUE , xlab=xlab ,pch = pch , cex = cex, col=b:1, breaks=breaks
-           ,main = "histogram")
+      palette(rainbow(max(b, 2)))
+      hist(variable, freq=TRUE , xlab=xlab , pch = pch , cex = cex, col=b:1, breaks=breaks
+           , main = "histogram")
       palette("default")
   }
   
-  plot.bars = function(variable,xlab,pch,cex,breaks,breaks.lines,xlim=xlim,col=col){
-		#      if(length(unique(variable))==1){  stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+  plot.bars = function(variable, xlab, pch, cex, breaks, breaks.lines, xlim=xlim, col=col){
+		#      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
       b = length(breaks)-1
-      palette(rainbow(max(b,2)))
+      palette(rainbow(max(b, 2)))
       barplot( var.tab , space=0 #, freq=TRUE
               , names.arg = 1:length(breaks[-1]) #, las = 2
-              , xlab=xlab       #,pch = pch , cex = cex
+              , xlab=xlab       #, pch = pch , cex = cex
               , ylab = "counts"
               , col=b:1
               #, xlim=xlim
@@ -265,11 +265,11 @@ if( is.factor(variable) ){
 	}else{cvs.covariate.mark <- FALSE}
 
 	############################################################################################
-  plot.cvs = function(variable,xlab,pch,cex,breaks,breaks.lines,xlim=xlim,col=col){
+  plot.cvs = function(variable, xlab, pch, cex, breaks, breaks.lines, xlim=xlim, col=col){
   ## counts versus sum within groups
-   	#      if(length(unique(variable))==1){  stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+   	#      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
       b = length(breaks)-1
-      palette(rainbow(max(b,2)))
+      palette(rainbow(max(b, 2)))
 		if(cvs.covariate.mark){
 			x.name = cvs.covar.name
 			##
@@ -277,88 +277,88 @@ if( is.factor(variable) ){
 				  variable = variable[!idx.na.covariate]
          cvs.covariate = cvs.covariate[!idx.na.covariate]
 			##
-	      	breaks.var = cut(variable,breaks,include.lowest = TRUE)
+	      	breaks.var = cut(variable, breaks, include.lowest = TRUE)
 	      	var.tab = table(breaks.var)
-			sum.tab = tapply(cvs.covariate,breaks.var,sum)
+			sum.tab = tapply(cvs.covariate, breaks.var, sum)
 	      	sum.tab[is.na(sum.tab)] = 0
 		}else{
 			x.name = var.name
 			##
-	      	breaks.var = cut(variable,breaks,include.lowest = TRUE)
+	      	breaks.var = cut(variable, breaks, include.lowest = TRUE)
 	      	var.tab = table(breaks.var)
-	      sum.tab = tapply(variable,breaks.var,sum)
+	      sum.tab = tapply(variable, breaks.var, sum)
 	      	sum.tab[is.na(sum.tab)] = 0
 		}
 		##
-     plot( as.numeric(var.tab)~as.numeric(sum.tab), xlab= paste0("sum of ",x.name," within group")
+     plot( as.numeric(var.tab)~as.numeric(sum.tab), xlab= paste0("sum of ", x.name, " within group")
               , pch = 15 , cex = 2*cex
               , ylab = "counts"
               , col = b:1
-              , xlim = c(0,max(as.numeric(sum.tab))*1.05)
-              , ylim = c(0,max(as.numeric(var.tab))*1.05)
+              , xlim = c(0, max(as.numeric(sum.tab))*1.05)
+              , ylim = c(0, max(as.numeric(var.tab))*1.05)
            )
      #text(as.numeric(var.tab)~as.numeric(sum.tab), labels=1:b)
      ##
      if(is.null(title)){title = "counts ~ sum"}  ;  graphics::title(title)
      ##
      palette("default")
-     # abline(h=c(0,1),col="gray")
-     # if(breaks.lines){ abline(v=breaks,lty=3,col="grey")  }
+     # abline(h=c(0, 1), col="gray")
+     # if(breaks.lines){ abline(v=breaks, lty=3, col="grey")  }
   }
   
-  plot.ecdf = function(variable,xlab,pch,cex,breaks,breaks.lines,xlim=xlim,col=col){
-	  #      if(length(unique(variable))==1){  stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+  plot.ecdf = function(variable, xlab, pch, cex, breaks, breaks.lines, xlim=xlim, col=col){
+	  #      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
      n = length(variable)
      yy = (1:n)/n
      sort.v = sort(variable)
-     plot(yy~sort.v, type="n" ,xlab=xlab ,pch = pch , cex = cex, ylab = "probability",xlim=xlim)
+     plot(yy~sort.v, type="n" , xlab=xlab , pch = pch , cex = cex, ylab = "probability", xlim=xlim)
      ##
      if(is.null(title)){title = "distribution"}  ;  graphics::title(title)
      ##
       b = length(breaks)-1
-      palette(rainbow(max(b,2)))
-     abline(h=c(0,1),col="gray")
-     if(breaks.lines){ abline(v=breaks[-1],lty=3,col=b:1) ; abline(v=breaks[1],lty=3,col="darkgrey") }
+      palette(rainbow(max(b, 2)))
+     abline(h=c(0, 1), col="gray")
+     if(breaks.lines){ abline(v=breaks[-1], lty=3, col=b:1) ; abline(v=breaks[1], lty=3, col="darkgrey") }
         palette("default")
-     points(yy~sort.v, xlab=xlab ,pch = pch , cex = cex, ylab = "probability",xlim=xlim)
+     points(yy~sort.v, xlab=xlab , pch = pch , cex = cex, ylab = "probability", xlim=xlim)
   }
   
-  plot.density = function(variable,xlab,pch,cex,breaks,breaks.lines,xlim=xlim,col=col){
-      if(length(unique(variable))==1){
-			warning("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.")
+  plot.density = function(variable, xlab, pch, cex, breaks, breaks.lines, xlim=xlim, col=col){
+    if(length(unique(variable))==1){
+			warning("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.")
 			plot(variable, type = "n");
 		}else{
 		  d.v = density(variable)
         ##
-	     plot(d.v$y ~ d.v$x , type="n" , xlab=xlab , ylab = "density",xlim=xlim)
+	     plot(d.v$y ~ d.v$x , type="n" , xlab=xlab , ylab = "density", xlim=xlim)
         ##
 	      b = length(breaks)-1
 	      palette(rainbow(b))
-	      if(breaks.lines){ abline(v=breaks[-1],lty=3,col=b:1) ; abline(v=breaks[1],lty=3,col="darkgrey") }
+	      if(breaks.lines){ abline(v=breaks[-1], lty=3, col=b:1) ; abline(v=breaks[1], lty=3, col="darkgrey") }
 	         palette("default")
-	     lines(d.v$y ~ d.v$x ,  xlab=xlab , ylab = "density",xlim=xlim)
+	     lines(d.v$y ~ d.v$x ,  xlab=xlab , ylab = "density", xlim=xlim)
 		}
       if(is.null(title)){title = "density"}  ;  graphics::title(title)
   }
   
-  plot.cloud = function(variable,xlab,pch,cex,breaks,breaks.lines,xlim=xlim,col=col){
-     #      if(length(unique(variable))==1){  stop("Variable '",var.name,"' has only one value and it is not sensible to draw its plot.") }
+  plot.cloud = function(variable, xlab, pch, cex, breaks, breaks.lines, xlim=xlim, col=col){
+     #      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
      plot( 1:length(variable) ~ variable, type = "n"
-           , xlab=xlab ,pch = pch , cex = cex, ylab = "ID number",xlim=xlim)
+           , xlab=xlab , pch = pch , cex = cex, ylab = "ID number", xlim=xlim)
      ##
      if(is.null(title)){title = "cloud"}  ;  graphics::title(title)
      ##
      if(is.null(col)){ col = par()$fg }
       b = length(breaks)-1
-            ###cat(breaks,"\n",b,"\n")
-      palette(rainbow(max(b,2)))
-      if(breaks.lines){ abline(v=breaks[-1],col=b:1) ; abline(v=breaks[1],col="darkgrey")}
+            ###cat(breaks, "\n", b, "\n")
+      palette(rainbow(max(b, 2)))
+      if(breaks.lines){ abline(v=breaks[-1], col=b:1) ; abline(v=breaks[1], col="darkgrey")}
          palette("default")
-     points( 1:length(variable) ~ variable, xlab=xlab ,pch = pch , cex = cex
-            , ylab = "ID number",xlim=xlim , col = col)#[!is.na(variable)])
+     points( 1:length(variable) ~ variable, xlab=xlab , pch = pch , cex = cex
+            , ylab = "ID number", xlim=xlim , col = col)#[!is.na(variable)])
   }
   
-  what = paste0("plot.",what)
+  what = paste0("plot.", what)
   
   l = quote( funkcja( variable
                           , xlab = xlab
@@ -371,11 +371,11 @@ if( is.factor(variable) ){
   for(wh in what){  l[[1]] = as.name(wh);  eval(l)  }
   
   if(is.null(main)){ main = var.name }
-  mtext(main,outer=TRUE)
+  mtext(main, outer=TRUE)
 
 }
 
-if(!is.null(breaks))cat("breaks = c(",paste(breaks,collapse=","),")",sep="");cat("\n")
+if(!is.null(breaks))cat("breaks = c(", paste(breaks, collapse=", "), ")", sep="");cat("\n")
 if(!is.null(var.tab))print(var.tab)
 
 if(!user.window){ suppressWarnings(par(old)) }
@@ -396,16 +396,16 @@ dummy = function(){
 
 
 # 1 histogram
-   #hist.all = hist(X,plot = FALSE)
+   #hist.all = hist(X, plot = FALSE)
 #   hist.list = lapply( X.gbs, function(x){ hist(x, breaks = hist.all$breaks, plot = FALSE)$counts} )
 #   barplot( rbind(hist.all$counts, hist.list$`1`, hist.list$`0` ),
 #            beside = TRUE,
-#            col = c("darkgrey","darkgreen","red"),
-#            names.arg = signif(hist.all$breaks[-length(hist.all$breaks)],3),
+#            col = c("darkgrey", "darkgreen", "red"),
+#            names.arg = signif(hist.all$breaks[-length(hist.all$breaks)], 3),
 #            xlab=var.names[1],
 #            ylab = "counts")
-#   legend("topright", legend=c("all","goods","bads"), col = c("darkgrey","darkgreen","red"), pch=15)
-#   title(paste0(var.names[1]," -- histogram"))
+#   legend("topright", legend=c("all", "goods", "bads"), col = c("darkgrey", "darkgreen", "red"), pch=15)
+#   title(paste0(var.names[1], " -- histogram"))
 
 ## distribution function
 #plot(1:n ~ variable , pch = ".")
@@ -416,24 +416,24 @@ dummy = function(){
 #
 #
 #   plot( d~sort(X), col="grey", pch=".", xlab=var.names[1], ylab="distribution")
-#   lines(d1~v1,col="darkgreen", pch=".")
-#   lines(d0~v0,col="red", pch=".")
-#   abline(h=c(0,1),col="darkgrey")
-#   title(paste0(var.names[1]," ~ ",var.names[2]))
+#   lines(d1~v1, col="darkgreen", pch=".")
+#   lines(d0~v0, col="red", pch=".")
+#   abline(h=c(0, 1), col="darkgrey")
+#   title(paste0(var.names[1], " ~ ", var.names[2]))
 #
 #     # 3
 #      xx = order(X)
-#   plot(CzyDobra~X,pch=".",xlab=var.names[1], ylab=var.names[2])
-#   lines(predict(mod.l,type="response")[xx] ~ X[xx],col=5,lwd=2)
-#   lines(predict(mod.a,type="response")[xx] ~ X[xx],col=6)
-#   title(paste0(var.names[2]," ~ ",var.names[1]))
+#   plot(CzyDobra~X, pch=".", xlab=var.names[1], ylab=var.names[2])
+#   lines(predict(mod.l, type="response")[xx] ~ X[xx], col=5, lwd=2)
+#   lines(predict(mod.a, type="response")[xx] ~ X[xx], col=6)
+#   title(paste0(var.names[2], " ~ ", var.names[1]))
 #
 #   # 4
-#   plot(skutecznosc~X, xlab=var.names[1], ylab=var.names[3], pch=pch ,cex = cex);
-#   abline(h=c(0,1),col="grey")
-#   lines(predict(mod.lsf,type="response")[xx] ~ X[xx],col=5,lwd=2)
-#   lines(predict(mod.asf,type="response")[xx] ~ X[xx],col=6)
-#   title(paste0(var.names[3]," ~ ",var.names[1]))
+#   plot(skutecznosc~X, xlab=var.names[1], ylab=var.names[3], pch=pch , cex = cex);
+#   abline(h=c(0, 1), col="grey")
+#   lines(predict(mod.lsf, type="response")[xx] ~ X[xx], col=5, lwd=2)
+#   lines(predict(mod.asf, type="response")[xx] ~ X[xx], col=6)
+#   title(paste0(var.names[3], " ~ ", var.names[1]))
 #
 
 

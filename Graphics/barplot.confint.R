@@ -1,4 +1,4 @@
-barplot.confint = function(x,y,main=NULL,namx=NULL,namy=NULL,...){
+barplot.confint = function(x, y, main=NULL, namx=NULL, namy=NULL,...){
 ########################################################################################################################
 ## Draws a barplot with confidence intervalse for the values of coefficients in the model
 ##    lm( y ~ x )
@@ -27,34 +27,34 @@ stop("'y' must be numeric.")
 
 
 if(is.null(main)){
-   main = paste(namy,namx,sep=" ~ ")
+   main = paste(namy, namx, sep=" ~ ")
 }
 
 model = lm(y~x)
-   coeff = model$coeff ; coeff = coeff[1] + c(0,coeff[-1])
-   stderrs = summary(model)$coeff[,2]
+   coeff = model$coeff ; coeff = coeff[1] + c(0, coeff[-1])
+   stderrs = summary(model)$coeff[, 2]
    upper = coeff+2*stderrs
    lower = coeff-2*stderrs
 
 m = length(coeff)
 
-   ylim = c(min(0,lower),max(0,upper))
+   ylim = c(min(0, lower), max(0, upper))
 
 
-mp = barplot( tapply(y,x,mean) , main = main , xlab = namx , ylab = namy
+mp = barplot( tapply(y, x, mean) , main = main , xlab = namx , ylab = namy
              , ylim = ylim , ... )
 
 mp = as.vector(mp)
 span = diff(mp[1:2])/2
 
-lines( c(mp[1]-span,mp[m]+span) , rep(mean(y),2) , col = "red" )
+lines( c(mp[1]-span, mp[m]+span) , rep(mean(y), 2) , col = "red" )
 
 points( mp , lower , pch = "-" , cex=2 , col="red" )
 points( mp , upper , pch = "-" , cex=2 , col="red" )
 
 for( k in 1:length(coeff) ){
 
-   lines( rep(mp[k],2) , c(lower[k],upper[k]) , col="red" )
+   lines( rep(mp[k], 2) , c(lower[k], upper[k]) , col="red" )
 
 }
 

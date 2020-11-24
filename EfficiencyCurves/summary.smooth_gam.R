@@ -1,6 +1,6 @@
-########################################################################################################################—•°
+########################################################################################################################???
 ## summary() and print() methods for "smooth_gam"
-########################################################################################################################—•°
+########################################################################################################################???
 ## FUNCTIONS HERE    {EfficienyCurves}
 ##  print.smooth_gam()
 ##  summary.smooth_gam()
@@ -16,19 +16,19 @@
 ## REMARKS/WARNINGS
 ##
 ## TODO
-## •
+## ?
 ##
 ## DESCRIPTION
 ##  The aim, the idea, problems, solutions... briefly!, concerning the whole set of functions
 ##
-####################################################################################################—•°
+####################################################################################################???
 ## AUTHOR: Arkadiusz Kasprzyk; akasp@...
 ## ver. 1.0
 ## PATH: D:\ROBOCZY\...
 ## start: 2017-03-01    last: 2017-10-08
-########################################################################################################################—•°
+########################################################################################################################???
 
-########################################################################################################################—•°
+########################################################################################################################???
 print.smooth_gam = function( sg  ## object of class "smooth_gam"
                            #, messages = coalesce(getOption("messages"),TRUE)
                            , round = 3
@@ -36,9 +36,9 @@ print.smooth_gam = function( sg  ## object of class "smooth_gam"
                            , round.attr = TRUE
                            , ...
                            ) {
-###################################################################################################—•°
+###################################################################################################???
 ##
-###################################################################################################—•°
+###################################################################################################???
 cat("object of class \"",paste(class(sg),collapse="\", \""),"\"\n",sep="")      # ???
 
 indentr( unclass(sg) , vsep=1 , add="models_list"
@@ -47,7 +47,7 @@ indentr( unclass(sg) , vsep=1 , add="models_list"
          ## this is no problem as print() methods ignore irrelevant arguments! GREAT!
 
 }  ##----END----##
-########################################################################################################################—•°
+########################################################################################################################???
 dummy = function(){
 
 sgcbg[]
@@ -58,13 +58,13 @@ indent(sgcbg$models_list)
 };rm(dummy)
 
 
-########################################################################################################################—•°
+########################################################################################################################???
 summary.smooth_gam = function( sg  ## object of class "smooth_gam"
                            , as_rows = FALSE
                            , messages = TRUE
                            , round = NULL
                            ) {
-########################################################################################################################—•°
+########################################################################################################################???
 
 colsums <- function(x){ if(is.null(dim(x))){x}else{colSums(x)} }
 
@@ -86,9 +86,9 @@ group_sums.df <- data.frame(
    )
 
 
-newMessage(group_sums.df) <- Message("counts","Sums for groups — total number of counts for each group.")
-newMessage(group_sums.df) <- Message("trials","Sums for groups — total number of trials for each group.")
-newMessage(group_sums.df) <- Message("successes","Sums for groups — total number of successes for each group.")
+newMessage(group_sums.df) <- Message("counts","Sums for groups - total number of counts for each group.")
+newMessage(group_sums.df) <- Message("trials","Sums for groups - total number of trials for each group.")
+newMessage(group_sums.df) <- Message("successes","Sums for groups - total number of successes for each group.")
 
 messages.df <- messages(group_sums.df)
 
@@ -98,7 +98,7 @@ if(!is.null(sg$weights_groups)){
 
 group_sums.df <- cbind( group_sums.df
    , efficiencies = colsums(sg$efficiencies[,rownames(group_sums.df)])  #!#! this is exception, the only matrix where
-                           ##! the 'Sum' (in case  net_curve=F)  or  'net_curve' (in case  net_curve=T — default)
+                           ##! the 'Sum' (in case  net_curve=F)  or  'net_curve' (in case  net_curve=T ? default)
                            ##! is fixed column not a tm() derivative;  What's the reason behind it?!
                            ##! Because 'Sum' in 'efficiencies' (or 'net_curve') is NOT a sum of rows (or columns) BUT
                            ##! efficiencies derived from sums of rows (or columns) of 'successes' and 'trials'.
@@ -108,8 +108,8 @@ group_sums.df <- cbind( group_sums.df
    )
 
 
-newMessage(messages.df) <- Message("efficiencies","Sums for groups — total efficiency for each group.")
-newMessage(messages.df) <- Message("smoothed_curves","Sums for groups — total efficiency from smoothed curves for each group.")
+newMessage(messages.df) <- Message("efficiencies","Sums for groups - total efficiency for each group.")
+newMessage(messages.df) <- Message("smoothed_curves","Sums for groups - total efficiency from smoothed curves for each group.")
 
 
 if(!is.null(sg$arguments$lengthen)){
@@ -119,7 +119,7 @@ if(!is.null(sg$arguments$lengthen)){
                          ## messages are lost!
    ##
    newMessage(messages.df) <- Message( "smoothed_curves_len"
-                           , "Sums for groups — total efficiency from smoothed and lengthened curves for each group." )
+                           , "Sums for groups - total efficiency from smoothed and lengthened curves for each group." )
 }
 
 if(sg$arguments$method == "cumulated"){
@@ -128,9 +128,9 @@ if(sg$arguments$method == "cumulated"){
                          , smoothed_curves_cum = as.vector(tail(sg$smoothed_curves_cum,1))
                          )
    ##
-   ## newMessage(group_sums.df) <- Message( "successes_cum" , "(last row — equal to 'trials' if 'trials' were not passed)")
+   ## newMessage(group_sums.df) <- Message( "successes_cum" , "(last row ? equal to 'trials' if 'trials' were not passed)")
    newMessage(messages.df) <- Message( "smoothed_curves_len"
-                                     , "Last row — total efficiency from smoothed curves for each group." )
+                                     , "Last row - total efficiency from smoothed curves for each group." )
 }
 
 if( !sg$arguments$net_curve ){
@@ -157,12 +157,12 @@ class(result) <- "summary.smooth_gam"
 result
 
 }  ##----END----##
-########################################################################################################################—•°
+########################################################################################################################???
 
-########################################################################################################################—•°
+########################################################################################################################???
 print.summary.smooth_gam = function( ssg  ## object of class "summary.smooth_gam"
                            , ... ){
-########################################################################################################################—•°
+########################################################################################################################???
 
 #      mat.names = c("trials","successes","efficiency","weights_times","weights_curves","smoothed_curves")
 
@@ -213,28 +213,28 @@ indentr( unclass(ssg) , vsep=1 , ... )
 #}
 
 }  ##----END----##
-########################################################################################################################—•°
+########################################################################################################################???
 
 
-########################################################################################################################—•°
-## EXAMPLES ############################################################################################################—•°
-########################################################################################################################—•°
+########################################################################################################################???
+## EXAMPLES ############################################################################################################???
+########################################################################################################################???
 
-########################################################################################################################—•°
+########################################################################################################################???
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-##############################################################################################—•°
+##############################################################################################???
 
- ## RELOADER —— before it works you need to source("PacksAK.R"); it's best to use EfficiencyCurves.R within pack's dir.
+ ## RELOADER ?? before it works you need to source("PacksAK.R"); it's best to use EfficiencyCurves.R within pack's dir.
  loadPacksAK("EfficiencyCurves")
 
-##############################################################################################—•°
+##############################################################################################???
 
 ## Examples of using print.smooth_gam() are in the Help part of  smooth_gam.R
 
 }
-########################################################################################################################—•°
+########################################################################################################################???
 rm(dummy)

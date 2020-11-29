@@ -134,7 +134,7 @@ if(is.numeric(id)){
 
    }else if(! id %in% 1:length(datfram)){
 
-      stop("Value of 'id', wich is ",id,", is out of bound 1:ncol(datfram).")
+      stop("Value of 'id', wich is ", id, ", is out of bound 1:ncol(datfram).")
 
    }else{
 
@@ -148,7 +148,7 @@ if(is.numeric(id)){
 
    names.datfram = names(datfram)  #! all columns together with ID variable
    if(!any(names.datfram%in%id)){
-   	stop("There is no variable in input data frame having name \"",id,"\".")    ##"
+   	stop("There is no variable in input data frame having name \"", id, "\".")    ##"
    }
    id.pos = which(names.datfram == id)
 
@@ -162,8 +162,8 @@ if(is.numeric(id)){
 
 #################################################
 ## needed for retrieving order and rownames #####
-id.var = datfram[,id]	#<=>#  id.var = var2vec(datfram,id)
-rownams = rownames(datfram) ; names(rownams) = id.var		#<=>#	rownams = var2vec(datfram,variable=0,names=id.var)
+id.var = datfram[, id]	#<=>#  id.var = var2vec(datfram, id)
+rownams = rownames(datfram) ; names(rownams) = id.var		#<=>#	rownams = var2vec(datfram, variable=0, names=id.var)
 #################################################
 ## By the way:
 if(any(table(id.var)>1)){warning("Some values in ID variable are not unique! Result is unpredictable!")}
@@ -241,14 +241,14 @@ if( join == "outer" ){
 #######################################################################################
 j = which( names.datfram %in% names.data )  ## j >= 1 because ID variable is always in both data frames (with the same name)
    											#print(names.datfram[j])
-names.common = names.datfram[setdiff(j,id.pos)]  ## without ID -- may be empty
-											## names.datfram[j] == c(id,names.common)
+names.common = names.datfram[setdiff(j, id.pos)]  ## without ID -- may be empty
+											## names.datfram[j] == c(id, names.common)
                                    # print(j)
                                    # print(names.common)
-                                   # print(setdiff(j,id.pos))
-classes = as.list(sapply(datfram[,c(id,names.common),drop=FALSE],class))  ## never empty - ID always exists
+                                   # print(setdiff(j, id.pos))
+classes = as.list(sapply(datfram[, c(id, names.common), drop=FALSE], class))  ## never empty - ID always exists
    #print(classes)
-levs = lapply( datfram[,c(id,names.common),drop=FALSE] , levels )
+levs = lapply( datfram[, c(id, names.common), drop=FALSE] , levels )
    #print(levs)
 #######################################################################################
 
@@ -272,29 +272,29 @@ if(length(j)>1){
 
 	}else if(action == "replace"){
 
-                                # print(datfram[,-setdiff(j,id.pos),drop=FALSE])
+                                # print(datfram[,-setdiff(j, id.pos), drop=FALSE])
 
-		datfram = merge( datfram[,-setdiff(j,id.pos),drop=FALSE] , data.df , by = id , all.x = all.x , all.y = all.y )   ##, all.x = TRUE	)
+		datfram = merge( datfram[,-setdiff(j, id.pos), drop=FALSE] , data.df , by = id , all.x = all.x , all.y = all.y )   ##, all.x = TRUE	)
 
       names.data = setdiff( names.data , names.datfram[-id.pos] )
 
 	}else if(action == "update"){  ## replace + filling NAs for nonmatching records of datfram
 
-                                # print(datfram[,-setdiff(j,id.pos),drop=FALSE])
+                                # print(datfram[,-setdiff(j, id.pos), drop=FALSE])
 
-      if( join %in% c("left","outer")){  ## preparation to fill NAs for nonmatching records of
+      if( join %in% c("left", "outer")){  ## preparation to fill NAs for nonmatching records of
 
-        id.notin.data.df = ! id.var %in% data.df[,id]
+        id.notin.data.df = ! id.var %in% data.df[, id]
 
-        datfram.tofill = datfram[ id.notin.data.df , setdiff(j,id.pos) , drop=FALSE ]   #!#!  ID is here  #!#!
+        datfram.tofill = datfram[ id.notin.data.df , setdiff(j, id.pos) , drop=FALSE ]   #!#!  ID is here  #!#!
 
       }
 
 		if(na.omit){
-			datfram.old = datfram[,j]
+			datfram.old = datfram[, j]
 		}
 
-		datfram = merge( datfram[,-setdiff(j,id.pos),drop=FALSE] , data.df , by = id , all.x = all.x , all.y = all.y )   ##, all.x = TRUE	)
+		datfram = merge( datfram[,-setdiff(j, id.pos), drop=FALSE] , data.df , by = id , all.x = all.x , all.y = all.y )   ##, all.x = TRUE	)
 
       names.data = setdiff( names.data , names.datfram[-id.pos] )                #!#!  ID is here  #!#!
 
@@ -317,21 +317,21 @@ if(length(j)>1){
 
 ## retrieving original order and rownames of 'datfram' with new records (if they appear) at the end
 ## 1.
-rownames(datfram) = datfram[,id]    ## ID variable may have new elements
+rownames(datfram) = datfram[, id]    ## ID variable may have new elements
                                     ## if some names(data) do not match ID variable values from original 'datfram' and
                                     ## all = TRUE (default)  in  merge(...)
 ## 2.
   ## df.old
-id.in  = id.var %in% datfram[,id]
+id.in  = id.var %in% datfram[, id]
 id.var.in = as.character(id.var[id.in])
 df.old  = datfram[ id.var.in , ]        ## order of the first argument is preserved
   rownames(df.old) = rownams[ id.in ]
 
                                   ## print(j)
 
-if( action == "update" && join %in% c("left","outer") && length(j)>1 ){ #){  ## filling NAs for nonmatching records
+if( action == "update" && join %in% c("left", "outer") && length(j)>1 ){ #){  ## filling NAs for nonmatching records
 	for(nam_k in names(datfram.tofill)){
-    values_k = datfram.tofill[,nam_k]
+    values_k = datfram.tofill[, nam_k]
         #print(values_k)
     if(is.factor(values_k)){
       df.old[ , nam_k ] <- as.character( df.old[ , nam_k ] )
@@ -344,12 +344,12 @@ if( action == "update" && join %in% c("left","outer") && length(j)>1 ){ #){  ## 
 }
 
 ## df.new
-df.new  = datfram[ as.character( intersect( setdiff( data.df[,id], id.var ) , datfram[,id] ) ), ]
+df.new  = datfram[ as.character( intersect( setdiff( data.df[, id], id.var ) , datfram[, id] ) ), ]
                           ## rownames of df.new are equal to these names(data) which didn't match ID variable from 'datfram'
                           ## if however rownames(datfram) were not used as ID variable then some values may repeat but should be
                           ## automatically adjusted by rbind() by adding some suffix ???
 ## 3.
-datfram = rbind(df.old,df.new)
+datfram = rbind(df.old, df.new)
 
 ## 4.
     # print(datfram)
@@ -371,9 +371,9 @@ if(rm.id){    ##  iff  id == 0  i.e. when using rownames(datfram)
   names(datfram)[which( names(datfram)==id )[1] ] = id.old
 }
 
-names.datfram.final = c(names.datfram,names.data)
+names.datfram.final = c(names.datfram, names.data)
 
-datfram = datfram[,names.datfram.final]  ## now all names of datfram are retrieved to original in the original order
+datfram = datfram[, names.datfram.final]  ## now all names of datfram are retrieved to original in the original order
 
 ######################################################################################
 ## if "update" and na.omit = TRUE -- refilling NAs from 'data' when they've overwritten proper values in 'datfram'
@@ -388,19 +388,19 @@ if( action == "update" && na.omit && length(names.common)>0 ){
          #print(nam_k)
 
       if(rm.id){    ##  iff  id == 0
-        idx_k = ( rownames(datfram) %in% id.var.in )  &  is.na(datfram[,nam_k])
+        idx_k = ( rownames(datfram) %in% id.var.in )  &  is.na(datfram[, nam_k])
       }else{
-        idx_k = ( datfram[,id.old] %in% id.var.in )  &  is.na(datfram[,nam_k])
+        idx_k = ( datfram[, id.old] %in% id.var.in )  &  is.na(datfram[, nam_k])
       }
 
         #print(idx_k)
 
       rownams_k = rownames(datfram)[idx_k]
-      if(is.factor(datfram.old[,nam_k])){
-         datfram[,nam_k] = as.character(datfram[,nam_k])
-         datfram[rownams_k,nam_k] = as.character(datfram.old[rownams_k,nam_k])
+      if(is.factor(datfram.old[, nam_k])){
+         datfram[, nam_k] = as.character(datfram[, nam_k])
+         datfram[rownams_k, nam_k] = as.character(datfram.old[rownams_k, nam_k])
       }else{
-         datfram[rownams_k,nam_k] = datfram.old[rownams_k,nam_k]
+         datfram[rownams_k, nam_k] = datfram.old[rownams_k, nam_k]
       }
 
    }
@@ -409,14 +409,14 @@ if( action == "update" && na.omit && length(names.common)>0 ){
 ######################################################################################
 ## retrieveing classes, especially factors
 ##
-## print(names(classes)) ;  print(names(datfram)) ;   print(intersect(names(classes),names(datfram)))
+## print(names(classes)) ;  print(names(datfram)) ;   print(intersect(names(classes), names(datfram)))
 
-for(nam_k in intersect(names(classes),names(datfram))){
+for(nam_k in intersect(names(classes), names(datfram))){
    ##  print(nam_k)
    class_k = classes[[nam_k]]
    if("factor" %in% class_k){
-         uniq_k = unique(datfram[,nam_k]) ; uniq_k = uniq_k[!is.na(uniq_k)]
-         datfram[,nam_k] = factor( datfram[,nam_k] , levels  = union( levs[[nam_k]] , uniq_k )
+         uniq_k = unique(datfram[, nam_k]) ; uniq_k = uniq_k[!is.na(uniq_k)]
+         datfram[, nam_k] = factor( datfram[, nam_k] , levels  = union( levs[[nam_k]] , uniq_k )
                                                    , ordered = "ordered" %in% class_k  )
    } ## else if("character" %in% class_k){ } ## not necessary
 }
@@ -425,7 +425,7 @@ for(nam_k in intersect(names(classes),names(datfram))){
 ## retrieveing attributes of datfram
 
 attributes(datfram) = c( attributes(datfram)
-                       , datfram0.attr[setdiff(datfram0.attr.names,names(attributes(datfram)))]  )
+                       , datfram0.attr[setdiff(datfram0.attr.names, names(attributes(datfram)))]  )
 
 class(datfram) <- union( class(datfram) , datfram0.attr[["class"]] ) 
 
@@ -454,69 +454,69 @@ df1 = data.frame( aa = sample(1:6)
                 , bb = 4:9
                 , cc = sample(4:9)+10
                 , dd = sample(letters[1:6])
-                , ee = sample(LETTERS[1:6],6, replace = TRUE)
+                , ee = sample(LETTERS[1:6], 6, replace = TRUE)
                 )
 df1
-   sapply(df1,class)
+   sapply(df1, class)
 
 ( v1 = sample(1:6)+100 )
-update.df(df1,v1)           ## rownames(df1) used as ID variable, and order of v1 preserved because
+update.df(df1, v1)           ## rownames(df1) used as ID variable, and order of v1 preserved because
                             ## in df1 and v1 an order of elements is an identifier
-   sapply(update.df(df1,v1),class)
-update.df(df1,v1,variable="variable") ## you may set a name for a variable different from a vector name
-update.df(df1,v1,id="aa")  ## now order of v1 is conformed to "aa" variable in df1
+   sapply(update.df(df1, v1), class)
+update.df(df1, v1, variable="variable") ## you may set a name for a variable different from a vector name
+update.df(df1, v1, id="aa")  ## now order of v1 is conformed to "aa" variable in df1
 
 
 v2 = v1; names(v2) = sample(1:6)  ## ordering different from names
   v2
-merge(df1,v2,by=0) ## this is how merge() works : joining according to [row]names of both objects, that's OK, BUT:
+merge(df1, v2, by=0) ## this is how merge() works : joining according to [row]names of both objects, that's OK, BUT:
                    ## variable has automatic name, rownames are not inherited but added as a variable Row.names
                    ## order of df1 not preserved and new one given (but it is not clear what order) -- see example below
-merge(df1,v1,by=0) ## works too with element's positions as names(v1) (v1 has no names)
-update.df(df1,v2)  ## name of variable preserved, rownames(df2) preserved and are not added to data frame
-update.df(df1,v2,id="aa")
+merge(df1, v1, by=0) ## works too with element's positions as names(v1) (v1 has no names)
+update.df(df1, v2)  ## name of variable preserved, rownames(df2) preserved and are not added to data frame
+update.df(df1, v2, id="aa")
 
 ## different types of JOINS (using rownames and names)
-update.df(df1,v2,join="left")  ## default is join = "left"  (datfram OUTER JOIN data)
+update.df(df1, v2, join="left")  ## default is join = "left"  (datfram OUTER JOIN data)
 ## all other joins will give the same result ( set of [row]names is the same for both objects )
-update.df(df1,v2,join="right")
-update.df(df1,v2,join="outer")
-update.df(df1,v2,join="inner")
+update.df(df1, v2, join="right")
+update.df(df1, v2, join="outer")
+update.df(df1, v2, join="inner")
 
 ##############################################
 
 df2 = df1; rownames(df2) = sample(101:106)
   df2 ; v2
-merge(df2,v2,by=0) ## empty data.frame
-merge(df2,v2,by.x="aa") ## ERROR! there's no "aa" in v2
-merge(df2,v2,by.x="aa",by.y=0) ## this is what you need using merge() ;
+merge(df2, v2, by=0) ## empty data.frame
+merge(df2, v2, by.x="aa") ## ERROR! there's no "aa" in v2
+merge(df2, v2, by.x="aa", by.y=0) ## this is what you need using merge() ;
                                ## however, notice the order of rows and what the rownames are...
                                ## it is not what you may expect and may be really annoying
-update.df(df2,v2,id="aa")  ## this works!  only (always) [row]names of v2 are considered -- this makes things sometimes easier
+update.df(df2, v2, id="aa")  ## this works!  only (always) [row]names of v2 are considered -- this makes things sometimes easier
 									## rownames of the df2 preserved and rows' order too
-   sapply(update.df(df2,v2,id="aa"),class)
+   sapply(update.df(df2, v2, id="aa"), class)
 
 ##############################################
 ## no common names(v2) with rownames(df2)
    df2 ; v2
-update.df(df2,v2)    ## it's OK
-   sapply(update.df(df2,v2),class)
-   	merge(df2,v2) ## == CROSS JOIN
-		merge(df2,v2,by=0) ## = INNER JOIN
-   merge(df2,v2,by=0, all.x=TRUE, all.y=FALSE) ## = LEFT JOIN ;
+update.df(df2, v2)    ## it's OK
+   sapply(update.df(df2, v2), class)
+   	merge(df2, v2) ## == CROSS JOIN
+		merge(df2, v2, by=0) ## = INNER JOIN
+   merge(df2, v2, by=0, all.x=TRUE, all.y=FALSE) ## = LEFT JOIN ;
                                     ## OK, but rownames changed while the old one bacame a new variable...
                                     ## records' order has changed too
 
-update.df(df2,v2,join="left")   ## default is join = "left"  (datfram LEFT JOIN data)
-	merge(df2,v2,by=0, all.x=TRUE, all.y=FALSE)  ## but rownames from v2 which is y in resulting table
-update.df(df2,v2,join="inner")  ## no common values of ID variables ( (row)names in this case)
-	merge(df2,v2,by=0, all.x=FALSE, all.y=FALSE) ## dafault for merge()
-update.df(df2,v2,join="outer")  ##  "
-	merge(df2,v2,by=0, all.x=TRUE, all.y=TRUE)  ## notice the rownames
-      sapply(update.df(df2,v2,join="outer"),class)  ## OK
-update.df(df2,v2,join="right")  ##  "
-	merge(df2,v2,by=0, all.x=FALSE, all.y=TRUE) ##
-      sapply(update.df(df2,v2,join="right"),class)  ## OK
+update.df(df2, v2, join="left")   ## default is join = "left"  (datfram LEFT JOIN data)
+	merge(df2, v2, by=0, all.x=TRUE, all.y=FALSE)  ## but rownames from v2 which is y in resulting table
+update.df(df2, v2, join="inner")  ## no common values of ID variables ( (row)names in this case)
+	merge(df2, v2, by=0, all.x=FALSE, all.y=FALSE) ## dafault for merge()
+update.df(df2, v2, join="outer")  ##  "
+	merge(df2, v2, by=0, all.x=TRUE, all.y=TRUE)  ## notice the rownames
+      sapply(update.df(df2, v2, join="outer"), class)  ## OK
+update.df(df2, v2, join="right")  ##  "
+	merge(df2, v2, by=0, all.x=FALSE, all.y=TRUE) ##
+      sapply(update.df(df2, v2, join="right"), class)  ## OK
 
 
 ##############################################
@@ -524,110 +524,108 @@ df1 ; v2
 ## no common entries of names(v2) with df1$cc
 ##
 #!#!#!#!#! NOT GOOD :
-update.df(df1,v2,id="cc",join="outer")              ## == OUTER JOIN
+update.df(df1, v2, id="cc", join="outer")              ## == OUTER JOIN
 #!#!#! This is some problem: cc got names(v2) for records obtained from v2
 ## while rownames for this records are not equal to names(v2)
 ##  (1 was appended to them as suffix because rownames must be unique
 ##  and otherwise they would be the same as rownames for records of df1).
-      sapply(update.df(df1,v2,join="outer"),class)  ## OK
+      sapply(update.df(df1, v2, join="outer"), class)  ## OK
 ##
-update.df(df1,v2,id="cc",join="inner") ## == INNER JOIN
-update.df(df1,v2,id="cc",join="left")  ## == LEFT JOIN
+update.df(df1, v2, id="cc", join="inner") ## == INNER JOIN
+update.df(df1, v2, id="cc", join="left")  ## == LEFT JOIN
 #!#!#! rownames not changed BUT cc column with values inherited from names(v2)
-update.df(df1,v2,id="cc",join="right") ## == RIGHT JOIN
+update.df(df1, v2, id="cc", join="right") ## == RIGHT JOIN
   ## cc got values but it rather should not.
 #!#!#!#!#!#!#!#!#!#!#! How to mend it? Is it really so bad? Maybe there is nothing to do with it?
-      sapply(update.df(df1,v2,join="right"),class)  ## OK
+      sapply(update.df(df1, v2, join="right"), class)  ## OK
 
   ## by the way
-  rbind(df2,df2,df2)    ## notice how rownames changes
-  rbind(df2,rbind(df2,df2))
+  rbind(df2, df2, df2)    ## notice how rownames changes
+  rbind(df2, rbind(df2, df2))
 
 ##############################################
 ## ID as letters
 ##
 df3 = df2 ; rownames(df3) = sample(letters[11:16])
   df3
-  rbind(df3,df2)   ## notice the rownames
-   sapply(rbind(df3,df2),class)
+  rbind(df3, df2)   ## notice the rownames
+   sapply(rbind(df3, df2), class)
 ##
 v3 = v2; names(v3) = sample(letters[11:16])
    df3 ; v3
-update.df(df3,v3,join="outer") ## == OUTER JOIN
-update.df(df3,v3,join="inner") ## == INNER JOIN
-update.df(df3,v3,join="left")  ## == LEFT  JOIN
-update.df(df3,v3,join="right") ## == RIGHT JOIN
+update.df(df3, v3, join="outer") ## == OUTER JOIN
+update.df(df3, v3, join="inner") ## == INNER JOIN
+update.df(df3, v3, join="left")  ## == LEFT  JOIN
+update.df(df3, v3, join="right") ## == RIGHT JOIN
 ## all the same
-      sapply(update.df(df3,v3,join="right"),class)  ## OK
+      sapply(update.df(df3, v3, join="right"), class)  ## OK
 
 
-   sapply(df3,class)
+   sapply(df3, class)
 #!#!#!#!#! NOT GOOD :
 #! the same "problem" as before
-(df0 = update.df(df3,v3,id="dd",join="outer") ) ## == OUTER JOIN
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df3,v3,id="dd",join="inner") ) ## == INNER JOIN
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df3,v3,id="dd",join="left") ) ## == LEFT  JOIN
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df3,v3,id="dd",join="right") ) ## == RIGHT JOIN
-   sapply(df0,class) ; lapply(df0,levels)
+(df0 = update.df(df3, v3, id="dd", join="outer") ) ## == OUTER JOIN
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df3, v3, id="dd", join="inner") ) ## == INNER JOIN
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df3, v3, id="dd", join="left") ) ## == LEFT  JOIN
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df3, v3, id="dd", join="right") ) ## == RIGHT JOIN
+   sapply(df0, class) ; lapply(df0, levels)
 #!#!#!#!#!#!#!#!#!#!#! How to mend it? Maybe there is nothing to do with it?
 
 
 ## mixture
 v4 = v3; names(v4) = sample(letters[14:19])
   df3 ; v4
-  intersect(rownames(df3),names(v4))  ## 3 common ID values
-(df0 = update.df(df3,v4,join = "outer") ) ## == OUTER JOIN ; order of df3 prevails !!!
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df3,v4,join = "left") )  ## == LEFT JOIN
-(df0 = update.df(df3,v4,join = "right") ) ## == RIGHT JOIN
-(df0 = update.df(df3,v4,join = "inner") ) ## == INNER JOIN
+  intersect(rownames(df3), names(v4))  ## 3 common ID values
+(df0 = update.df(df3, v4, join = "outer") ) ## == OUTER JOIN ; order of df3 prevails !!!
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df3, v4, join = "left") )  ## == LEFT JOIN
+(df0 = update.df(df3, v4, join = "right") ) ## == RIGHT JOIN
+(df0 = update.df(df3, v4, join = "inner") ) ## == INNER JOIN
 
 v5=v1;names(v5) = sample(letters[4:9]) ; v5
-  intersect(df3[,"dd"],names(v5))  ## 3 common ID values
-(df0 = update.df(df3,v5,id="dd",join = "outer") ) ## == OUTER JOIN ; order of df3 prevails
-   sapply(df0,class) ; lapply(df0,levels)
-  ## cc got values for records from v5  and  rownames for these records are not exactly the same as names(v5) -- it cannot be mended!
-update.df(df3,v5,id="dd",join = "left")   ## == LEFT  JOIN
-update.df(df3,v5,id="dd",join = "right")  ## == RIGHT JOIN
-  ## cc got names for records from v5 which do not match any df3$cc values; rownames for these records have also changed
-update.df(df3,v5,id="dd",join = "inner")  ## == INNER JOIN
+  intersect(df3[, "dd"], names(v5))  ## 3 common ID values
+(df0 = update.df(df3, v5, id="dd", join = "outer") ) ## == OUTER JOIN ; order of df3 prevails
+   sapply(df0, class) ; lapply(df0, levels)
+update.df(df3, v5, id="dd", join = "left")   ## == LEFT  JOIN
+update.df(df3, v5, id="dd", join = "right")  ## == RIGHT JOIN
+update.df(df3, v5, id="dd", join = "inner")  ## == INNER JOIN
 
 ##############################################
 df3 ; v4
 
-update.df(df3,v4)
-update.df(df3,v4,variable = "variable")
-update.df(df3,v4,variable = "aa")
-update.df(df3,v4,variable = "aa",action = "replace") ## we have lost values for records with no match
-update.df(df3,v4,variable = "aa",action = "update") ##
-update.df(df3,v4,variable = "aa",action = "update",join = "right") ##
-update.df(df3,v4,variable = "aa",action = "update",join = "outer") ##
-update.df(df3,v4,variable = "aa",action = "update",join = "inner") ##
+update.df(df3, v4)
+update.df(df3, v4, variable = "variable")
+update.df(df3, v4, variable = "aa")
+update.df(df3, v4, variable = "aa", action = "replace") ## we have lost values for records with no match
+update.df(df3, v4, variable = "aa", action = "update") ##
+update.df(df3, v4, variable = "aa", action = "update", join = "right") ##
+update.df(df3, v4, variable = "aa", action = "update", join = "outer") ##
+update.df(df3, v4, variable = "aa", action = "update", join = "inner") ##
 
 ##############################################
 ##############################################
 ## two data frames
-(df0 = update.df(df1,df1))    ## just repeated columns,  join according to rownames
-   sapply(df0,class)
-update.df(df1,df1,id = "aa")   ## check it carefully : df1 a LEFT JOIN df1 b ON a.aa = b.rownames
+(df0 = update.df(df1, df1))    ## just repeated columns,  join according to rownames
+   sapply(df0, class)
+update.df(df1, df1, id = "aa")   ## check it carefully : df1 a LEFT JOIN df1 b ON a.aa = b.rownames
   ## joined df1 (this on the right) has the same order as
   df1[df1$aa,]
 ##
 ## function is asymetric
 df2 ; df1
-(df0 = update.df(df2,df1,id = "aa") )  ##
-   sapply(df0,class)
-(df0 = update.df(df1,df2,id = "aa") )  ## default join is "left" and there is no common df1$aa with rownames(df2)
-   sapply(df0,class)
-(df0 = update.df(df1,df2,id = "aa", join = "outer") )  ##
-   sapply(df0,class)
-(df0 = update.df(df1,df2,id = "aa", join = "right") )  ##  "problem" with ID variable for nonmatching records of the the second argument
-   sapply(df0,class)
-(df0 = update.df(df1,df2,id = "aa", join = "inner") )  ##
-   sapply(df0,class)
+(df0 = update.df(df2, df1, id = "aa") )  ##
+   sapply(df0, class)
+(df0 = update.df(df1, df2, id = "aa") )  ## default join is "left" and there is no common df1$aa with rownames(df2)
+   sapply(df0, class)
+(df0 = update.df(df1, df2, id = "aa", join = "outer") )  ##
+   sapply(df0, class)
+(df0 = update.df(df1, df2, id = "aa", join = "right") )  ##  "problem" with ID variable for nonmatching records of the second argument
+   sapply(df0, class)
+(df0 = update.df(df1, df2, id = "aa", join = "inner") )  ##
+   sapply(df0, class)
 
 ##
 df1
@@ -639,16 +637,16 @@ df1
                    )
   df11 ; df1
 
-update.df(df1,df11)
+update.df(df1, df11)
 ##
-intersect(df11$dd,rownames(df1))
-update.df(df11,df1,id="dd")       #! warning comes from names2id() used internally -- maybe should be supressed ???
-(df0 = update.df(df11,df1,id=4) )         ##  "
-   sapply(df0,class)
+intersect(df11$dd, rownames(df1))
+update.df(df11, df1, id="dd")       #! warning comes from names2id() used internally -- maybe should be supressed ???
+(df0 = update.df(df11, df1, id=4) )         ##  "
+   sapply(df0, class)
 
 ##
 ## default action is "append" (the safest one, which do not change any value in a 'datfram', only appends new variables)
-update.df( df11 , df1 , id=4 , variable = 1 , action = "append" )  ## only first varaiable of df1 is used
+update.df( df11 , df1 , id=4 , variable = 1 , action = "append" )  ## only first variable of df1 is used
    #! In case of two data frames parameter 'variable' is not a new name for variable (vector passed two 'data')
    ## but names or numeric positions of variables of 'data' which have to be considered while updating 'datfram'.
    ## Their names will not be changed provided they do not interfere with names of 'datfram' in which case
@@ -674,7 +672,7 @@ update.df( df11 , df1 , id=4 , variable = 1 , action = "replace" , join = "inner
 df11 ; df1
 ## "replace"  -- danger option -- we completely lose old values
 (df0 = update.df( df11 , df1 , id=4 , variable = 1:3 , action = "update" ) ) #! notice how cc changed !!!
-  sapply(df0,class) ; lapply(df0,levels)       #! class of a variable is retained from 'datfram', here 'df11'
+  sapply(df0, class) ; lapply(df0, levels)       #! class of a variable is retained from 'datfram', here 'df11'
 ##
 update.df( df11 , df1 , id=4 , variable = 1:3 , action = "update" , join = "outer")  ## new values appear only for matching records
 update.df( df11 , df1 , id=4 , variable = 1:3 , action = "update" , join = "right")  ## new values appear only for matching records
@@ -683,40 +681,40 @@ update.df( df11 , df1 , id=4 , variable = 1:3 , action = "update" , join = "inne
 ## go back to factors
 class(df11$cc) ; as.numeric(df11$cc) ## factor values are stored as integers !!!
 df12 = df11 ; df12$cc = as.character(df11$cc)  ## now cc is character variable not a factor
-df12 ; sapply(df12,class)
+df12 ; sapply(df12, class)
 ##
 (df0 = update.df( df12 , df1 , id=4 , variable = 1:3 , action = "update" ) ) ## notice how cc has changed !!!
-  sapply(df0,class) ; lapply(df0,levels)       #! class of a variable is retained from 'datfram', here 'df11'
+  sapply(df0, class) ; lapply(df0, levels)       #! class of a variable is retained from 'datfram', here 'df11'
 ## now the new values are inserted as characters:
 df0$cc   ## new cc is also character
 
 ##################
 ## na.omit
-df1 ;   sapply(df1,class) ; lapply(df1,levels)
-v5 = c("a","a",NA,NA,"z","")
-(df0 = update.df(df1,v5) )
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df1,v5,variable = "dd") )
-   sapply(df0,class) ; lapply(df0,levels)
-(df0=update.df(df1,v5,variable = "dd",action="update"))
-   sapply(df0,class) ; lapply(df0,levels)            ## class of 'dd' is retained from df1
-(df0 = update.df(df1,v5,variable = "dd",action="update",na.omit=TRUE) )
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df1,v5,id="bb",variable = "dd",action="update",na.omit=TRUE) )
-   sapply(df0,class) ; lapply(df0,levels)
+df1 ;   sapply(df1, class) ; lapply(df1, levels)
+v5 = c("a", "a", NA, NA, "z", "")
+(df0 = update.df(df1, v5) )
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df1, v5, variable = "dd") )
+   sapply(df0, class) ; lapply(df0, levels)
+(df0=update.df(df1, v5, variable = "dd", action="update"))
+   sapply(df0, class) ; lapply(df0, levels)            ## class of 'dd' is retained from df1
+(df0 = update.df(df1, v5, variable = "dd", action="update", na.omit=TRUE) )
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df1, v5, id="bb", variable = "dd", action="update", na.omit=TRUE) )
+   sapply(df0, class) ; lapply(df0, levels)
 
 
 v6 = as.factor(v5) ; v6
-(df0 = update.df(df1,v6) )
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df1,v6,variable = "dd") )
-   sapply(df0,class) ; lapply(df0,levels)
-(df0=update.df(df1,v6,variable = "dd",action="update"))
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df1,v6,variable = "dd",action="update",na.omit=TRUE) )
-   sapply(df0,class) ; lapply(df0,levels)
-(df0 = update.df(df1,v6,id="bb",variable = "dd",action="update",na.omit=TRUE) )
-   sapply(df0,class) ; lapply(df0,levels)
+(df0 = update.df(df1, v6) )
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df1, v6, variable = "dd") )
+   sapply(df0, class) ; lapply(df0, levels)
+(df0=update.df(df1, v6, variable = "dd", action="update"))
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df1, v6, variable = "dd", action="update", na.omit=TRUE) )
+   sapply(df0, class) ; lapply(df0, levels)
+(df0 = update.df(df1, v6, id="bb", variable = "dd", action="update", na.omit=TRUE) )
+   sapply(df0, class) ; lapply(df0, levels)
 
 #############################################################################################
 ## More on 'variable'
@@ -733,9 +731,9 @@ data1 = data.frame( aa = sample(1:6)
                 )
 data1
 
-update.df(df1,data1)      ## "aa", "bb", "cc" of df1 remained unchanged while "aa", "bb", "cc" of data1 appended whith numeric suffixes
+update.df(df1, data1)     ## "aa", "bb", "cc" of df1 remained unchanged while "aa", "bb", "cc" of data1 appended whith numeric suffixes
                           ## and "pp", "qq", "rr" appended
-update.df(df1,data1,action="update")  ## "aa", "bb", "cc" replaced and "pp", "qq", "rr" appended
+update.df(df1, data1, action="update")  ## "aa", "bb", "cc" replaced and "pp", "qq", "rr" appended
 
 
 #############################################################################################
@@ -744,10 +742,10 @@ update.df(df1,data1,action="update")  ## "aa", "bb", "cc" replaced and "pp", "qq
 
 df1 ; df11
 ## 1. you need to update variable df1$cc with values of df11$bb  according to ID df1$aa
-update.df(df1,df11[,"bb"],id="aa",variable="cc",action="update")   ## OK , cc was updated (replaced in fact)
+update.df(df1, df11[, "bb"], id="aa", variable="cc", action="update")   ## OK , cc was updated (replaced in fact)
 
 ## 2. BUT IF you try replacing ID variable:
-update.df(df1,df11[,"bb"],id="aa",variable="aa",action="update")   #!#! ID variable cannot be replaced
+update.df(df1, df11[, "bb"], id="aa", variable="aa", action="update")   #!#! ID variable cannot be replaced
 ###############################
 ## when you try to replace ID variable
 update.df( df11 , df1 , id=4 , variable = 1:4 , action = "update" )  ## notice how cc has changed !!!
@@ -759,17 +757,15 @@ update.df( df11 , df1 , id=4 , variable = 1:4 , action = "update" )  ## notice h
 
 ## 3. reordering one of the variables according to order given by the another
 ##    e.g. df1$dd according to df1$aa
-update.df( df1 , df1[,"dd"] , id="aa" , variable="dd" , action="update" )    ## OK
+df1
+update.df( df1 , df1[, "dd"] , id="aa" , variable="dd" , action="update" )    ## OK
 ## BUT   df1$dd according to df1$bb
-update.df( df1 , df1[,"dd"] , id="bb" , variable="dd" , action="update" )    ## OK
-update.df( df1 , df1[,"dd"] , id="bb" , variable="dd" , action="replace" )   ## OK
-update.df( df1 , df1[,"dd"] , id="bb" , variable="dd" , action="replace" , join = "outer")    ## OK
+update.df( df1 , df1[, "dd"] , id="bb" , variable="dd" , action="update" )    ## OK
+update.df( df1 , df1[, "dd"] , id="bb" , variable="dd" , action="replace" )   ## OK
+update.df( df1 , df1[, "dd"] , id="bb" , variable="dd" , action="replace" , join = "outer")    ## OK
 
 ## 4.
 
-
-
 }
-
 
 rm(dummy)

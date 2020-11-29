@@ -1,10 +1,10 @@
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## FUNCTIONS HERE
 ##  split.rand.portion()
 ##
 ## DEPENDENCIES
 ## ...
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 split.rand.portion = function(
 		  datfram      			## data frame.
 		, portion = .5          ## portion of data to be sampled from the 'datfram' as a first part of it.
@@ -27,7 +27,7 @@ split.rand.portion = function(
       ##########################
       , times = 1             ## only for split = FALSE: How many times splitting procedure will be performed.
 ){
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## Random spliting data frame in two with constraints on the volume or number of records, balance between some factor levels, etc.
 ##
 ##    Arguments
@@ -39,7 +39,7 @@ split.rand.portion = function(
 ##						Ignored when 'nrows' is not NULL; notice that 'portion' is internally evalulated to 'nrows' (see below).
 ## nrows = NULL   number of rows for the first data frame (result of spliting 'datfram');
 #!						if not NULL then 'portion' is ignored.
-##########################
+## -----------------------
 ## variable = NULL    _name_ of a factor or logical variable (of one in enclosing environment)
 ##						    or vector of character name(s) or numeric position(s) of variables in 'datfram'
 ##						indicating the factor variable(s) which levels
@@ -159,21 +159,21 @@ split.rand.portion = function(
 ## 2. document output
 ## 3. balance on whole variable as vector of proportions for all levels, eg. we want all levels in equal quantities
 ## 4. add parameter of the call to the list
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## CHECKing and preparation of arguments values ########################################################################•°
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
-###########################################################
+## --------------------------------------------------------
 
-##########################
+## -----------------------
 ## split
 if( ! is.logical(split)  ){
 	stop("The argument 'split' must be logical with possible values TRUE or FALSE.")
 }
 
-##########################
+## -----------------------
 ## datfram
 if(is.character(datfram)){
 	name.df = datfram
@@ -188,7 +188,7 @@ if(! "data.frame" %in% class(datfram)){
 	stop("'datfram' must be of class \"data.frame\".")
 }
 
-###########################################################
+## --------------------------------------------------------
 ## portion & nrows
 
 if(!is.null(portion)){portion.call = portion}else{ portion.call <- portion <- .5}
@@ -235,7 +235,7 @@ if( !is.null(nrows)){
 }
 
 
-###########################################################
+## --------------------------------------------------------
 ## variable & first.level  preprocessing
 
 if(!is.null(variable)){
@@ -336,7 +336,7 @@ if(!is.null(variable)){
 	}
 }
 
-###########################################################
+## --------------------------------------------------------
 ## new.names
 
 
@@ -379,9 +379,9 @@ if(split & is.logical(new.names)){
 	new.names.df = new.names
 }
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## splitting procedure #################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 if(split){
    times = 1
@@ -392,7 +392,7 @@ if(split){
    }
 }
 
-###################
+## ----------------
 ## indices
 
 for(m in 1:times){
@@ -574,7 +574,7 @@ if(is.null(variable)){
 } ## END OF if( is.null( variable ) ){}else{}
 
 
-###############################################################################
+## ----------------------------------------------------------------------------
 ## result
 
 split.factor = 1:N %in% idx_1  ## boolean
@@ -605,11 +605,11 @@ if(split){
 
 
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## output ##############################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-###############################################################################
+## ----------------------------------------------------------------------------
 ## envir checking
 
 if(!is.null(envir)){
@@ -624,7 +624,7 @@ if(!is.null(envir)){
    Only data frame is returned.")
    }
 }
-###############################################################################
+## ----------------------------------------------------------------------------
 
 if(split){
 
@@ -680,7 +680,7 @@ if(split){
    }
 }
 
-###################
+## ----------------
 
 if( !is.null(envir) ){
 
@@ -699,7 +699,7 @@ if( !is.null(envir) ){
    }
 }
 
-###################
+## ----------------
 
 if(exists("final.message",inherits=FALSE)){
 
@@ -709,26 +709,26 @@ return(result)
 
 } ##----END----##
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 #split.rand.portion = function(...){ vec = df.split.random(...); vec } ## just an alias for var2vec() to retain old name in action
    #!!!!!! may not work properly when using  envir = -1  ????????
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## EXAMPLES ############################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-###################################################################################################
+## ------------------------------------------------------------------------------------------------
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-###################################################################################################
+## ------------------------------------------------------------------------------------------------
 
-#######################################
+## ------------------------------------
 ## 0. Data
 
 	N = 20 ## N = 30
@@ -742,10 +742,10 @@ dummy = function(){
 							  )
 	datfram
 
-#######################################
+## ------------------------------------
 ## 1. Basics
 
-#########
+## ------
 ## envir = NULL -- minimal output
 split.rand.portion( datfram ) ## whole data frame returned with split variable -- split = FALSE
 split.rand.portion( datfram , split = FALSE)  ## the same result, split = FALSE is default
@@ -753,13 +753,13 @@ split.rand.portion( datfram , split = FALSE)  ## the same result, split = FALSE 
 split.rand.portion( datfram , split = TRUE)   ## only data frame consisting of records drawn from 'datfram' (1st data frame) is returned
 ## remnants/leftovers (2nd data frame) are not returned unless you set 'envir' properly
 
-#########
+## ------
 ## envir = 0 -- to the list
 split.rand.portion( datfram , envir = 0)        ## data frame not splitted but with additional split variable
 split.rand.portion( datfram , envir = 0 , split = TRUE)   ## two data frames -- 'datfram' splitted in two
    ## the first data frame are records drawn, the second data frame are records left
    
-#########
+## ------
 ## envir = 1 -- to the .GlobalEnv
 split.rand.portion( datfram , envir = 1)        ## data frame not splitted but with additional split variable
    datfram
@@ -772,7 +772,7 @@ split.rand.portion( datfram , envir = 1 , split = TRUE)   ## two data frames -- 
 ## There is also option envir = -1 -- returning to the parent frame (environment from which function was called).
 ## More on envir[onments] below in section 3.
 
-###################
+## ----------------
 ## splitting many times
 ## in a loop
 for(k in 1:3)split.rand.portion( datfram , envir = 1 , split = FALSE)
@@ -812,7 +812,7 @@ for( k in grep('^split\\.',names(datfram),value=TRUE)){
 ## if split = TRUE 'times' doesn't work (how could it?)
 split.rand.portion( datfram , split = TRUE ,  times = 3)
 
-###################
+## ----------------
 ## new.names of data frames or levels of split factor
 ##
 split.rand.portion( datfram , new.names = c("df_1","df_2"))
@@ -833,7 +833,7 @@ split.rand.portion( datfram , split = TRUE , new.names = c("df_1","df_2") , envi
 split.rand.portion( datfram , split = TRUE , new.names = c("df_1"), envir = 0)  ## not enough arguments to new.names
 ##
 
-#######################################
+## ------------------------------------
 ## 2. Splitting parameters
 
 ## create a new data at section 0. with N=30
@@ -841,7 +841,7 @@ split.rand.portion( datfram , split = TRUE , new.names = c("df_1"), envir = 0)  
    table(datfram$f6)
    table(datfram$f7)
 
-###################
+## ----------------
 ## portion, nrows
 
 ## 'portion' -- portion of data to be selected
@@ -854,7 +854,7 @@ split.rand.portion( datfram , envir = 0 , nrows = 10 , split = TRUE)
 ## 'nrows' prevails
 split.rand.portion( datfram , envir = 0 , portion =.1 , nrows = 10 , split = TRUE)
 
-###################
+## ----------------
 ## Getting variable (factor) of which all levels should be in equal proportions in datfram.1 (rows randomly chosen)
 split.rand.portion( datfram , variable = "f1" )  ## f1 taken from datfram ; no statistics, thus result not clear
 ## use envir = 0 to get more informations
@@ -878,7 +878,7 @@ split.rand.portion( datfram , variable = f1 )  ## f1 taken form .GlobalEnv;
    ## error:   Number of elements of 'variable' differs from nrows(datfram).
    rm(f1)
    
-###################
+## ----------------
 ## balance & first.level -- if you are interested only in preserving proportion of one particular level of 'variable'
 
 	N = 20 ## N = 30
@@ -912,7 +912,7 @@ split.rand.portion( datfram , variable = "f1" , first.level = 0 , balance = .3, 
 ## you may also use numeric position of the level
 split.rand.portion( datfram , variable = "f1" , first.level = 3 , balance = .3 , envir = 0 , split = TRUE )
 
-###################
+## ----------------
 ## conflict betweeen 'portion'/'nrows' and 'balance' -- 'priority' parameter
 ## balance set automatically to the original proportions of levels
 split.rand.portion( datfram , variable = "f1" , first.level = "a" , envir = 0 , split = TRUE)
@@ -932,7 +932,7 @@ split.rand.portion( datfram , variable = "f1" , first.level = "a" , balance = .7
 split.rand.portion( datfram , variable = "f1" , first.level = 0 , balance = .25 , nrows = 16 , envir = 0 , split = TRUE )
 split.rand.portion( datfram , variable = "f1" , first.level = 0 , balance = .25 , nrows = 16 , priority = "nrows" , envir = 0 , split = TRUE )
 
-###################
+## ----------------
 ## More variables
 ## When using many variables, say variable = c("f1","f7"), then the factor of its interactions is created : f1*f7
 split.rand.portion( datfram , variable = c("f1","f7") , envir = 0 , split = TRUE)
@@ -946,7 +946,7 @@ split.rand.portion( datfram , variable = c("f1","f7") , first.level = "a:Treat" 
 ## factor*integer
 split.rand.portion( datfram , variable = c("f1","f3") , envir = 0 , split = TRUE)
 
-###################
+## ----------------
 ## for larger data frame
 	N = 50   ## N = 20
 	datfram = data.frame(  f1 = factor( sample (letters[1:4], N, replace = TRUE ) )
@@ -979,7 +979,7 @@ split.rand.portion( datfram , variable = c("f1","f6","f7") , nrows = 30, priorit
 split.rand.portion( datfram , variable = c("f1","f6","f7") , nrows = 30, priority = "portion"  , envir = 0 , split = TRUE) ## OK
 
 
-###################
+## ----------------
 ## more variables from environment
 f1 = datfram$f1 ; f6 = datfram$f6 ; f7 = datfram$f7
    ## this will not work
@@ -998,7 +998,7 @@ split.rand.portion( datfram , variable = variable , priority ="nrows" , envir = 
    ## character strings are interpreted as names of variables in 'datfram'
 
 
-#######################################
+## ------------------------------------
 ## 3. More on envir[onments].
 
 ##
@@ -1020,7 +1020,7 @@ datfram.0   ## does not exist
 split.rand.portion( datfram , envir = 1 , split = FALSE)
 datfram
 
-#########
+## ------
 ## output may be written to some variable
 ll = split.rand.portion( datfram , envir = 1 , split = TRUE)
 ll          ## no data frames
@@ -1035,7 +1035,7 @@ datfram     ## 'split.X' added
 datfram.1   ## does not exist
 datfram.0   ## does not exist
 
-#########
+## ------
 ## names of data frames are served
  mydf = datfram
 split.rand.portion( datfram = mydf , envir = 1 , split  = TRUE)
@@ -1052,7 +1052,7 @@ mydf.0
 rm(mydf.1,mydf.0)
 
 
-#############################
+## --------------------------
 ## envir = NULL -- minimal output
 ## build a new datfram
 split.rand.portion( datfram , envir = NULL , split = FALSE)
@@ -1067,7 +1067,7 @@ split.rand.portion( datfram , split = FALSE)
 split.rand.portion( datfram , split = TRUE)
    datfram  ## not changed
 
-#############################
+## --------------------------
 ## envir = 0 -- to the list
 ## build a new datfram
 
@@ -1099,11 +1099,11 @@ ll["datfram.1"]
 ll["datfram.0"]
 ll["names"]
 
-#############################
+## --------------------------
 ## envir = -1  --  returning resulting data frames to the parent frame -- environment from which the function was called
 ##   see ?parent.frame
 
-###################
+## ----------------
 ## parent.frame -> .GlobalEnv
 split.rand.portion( datfram , envir = -1 , split = FALSE)
    datfram  ## changed
@@ -1117,7 +1117,7 @@ split.rand.portion( datfram , envir = -1 , split = TRUE)  ## returns only a firs
    
 ## Notice lack of any message about new variables or data frames
 
-###################
+## ----------------
 ## But the reason for this option is returning results to the function calling split.rand.portion()
 
 ff = function(df){
@@ -1133,7 +1133,7 @@ ff(datfram)
 df.1   ## does not exist
 df.0   ## does not exist
 
-#########
+## ------
 ## envir = 1 will leave results in .GlobalEnv
 gg = function(df){
    ll = split.rand.portion(datfram = df , split = TRUE , envir = 1)
@@ -1147,7 +1147,7 @@ df.1
 df.0
 rm("df.1","df.0")
 
-#########
+## ------
 ## returning records not drawn, datfram.0, rather then drawn, datfram.1
 hh = function(df,portion = .5){
    split.rand.portion(datfram = df, portion = portion , split = TRUE , envir = -1)
@@ -1157,7 +1157,7 @@ hh = function(df,portion = .5){
    nrow(datfram) ; portion = .7; nrow(datfram)*portion
 hh(datfram,portion)
 
-###################
+## ----------------
 ## n-fold division for cross-validation purposes, with balancing for one of the variable
 
 nfold = function(datfram,fold,variable){
@@ -1183,12 +1183,12 @@ datfram ## generate a new one with N=50
 table(df.div$division)
 table(df.div$division,df.div$f7)   ## OK!!!
 
-##########################################################
+## -------------------------------------------------------
 ## END OF EXAMPLES
-##########################################################
+## -------------------------------------------------------
 
 
-#############################################################################################################
+## ----------------------------------------------------------------------------------------------------------
 ## some "trials & errors"
 
 
@@ -1223,7 +1223,7 @@ nn
 nn[[1]]
 eval(nn[[1]])
 
-###################################################
+## ------------------------------------------------
 environment()
 parent.env(environment())
 search()

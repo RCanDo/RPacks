@@ -134,7 +134,7 @@ if(!is.factor(X)){
    
    print(output <- list(result = result.df, anova = anova, aic = aic, models = models))
 
-#############################################################
+## ----------------------------------------------------------
 }else{  ## variable is factor
 
    nol = length(levels(X))      ## number of levels

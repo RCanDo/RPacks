@@ -1,10 +1,10 @@
-########################################################################################################################•
+## ---------------------------------------------------------------------------------------------------------------------•
 ## FUNCTIONS HERE
 ##  split.rand.nrows()
 ##
 ## DEPENDENCIES
 ## ...
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 split.rand.nrows = function( datfram , variable = NULL , nrows = 1
 		, first.level = NULL		## if NULL all levels from 'variable' will be present in new data frame with equal quantities 'nrows',
 		##########################
@@ -17,19 +17,19 @@ split.rand.nrows = function( datfram , variable = NULL , nrows = 1
       ##########################
       , times = 1             ## only for split = FALSE: How many times splitting procedure will be performed.
 ){
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ##
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-###########################################################
+## --------------------------------------------------------
 
-##########################
+## -----------------------
 ## split
 if( ! is.logical(split)  ){
 	stop("The argument 'split' must be logical with possible values TRUE or FALSE.")
 }
 
-##########################
+## -----------------------
 ## datfram
 if(is.character(datfram)){
 	name.df = datfram
@@ -44,7 +44,7 @@ if(! "data.frame" %in% class(datfram)){
 	stop("'datfram' must be of class \"data.frame\".")
 }
 
-###########################################################
+## --------------------------------------------------------
 ## variable & first.level  preprocessing
 
 if(is.null(variable)){stop("'variable' must be given: a factor(s) name(s) within 'datafram' (passed as a character vector),
@@ -149,7 +149,7 @@ if(is.null(variable)){stop("'variable' must be given: a factor(s) name(s) within
 
 #} ## end of if(!is.null(variable))
 
-###########################################################
+## --------------------------------------------------------
 ## new.names
 
 
@@ -192,9 +192,9 @@ if(split & is.logical(new.names)){
 	new.names.df = new.names
 }
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## splitting procedure #################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 
 for(m in 1:times){
@@ -247,12 +247,12 @@ for(m in 1:times){
 
 } ## END OF for( m in 1:times ){ --splitting procedure--  }
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## output ##############################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 
-###############################################################################
+## ----------------------------------------------------------------------------
 ## envir checking
 
 if(!is.null(envir)){
@@ -267,7 +267,7 @@ if(!is.null(envir)){
    Only data frame is returned.")
    }
 }
-###############################################################################
+## ----------------------------------------------------------------------------
 
 if(split){
 
@@ -321,7 +321,7 @@ if(split){
    }
 }
 
-###################
+## ----------------
 
 if( !is.null(envir) ){
 
@@ -340,29 +340,29 @@ if( !is.null(envir) ){
    }
 }
 
-###################
+## ----------------
 
 return(result)
 
 
 } ##----END----##
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## EXAMPLES ############################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-###################################################################################################
+## ------------------------------------------------------------------------------------------------
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-###################################################################################################
+## ------------------------------------------------------------------------------------------------
 
 
-###################################################################################################
+## ------------------------------------------------------------------------------------------------
 
 #datfram0 = data.frame( fac1 = sample( LETTERS[1:5] , 100 , replace = TRUE)
 #                     , fac2 = sample( letters[1:4] , 100 , replace = TRUE)
@@ -378,13 +378,13 @@ datfram
 table(datfram$f1)
 
 
-#######################################
+## ------------------------------------
 ## 1. Basics
 
-###################
+## ----------------
 ## envir = NULL -- minimal output
 
-#########
+## ------
 ## minimal input -- dafault  nrows = 1
 split.rand.nrows( datfram ,"f1") ## whole data frame returned with split variable -- split = FALSE
 split.rand.nrows( datfram ,"f1" , split = FALSE)  ## the same result, split = FALSE is default
@@ -392,7 +392,7 @@ split.rand.nrows( datfram ,"f1" , split = FALSE)  ## the same result, split = FA
 split.rand.nrows( datfram ,"f1" , split = TRUE)   ## only data frame consisting of records drawn from 'datfram'
 ## remnants/leftovers are not returned unless you set 'envir' properly
 
-#########
+## ------
 ## other values of nrows
 split.rand.nrows(datfram,"f1",2,split=FALSE)
 split.rand.nrows(datfram,"f1",2,split=TRUE)
@@ -404,7 +404,7 @@ table(datfram11$fac1,datfram11$split.1)
 datfram11 = split.rand.nrows(datfram,"f1",8)
 table(datfram11$fac1,datfram11$split.1)
 
-###################
+## ----------------
 ## envir = 0 -- to the list
 
 split.rand.nrows( datfram ,"f1" , envir = 0)        ## data frame not splitted but with additional split variable
@@ -416,7 +416,7 @@ split.rand.nrows(datfram,"f1",2,split=TRUE , envir = 0)
 
 ## Notice that you obtain the table at once
 
-###################
+## ----------------
 ## envir = 1 -- to the .GlobalEnv
 split.rand.nrows( datfram ,"f1" , envir = 1)        ## data frame not splitted but with additional split variable
    datfram
@@ -436,7 +436,7 @@ split.rand.nrows( datfram ,"f1" , envir = 1 , split = TRUE)
 ## There is also option envir = -1 -- returning to the parent frame (environment from which function was called).
 ## More on envir[onments] below in section 3.
 
-#############################
+## --------------------------
 ## splitting many times
 ## in a loop
 for(k in 1:3)split.rand.nrows( datfram ,"f1" , nrows = 2 , envir = 1 , split = FALSE)
@@ -478,7 +478,7 @@ for( k in grep('^split\\.',names(datfram),value=TRUE)){
 ## if split = TRUE 'times' doesn't work (how could it?)
 split.rand.nrows( datfram ,"f1" , nrows = 2 , split = TRUE ,  times = 3)
 
-###################
+## ----------------
 ## new.names of data frames or levels of split factor
 ##
 split.rand.nrows( datfram ,"f1" , nrows = 2 , new.names = c("df_1","df_2"))
@@ -500,12 +500,12 @@ split.rand.nrows( datfram ,"f1" , nrows = 2 , split = TRUE , new.names = c("df_1
 split.rand.nrows( datfram ,"f1" , nrows = 2 , split = TRUE , new.names = c("df_1"), envir = 0)  ## not enough arguments to new.names
 ##
 
-#######################################
+## ------------------------------------
 ## 2. Splitting parameters
 
 datfram
 
-###################
+## ----------------
 ## first.level -- if you are interested only in one particular level of 'variable'
 
 ## try each option few times
@@ -520,7 +520,7 @@ split.rand.nrows( datfram ,"f1" , nrows = 2 , first.level = 0 , envir = 0 , spli
 split.rand.nrows( datfram ,"f1" , nrows = 2 , first.level = 2 , envir = 0 , split = TRUE )
 
 
-###################
+## ----------------
 ## More variables
 ## When using many variables, say variable = c("f1","f2"), then the factor of its interactions is created : fac1*fac2
 split.rand.nrows( datfram , variable = c("f1","f2") , envir = 0 , split = TRUE)
@@ -535,7 +535,7 @@ split.rand.nrows( datfram , variable = c("f1","f2") , first.level = "A:a" , envi
 split.rand.nrows( datfram , variable = c("f1","num2") , envir = 0 , split = TRUE)
 
 
-###################
+## ----------------
 ## more variables from environment
 f1 = datfram$f1 ; num2 = datfram$num2
    ## this will not work
@@ -554,7 +554,7 @@ split.rand.nrows( datfram , variable = variable , priority ="nrows" , envir = 0 
    ## character strings are interpreted as names of variables in 'datfram'
 
 
-#######################################
+## ------------------------------------
 ## 3. More on envir[onments].
 
    datfram = data.frame( f1 = sample(c(rep("A",10),rep("B",7),rep("C",3)))
@@ -584,7 +584,7 @@ datfram.0   ## does not exist
 split.rand.nrows( datfram ,"f1" , nrows = 2 , envir = 1 , split = FALSE)
 datfram
 
-#########
+## ------
 ## output may be written to some variable
 ll = split.rand.nrows( datfram ,"f1" , nrows = 2 , envir = 1 , split = TRUE)
 ll          ## no data frames
@@ -599,7 +599,7 @@ datfram     ## 'split.X' added
 datfram.1   ## does not exist
 datfram.0   ## does not exist
 
-#########
+## ------
 ## names of data frames are served
  mydf = datfram
 split.rand.nrows( datfram = mydf ,"f1" , nrows = 2 , envir = 1 , split  = TRUE)
@@ -616,7 +616,7 @@ mydf.0
 rm(mydf.1,mydf.0)
 
 
-#############################
+## --------------------------
 ## envir = NULL -- minimal output
 ## build a new datfram
    datfram = data.frame( f1 = sample(c(rep("A",10),rep("B",7),rep("C",3)))
@@ -640,7 +640,7 @@ split.rand.nrows( datfram ,"f1" , nrows = 2 , split = FALSE)
 split.rand.nrows( datfram ,"f1" , nrows = 2 , split = TRUE)
    datfram  ## not changed
 
-#############################
+## --------------------------
 ## envir = 0 -- to the list
 ## build a new datfram
 
@@ -672,11 +672,11 @@ ll["datfram.1"]
 ll["datfram.0"]
 ll["names"]
 
-#############################
+## --------------------------
 ## envir = -1  --  returning resulting data frames to the parent frame -- environment from which the functin was called
 ##   see ?parent.frame
 
-###################
+## ----------------
 ## parent.frame -> .GlobalEnv
 split.rand.nrows( datfram , "f1" , nrows = 2 , envir = -1 , split = FALSE)
    datfram  ## changed
@@ -690,7 +690,7 @@ split.rand.nrows( datfram , "f1" , nrows = 2 , envir = -1 , split = TRUE)
 
 ## Notice lack of any message about new variables or data frames
 
-###################
+## ----------------
 ## But the reason for this option is returning results to the function calling split.rand.nrows()
 
 ff = function(df){
@@ -706,7 +706,7 @@ ff(datfram)
 df.1   ## does not exist
 df.0   ## does not exist
 
-#########
+## ------
 ## envir = 1 will leave results in .GlobalEnv
 gg = function(df){
    ll = split.rand.nrows(datfram = df ,"f1" , nrows = 2 , split = TRUE , envir = 1)
@@ -720,7 +720,7 @@ df.1
 df.0
 rm("df.1","df.0")
 
-#########
+## ------
 ## returning records not drawn, datfram.0, rather then drawn, datfram.1
 hh = function(df,variable,nrows){
    split.rand.nrows(datfram = df , variable , nrows = nrows  , split = TRUE , envir = -1)
@@ -729,8 +729,8 @@ hh = function(df,variable,nrows){
 
 hh(datfram,"f1",2)
 
-##########################################################
+## -------------------------------------------------------
 ## END OF EXAMPLES
-##########################################################
+## -------------------------------------------------------
 
 }

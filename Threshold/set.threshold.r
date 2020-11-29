@@ -64,7 +64,7 @@ names(tab) = ifelse(names(tab),"goods","bads")
   
 
 
-### assigning threshold variable 
+##  assigning threshold variable 
 if(!is.null(threshold.name) & is.character(threshold.name)){
     if(is.null(envir)){envir = 1} #".GlobalEnv"}
     assign(threshold.name,threshold,pos=envir)
@@ -82,7 +82,7 @@ if(message){
    print(gbv)   
 }
       
-###---graphics---###       
+## ---graphics------       
 if(graphics){
     windows();margins.my();if(coldef=="black"){coldef.black()}
     
@@ -105,7 +105,7 @@ if(graphics){
           legend=c(paste0("threshold = ",signif(threshold,4)), "#bads = .09" ) )
     }
 }    
-###---END of graphics---###
+## ---END of graphics------
 
 #if(!is.null(covariate)){
 #   
@@ -118,7 +118,7 @@ if(graphics){
 #   result$covariate.stats = stat
 #
 #}
-######################################################################################################
+## ---------------------------------------------------------------------------------------------------
 
 result$GoodsBads = GoodsBads 
 

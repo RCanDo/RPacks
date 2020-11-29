@@ -1,13 +1,13 @@
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## FUNCTIONS HERE
 ##  condlist.make()
 ##
 ## DEPENDENCIES
 ##  lengthen.r
 ##
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 condlist.make = function(conddf,condlist.list,eval=TRUE,parse=TRUE,purify=TRUE){
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## (Read the help for condapply() before.)
 ## Creating 'condlist' on the basis of 'conddf' and 'condlist.list'.
 ## 'conddf' is considered to be a conscise form of 'condlist' to which it needs to be transformed
@@ -48,7 +48,7 @@ condlist.make = function(conddf,condlist.list,eval=TRUE,parse=TRUE,purify=TRUE){
 ##
 ##  Remarks
 ## Very difficult to explain... Try examples below in this file and wait until some tutorial appear :)
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 if(is.vector(conddf)){   ## vector of names of variables
    conddf = data.frame(conddf);
@@ -58,7 +58,7 @@ if(is.vector(conddf)){   ## vector of names of variables
    }
 }
 
-###################
+## ----------------
 
 clist = list() ##; clist
 
@@ -117,22 +117,22 @@ class(clist) <- c("condlist","list")
 clist
 
 } ##----END----##
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## EXAMPLES ############################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-##############################################################################################
+## -------------------------------------------------------------------------------------------
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-##############################################################################################
+## -------------------------------------------------------------------------------------------
 
-#######################################
+## ------------------------------------
 ## Example 1
 
 conddf=data.frame( min = c(1,1,1,1,0,0,0,0) , max = c(2,3,4,3,2,1,2,1) , exc.min = rep(.2,8) , exc.max = rep(.2,8) , logs = rep(".errs",8) )
@@ -151,10 +151,10 @@ condlist.list
 
 class(condlist)
 
-#######################################
+## ------------------------------------
 ## Example 2
 
-###################
+## ----------------
 ## suppose it is a main data.frame comprising some reference data (used to build some model):
 ( datfram.ref0=data.frame( aa = sample(0:4,10,replace=TRUE) , bb = sample(1:5,10,replace=TRUE)
                     , cc = sample(-4:-1,10,replace=TRUE)
@@ -193,7 +193,7 @@ conddf
 
     x = 1 ; lapply(conddf$transform,eval)
 
-###################
+## ----------------
 ## data new
 ( datfram.new0=data.frame( aa = sample(-1:5,10,replace=TRUE) , bb = sample(1:5,10,replace=TRUE)
                     , cc = sample(-5:0,10,replace=TRUE)
@@ -202,7 +202,7 @@ conddf
                     , ff = 2*rpois(10,lambda=3)
                     , gg = rlnorm(10) )  )
 
-###################
+## ----------------
 ## 1. transformation
 condlist.list.trans = list(conditions=quote("\"all\"") ,substitute = quote(transform))
 ( condlist.trans = condlist.make(conddf,condlist.list.trans) )

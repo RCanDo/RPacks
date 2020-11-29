@@ -1,10 +1,10 @@
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## LOADER OF ALL FunctionsAK to the separate environments
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 #rm(list=ls())     ## czyszczenie przestrzeni roboczej
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 #!   ################################################################################################•°
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
 ## LOADER FUNCTION #####################################################################################################•°
 source_to_env <- function(files,path,env){
@@ -43,7 +43,7 @@ PATHfunctions
 files = list()
 sig = "_AK"
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[1],"\n")  # = "DM"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("addid.R"
@@ -68,7 +68,7 @@ files[[pack]] = c("addid.R"
 ,"update.df.R")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[2],"\n")  # = "StatMath"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("chisq.multi.test.r"
@@ -79,7 +79,7 @@ files[[pack]] = c("chisq.multi.test.r"
 ,"transformations_a.R")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[3],"\n")  # = "Graphics"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("barplot.confint.R"
@@ -90,14 +90,14 @@ files[[pack]] = c("barplot.confint.R"
 ,"univariate.models.plots.r")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[4],"\n")  # = "Variable"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("extract.variable.r"
 ,"plot.variable.r")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[5],"\n")  # = "Condapply"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("condapply.R"
@@ -108,7 +108,7 @@ files[[pack]] = c("condapply.R"
 ,"update.logging.df.R")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[6],"\n")  # = "SumMod"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("moditem.create.R"
@@ -116,7 +116,7 @@ files[[pack]] = c("moditem.create.R"
 ,"summary.gam.ak.R")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[7],"\n")  # = "Curves"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("curves_and_prediction.r"
@@ -130,7 +130,7 @@ files[[pack]] = c("curves_and_prediction.r"
 ,"summary.curves_by_groups.R")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[8],"\n")  # = "RefineAssignment"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c(#"make_assignment.R"
@@ -142,7 +142,7 @@ files[[pack]] = c(#"make_assignment.R"
 ,"refine.assignment.R")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[9],"\n")  # = "Threshold"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("set.threshold.r"
@@ -150,7 +150,7 @@ files[[pack]] = c("set.threshold.r"
 ,"threshold.tables.r")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 cat(pack <- packages[10],"\n")  # = "Split"
 # cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 files[[pack]] = c("plot.split.r"
@@ -162,11 +162,11 @@ files[[pack]] = c("plot.split.r"
 ,"split.stats.r")
 source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-###########################################################•°
+## --------------------------------------------------------•°
 #cat(pack <- packages[11],"\n")  # = ""
 #cat(list.files(PATHfunctions[[pack]]),sep="\"\n,\"")
 #files[[pack]] = c("")
 #source_to_env( files = files[[pack]] , path = PATHfunctions[[pack]] , env = paste(pack,sig,sep="") )
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 search()

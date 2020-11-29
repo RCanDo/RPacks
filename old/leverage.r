@@ -19,7 +19,7 @@ leverage = function(xt,X){
 }
 
 confreg = function(modlin,xrange,alpha=.05){
-### only for one-dim regression
+##  only for one-dim regression
 data = modlin[[12]]
 n=dim(data)[1]
 p=dim(data)[2]-1

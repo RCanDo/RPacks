@@ -1,4 +1,4 @@
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE
 ##  condapply()
 ##
@@ -8,11 +8,11 @@
 ##  plot.variable.R
 ##  lengthen.R
 ##
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 condapply = function( datfram , condlist ,  isolate = TRUE , na.as = FALSE , logs = NULL , logs.action = "append", logs.join = "left", return.all = TRUE  , plot = FALSE , ... ){
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## Returns all the 'datfram' with variables mentioned in names(condlist) recalculated or substituted
 ## according to conditions and functions defined in 'condlist' which is a list of lists with proper structure.
 ## Each element of 'condlist', called 'conditem' is a list having a name of a variable in 'datfram' to be transformed
@@ -206,12 +206,12 @@ condapply = function( datfram , condlist ,  isolate = TRUE , na.as = FALSE , log
 ## Servicing of factors -- currently you may only add or replace level, but you cannot remove any. Levels are persistent
 ## in the levels(variable).
 ##
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
 if( length(na.as)<2 ){ na.as[2] <- na.as[1] }
 if( sum(is.na(na.as <- as.logical(na.as) ))>0 ){ stop("'na.as' must have logical values or any other which may be coerced to logical.")  }
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## conditions.method
 
 conditions.method = function( conditem , datfram , varname ){
@@ -257,7 +257,7 @@ conditions.method = function( conditem , datfram , varname ){
   idx     #!#!#! it is always logical!!!!
 }
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## subindex.method
 
 subindex.method = function( conditem , datfram , varname ){
@@ -305,7 +305,7 @@ subindex.method = function( conditem , datfram , varname ){
 }
 
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## substitute.method
 
 substitute.method = function( conditem , datfram , varname  ){
@@ -398,7 +398,7 @@ if(length.y>0 && sum(idx.sub)>0){  ## is anything to do?
 y   #!#!#!  of length = nrows(datfram)  !!!!
 }
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## data frames for logging on errors and outliers
 
 logs.names.dots.method = function(logs.names){  ## logs.names must be character
@@ -411,7 +411,7 @@ logs.names.dots.method = function(logs.names){  ## logs.names must be character
    logs.names
 }
 
-###################
+## ----------------
 
 logs.names.method = function( condlist , logs ){ ## constructing list of all needed logging data frames
 ## merging names of logging data frames from 'logs' parameter of condapply() and 'logs' entries of condlist
@@ -439,7 +439,7 @@ logs.names.method = function( condlist , logs ){ ## constructing list of all nee
 
 }
 
-###################
+## ----------------
 
 logs.method = function( conditem , logs , varnam ){
 
@@ -519,10 +519,10 @@ logs.method = function( conditem , logs , varnam ){
   }
 }
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## MAIN
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 if(length(condlist)==0){  ## if(1) ################################################################—•°
    message( "'condlist' is empty. 'datfram' not changed.\n" )
 }else if(nrow(datfram)==0){
@@ -531,7 +531,7 @@ if(length(condlist)==0){  ## if(1) #############################################
 
 datfram.name = deparse(substitute(datfram))
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## data frames for logging on errors and outliers
 
 logs.names = logs.names.method( condlist , logs ) ## logs may be NULL or boolean or character
@@ -541,14 +541,14 @@ logs.names = logs.names.method( condlist , logs ) ## logs may be NULL or boolean
 if(logs){ checksum = rep(0,nrow(datfram)); names(checksum) = rownames(datfram) } ## first column for non-existing logging data frames from 'logs' list;
 
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 
 new.names = setdiff(names(condlist),names(datfram))
 datfram[,new.names] = NA   ## for new variables (not present in 'datfram')
 
 if(sum(isolate)>0){ datfram0 = datfram }   ## datfram0 will not be changed during calculations, results of calc's will be written to datfram
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## THE LOOP
 
 report.df=data.frame(id=numeric(0),sum=numeric(0))
@@ -670,13 +670,13 @@ for(k in 1:length(condlist)){
 
 } ##-- END OF THE LOOP --##
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## finally all the datfram is returned with variables from names(condlist) changed.
 
 print(report.df)
 
 } ## END of if(1) #################################################################################—•°
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 
 if( is.null(return.all) ){
    datfram = TRUE
@@ -691,20 +691,20 @@ if( is.null(return.all) ){
 datfram
 
 } ##----END----##
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## EXAMPLES ############################################################################################################—•°
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-##############################################################################################—•°
+## -------------------------------------------------------------------------------------------—•°
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-##############################################################################################—•°
+## -------------------------------------------------------------------------------------------—•°
 
 datfram1=data.frame( aa = c(1,1,1,1,0,0,0,0) , bb = c(1,1,0,0,1,1,0,0) , cc = rep(c(1,0),4) , dd = 2:9 )
 datfram1
@@ -716,7 +716,7 @@ conditions = body(function(x,a){(x<=a)}) ,
 inputs = c("dd") ,    ## a,b,c,...
 substitute = body(function(a){a})
 ),
-###
+## 
 "bb" = list(  ## x
 variables = c("aa") , ## a,b,c,...
 conditions = body(function(x){x<=a})  ,
@@ -736,7 +736,7 @@ condapply(datfram1,condlist1,isolate = c(FALSE,TRUE))    ## cond's checking NOT 
 condapply(datfram1,condlist1,isolate = c(TRUE,FALSE))    ## cond's checking IS isolated , but susbstitution NOT isolated
 condapply(datfram1,condlist1,isolate = c(FALSE,FALSE))   ## both cond's checking and susbstitution are NOT isolated
 
-#######################################
+## ------------------------------------
 ## notice that formal arguments of functions in 'conditions' and 'substitute' are irrelevent and may be ommited;
 
 condlist1 = list(
@@ -746,7 +746,7 @@ conditions = body(function(){(x<=a)}) ,
 inputs = c("dd") ,    ## a,b,c,...
 substitute = body(function(){a})
 ),
-###
+## 
 "bb" = list(  ## x
 variables = c("aa") , ## a,b,c,...
 conditions = body(function(){x<=a})  ,
@@ -759,7 +759,7 @@ condlist1
 datfram1
 condapply(datfram1,condlist1)
 
-#######################################
+## ------------------------------------
 ## you don't even need to use body(function(){..}) syntax -- it's enough to use quote(..)
 condlist1 = list(
 "aa" = list(  ## x
@@ -768,7 +768,7 @@ conditions = quote(x<=a) ,
 inputs = c("dd") ,    ## a,b,c,...
 substitute = quote(a)
 ),
-###
+## 
 "bb" = list(  ## x
 variables = c("aa") , ## a,b,c,...
 conditions = quote(x<=a)  ,
@@ -781,7 +781,7 @@ condlist1
 datfram1
 condapply(datfram1,condlist1)
 
-######################################
+## -----------------------------------
 ## you may also create a new variable
 condlist2 = list(
 "ee" = list(  ## x
@@ -892,7 +892,7 @@ condlist7b
 
 condapply(datfram1,condlist7b)  ##
 
-#############################
+## --------------------------
 ## using condlist$subindex -- which elements of condlist$inputs will be used to calculate result
 datfram2 = datfram1
 datfram2$dd[c(1,2)] = NA ; datfram2
@@ -1001,17 +1001,17 @@ condapply(datfram2,condlist12)
 
 #!#!#! MANY MORE POSSIBILITIES... -- very difficult to test them all!
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 #! HOW DOES IT WORK WITH  factors ????
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## 'variable' and/or 'substitute'  are matrices
 datfram3 = datfram1
 mm = matrix(c(1:8,sample(11:18)),ncol=2)
 datfram3[,"mm"] = mm
 datfram3
 
-############
+## ---------
 ## replacing
 
 condlist31 = list(  "mm" = list( variables = c()
@@ -1065,7 +1065,7 @@ condlist34 = list(  "mm" = list( variables = c()
 
 condapply(datfram3,condlist34)
 
-###################
+## ----------------
 ## new variable
 
 condlist41 = list(  "nnn" = list( variables = c()
@@ -1098,8 +1098,8 @@ condlist43 = list(  "nn" = list( variables = c("mm")
 condapply(datfram3,condlist43)
 
 
-###############################################################################—•°
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
+## ----------------------------------------------------------------------------—•°
 ## USING 'logs'
 
 ( datfram=data.frame( aa = sample(0:4,8,replace=TRUE) , bb = sample(1:5,8,replace=TRUE) , cc = sample(-4:-1,8,replace=TRUE) , dd = 2*(runif(8)-.5) ) )
@@ -1113,7 +1113,7 @@ inputs = c("bb") ,    ## a,b,c,...
 substitute = body(function(a){NA}) ,
 logs = ".errs"           ## logging to datfram.errs - will be created if not exists
 ),
-###
+## 
 "dd" = list(  ## x
 variables = NULL , ## a,b,c,...
 conditions = body(function(x){x<=mean(x)})  ,
@@ -1148,7 +1148,7 @@ inputs = c("bb") ,    ## a,b,c,...
 substitute = body(function(a){NA}) ,
 logs = 1           ## logging to the first data frame on the 'logs' list of condapply()
 ),
-###
+## 
 "dd" = list(  ## x
 variables = NULL , ## a,b,c,...
 conditions = body(function(x){x<=mean(x)})  ,
@@ -1175,7 +1175,7 @@ inputs = c("bb") ,    ## a,b,c,...
 substitute = body(function(a){NA}) ,
 logs = "df.errs"           ## logging to datfram.errs - will be created if not exists
 ),
-###
+## 
 "dd" = list(  ## x
 variables = NULL , ## a,b,c,...
 conditions = body(function(x){x<=mean(x)})  ,
@@ -1211,7 +1211,7 @@ condapply( datfram ,condlist3, logs = FALSE )
 rm(  df.errs , df.outs , datfram.errs , datfram.outs )
 ls()
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## Summarising:
 ## There is 'logs' parameter of the condapply() function which is by default NULL
 ## and there is 'logs' entry in each conditem of condlist.
@@ -1271,7 +1271,7 @@ conditions = body(function(x,a){(x>=a)}) ,
 substitute = body(function(){NA}) ,
 logs = ".outs"           ## logging to datfram.errs - will be created if not exists
 ),
-###
+## 
 "dd" = list(  ## x
 conditions = body(function(x){x<=mean(x)})  ,
 substitute = body(function(){0})  ,
@@ -1292,7 +1292,7 @@ datfram2.outs
 
 rm( datfram.errs , datfram.outs )
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## You may make logs on the one conditem to many logging data frames
 
 ls()
@@ -1304,7 +1304,7 @@ conditions = body(function(x,a){(x>=a)}) ,
 substitute = body(function(){NA}) ,
 logs = c(".outs" , "df.outs")          ## logging to datfram.errs - will be created if not exists
 ),
-###
+## 
 "dd" = list(  ## x
 conditions = body(function(x){x<=mean(x)})  ,
 substitute = body(function(){0})  ,
@@ -1327,7 +1327,7 @@ conditions = body(function(x,a){(x>=a)}) ,
 substitute = body(function(){NA}) ,
 logs = c(1,2)          ## logging to datfram.errs - will be created if not exists
 ),
-###
+## 
 "dd" = list(  ## x
 conditions = body(function(x){x<=mean(x)})  ,
 substitute = body(function(){0})  ,
@@ -1342,7 +1342,7 @@ datfram.outs
 df.outs
 datfram.errs
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ##  Notice that logs are made with the use of the function update.df() which has parameter 'action' with possible values
 ##  "append" (default), "update", "replace".
 ##  This parameter may be set globally from condapply() via 'logs.action' parameter of the function
@@ -1372,7 +1372,7 @@ substitute = body(function(){NA}) ,
 logs = c(1,2) ,         ## logging to datfram.errs - will be created if not exists
 logs.action = c("replace","append")
 ),
-###
+## 
 "dd" = list(  ## x
 conditions = body(function(x){x<=mean(x)})  ,
 substitute = body(function(){0})  ,
@@ -1387,7 +1387,7 @@ datfram.outs
 df.outs
 datfram.errs
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## testing on 'sum..'
 datfram1 = data.frame(aa = 10*rnorm(100),bb = sample(1:100,replace=TRUE),cc = 10*rnorm(100),dd = sample(1:100,replace=TRUE))
 datfram1
@@ -1448,5 +1448,5 @@ condapply(datfram1,condlist2,logs=".outs")
 datfram1.outs
 
 }
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 rm(dummy)

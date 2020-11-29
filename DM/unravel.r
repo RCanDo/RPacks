@@ -66,7 +66,7 @@ dummy = function(){
    code
  unfac = unravel(fac,code);    data.frame(unfac,fac)
 
-### this is repeated from the function body:
+##  this is repeated from the function body:
       sep=""
    (ll = strsplit(code,split=sep,fixed=TRUE))
    (mm = t(as.data.frame(ll)))

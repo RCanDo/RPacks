@@ -1,6 +1,6 @@
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## smooth_gam() generic and default.
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE    {EfficiencyCurves}
 ##  smooth_gam()
 ##  smooth_gam.default()
@@ -19,19 +19,19 @@
 ## Smoothing curves using gam( . , family=binomial(link=logit) ) where curves are given in a form of
 ## successes relative to trials, rather then ready efficiency curves.
 ##
-####################################################################################################—•°
+## -------------------------------------------------------------------------------------------------—•°
 ## AUTHOR: Arkadiusz Kasprzyk; akasp@...
 ## ver. 1.0
 ## PATH: D:\ROBOCZY\...
 ## start: 2017-03-01    last: 2017-09-26
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 smooth_gam <- function(successes
                       , ...){UseMethod("smooth_gam")}
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 smooth_gam.default = function( successes  ## vector or matrix of successes
                            , trials = NULL
                            , weights_groups = NULL
@@ -43,7 +43,7 @@ smooth_gam.default = function( successes  ## vector or matrix of successes
                            , method = "normal" ## "cumulated"
                            , lengthen = NULL
                            ) {
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## Smoothes curves using gam( . , family=binomial(link=logit) ).
 ## Curves are given in a form of successes relative to trials, rather then ready efficiency curves.
 ## This is because of the way gam( . , family=binomial(link=logit) ) works
@@ -142,13 +142,13 @@ smooth_gam.default = function( successes  ## vector or matrix of successes
 ##  efficiencies_cum       matrix of efficiencies for cumulated successes.
 ##  smoothed_curves_cum    matrix of smoothed cumulated curves of success ratio.
 ##
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
 require(gam)
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## 0. Recording arguments
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 arguments = structure( list(  successes = deparse(substitute(successes)) ## name of a vector or matrix of successes
                , trials = deparse(substitute(trials)) #= NULL
                , weights_groups = deparse(substitute(weights_groups)) #= NULL
@@ -165,11 +165,11 @@ messages = structure(list(),class="messages")
 
    #prints = structure(list(),class="prints")
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## 1. Checking data integrity
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 
-#######################################—•°
+## ------------------------------------—•°
 ## successes
 
 if(is.null(dim(successes))){
@@ -183,7 +183,7 @@ successes = round(successes)
 
 ngr0 <- ncol(successes)    ## needed for weights_groups section
 
-#######################################—•°
+## ------------------------------------—•°
 ## time
 
 maxtime = nrow(successes)
@@ -211,12 +211,12 @@ if(horizon < 3){
    stop("horizon < 3 but 3 is minimum length to make any smoothing.")
 }
 
-#######################################—•°
+## ------------------------------------—•°
 ## names
 cnams <- colnames(successes)
 dimnames(successes) <- list(time=times,group=cnams)
 
-#######################################—•°
+## ------------------------------------—•°
 ## trials
 messages$trials = ""
 if(is.null(trials)){
@@ -249,7 +249,7 @@ trials = round(trials)
 
 dimnames(trials) <- list(time=times,group=cnams)
 
-#######################################—•°
+## ------------------------------------—•°
 ## net_curve
 
 if(net_curve){
@@ -260,7 +260,7 @@ if(net_curve){
 
 ngr = ncol(successes)      ##!!!!!!!!!
 
-#######################################—•°
+## ------------------------------------—•°
 ## CUMULATED successes
 successes0 = successes     ##
 trials0 = trials
@@ -275,7 +275,7 @@ if(method=="cumulated"){
    dimnames(successes) <- list(time=times,group=cnams)
 }
 
-#######################################—•°
+## ------------------------------------—•°
 ## trials vs successes
 if(any(trials<successes)){
 #      which_less = which(trials<successes)
@@ -286,7 +286,7 @@ Number of trials was increased to the number of successes and efficiency is 1 fo
 }
 messages$trials <- Message("trials",messages$trials)
 
-#######################################—•°
+## ------------------------------------—•°
 ## weights_times
 messages$weights_times = ""
 
@@ -325,7 +325,7 @@ dimnames(weights_times) <- list(time=times,group=cnams)
 
 messages$weights_times <- Message("weights_times",messages$weights_times)
 
-#######################################—•°
+## ------------------------------------—•°
 ## weights_groups
 messages$weights_groups = ""
 if(is.null(weights_groups)){
@@ -349,7 +349,7 @@ if(is.null(weights_groups)){
 
 messages$weights_groups <- Message("weights_groups",messages$weights_groups)
 
-#######################################—•°
+## ------------------------------------—•°
 ## lengthen  function not NULL
 len <- !is.null(lengthen) && (horizon > maxtime)
 if(len && !is.function(lengthen) ){
@@ -362,9 +362,9 @@ if(len && !is.function(lengthen) ){
 }
 
 
-####################################################################################################—•°
+## -------------------------------------------------------------------------------------------------—•°
 ## 2. Estimation
-####################################################################################################—•°
+## -------------------------------------------------------------------------------------------------—•°
    
 if(!is.null(wiggliness)){
    wiggliness = rep(wiggliness,length = ngr)
@@ -405,7 +405,7 @@ if(!is.null(mod_k$warn)){
 
 smoothed.curves = smoothed.curves[,-1,drop=FALSE]
 
-###########################################################—•°
+## --------------------------------------------------------—•°
 if(method=="cumulated"){
 
    smoothed.curves.cum <- smoothed.curves
@@ -419,7 +419,7 @@ if(method=="cumulated"){
    if(wc){ smoothed.curves = cbind(smoothed.curves,smoothed.curves[,1:ngr0]%*%cbind(weights_groups)) }
 }
 
-###########################################################—•°
+## --------------------------------------------------------—•°
 
 #weighted_curve = as.vector(smoothed.curves[,-1]%*%cbind(weights_groups))/sum(weights_groups)
 #smoothed.curves = cbind(smoothed.curves,weighted_curve)
@@ -438,14 +438,14 @@ if( len ){
    }
 }
 
-###################################################################################################—•°
-### Result
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
+##  Result
+## ------------------------------------------------------------------------------------------------—•°
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## preparation
 
-#######################################—•°
+## ------------------------------------—•°
 ## do not print everything (using compact() from DM package)
 
 if(max(weights_times)==min(weights_times)){  ## all equal
@@ -455,7 +455,7 @@ if(max(weights_times)==min(weights_times)){  ## all equal
 }else{}  ## do nothing in any other case
 
 
-#######################################—•°
+## ------------------------------------—•°
 ## smoothed_curves_...
 if(wc){
    dimnames(smoothed.curves) <- list(time=1:horizon,group=c(cnams,"weighted_curve"))
@@ -474,7 +474,7 @@ if(wc){
       dimnames(smoothed.curves.cum) <- list(time=1:horizon,group=cnams)
    }
 }
-#######################################—•°
+## ------------------------------------—•°
 ## margins
 
 margins(smoothed.curves) <- 1
@@ -491,7 +491,7 @@ if(net_curve){
    cnams <- c(cnams,"Sum")
 }
 
-#######################################—•°
+## ------------------------------------—•°
 ## efficiencies
 
 efficiencies0 <- tm(successes0)/tm(trials0)
@@ -508,7 +508,7 @@ if(wc){
    dimnames(efficiencies)  <- list(time=times,group=cnams)
 }
 
-#######################################—•°
+## ------------------------------------—•°
 ## making all matrices a "tm" class
 ##
 ## This is to have proper printing of them;
@@ -523,7 +523,7 @@ transpose(efficiencies0) <- FALSE
 transpose(efficiencies) <- FALSE
 transpose(smoothed.curves) <- FALSE
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## output
 
 result = list( #prints = prints  ,
@@ -560,24 +560,24 @@ class(result) <- c("smooth_gam")
 result
 
 }  ##----END----##
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## EXAMPLES ############################################################################################################—•°
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 
  ## RELOADER — before it works you need to source("PacksAK.R"); it's best to use PackName.R within pack's dir.
  loadPacksAK("EfficiencyCurves")
 
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 n=20 ; g=5 ; maxs=100
 successes <- data.frame(row.names=1:n)
 for(k in 1:g){ successes <- cbind(successes , rev(sort(sample(20:maxs,n,replace=TRUE))) + sample(1:20,n,replace=TRUE) + sample(-20:20,1)) }
@@ -613,7 +613,7 @@ summary(sg)[]
 
 efficiency(successes)
 efficiency(successes,cum=TRUE)
-###
+## 
    efficiency(successes,margin=1) ## nonsense!!! just to check how it works
    efficiency(successes,cum=TRUE,margin=1) ## nonsense!!! just to check how it works
 
@@ -626,7 +626,7 @@ plot(sg,add_points=FALSE,legend_pos="bottomleft")
 plot(sg,groups=1)
 
 
-#######################################—•°
+## ------------------------------------—•°
 ## future & horizon
 smooth_gam( successes )
 smooth_gam( successes , future =  12 )  ## the same as default
@@ -642,5 +642,5 @@ smooth_gam( successes , future = 10 , horizon = 32 ) ## inconsistent values —— n
 smooth_gam( successes , future = 10 , horizon = 30 ) ## consistent; but it's no need to specify both parameters.
 
 }
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 rm(dummy)

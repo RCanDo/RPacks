@@ -1,6 +1,6 @@
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## Pretty printing of lists, alternative for str() and other.
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE    {DM}
 ##  indentr()
 ##
@@ -20,14 +20,14 @@
 ## DESCRIPTION
 ##  The aim, the idea, problems, solutions... briefly!, concerning the whole set of functions
 ##
-####################################################################################################—•°
+## -------------------------------------------------------------------------------------------------—•°
 ## AUTHOR: Arkadiusz Kasprzyk; akasp@...
 ## ver. 1.0
 ## PATH: D:\ROBOCZY\...
 ## start: 2017-03-01    last: 2017-09-26
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 indentr = function( ll, level=0, ind="   "
                   , leaves=c( getOption("class.groups")$implicite , getOption("class.groups")$common
                             , "lm", "glm", "gam", "arguments", "condlist")
@@ -42,7 +42,7 @@ indentr = function( ll, level=0, ind="   "
                   , attributes=FALSE
                   , ...
                   ){
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 ## Prints lists recursively (indentr) with names of entries coerced to their numeric position (if names are empty)
 ## and each level indented 3 spaces (default) more. Indentation may be set arbitrary.
 ##    Arguments
@@ -112,7 +112,7 @@ indentr = function( ll, level=0, ind="   "
 ## • "\n" at the end of strings are immediately replaced with "" i.e. are ignored;
 ## • "\n" in the middle of a string results with new line indented according to level;
 ## • elements of a string vector are printed in one line separated with " ".
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 
 leaves <- setdiff(union(leaves, add), rm)
 leaves <- union(getOption("class.groups")$language, leaves)
@@ -228,27 +228,27 @@ if( messages && !is.null(messages.ll) ){                                        
 #cat( separate1 )
 
 }  ##----END----##
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## EXAMPLES ############################################################################################################—•°
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 dummy = function(){
 ## This is dummy function — it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-###################################################################################################—•°
+## ------------------------------------------------------------------------------------------------—•°
 
  ## RELOADER — before it works you need to source("PacksAK.R"); it's best to use DM.R within pack's dir.
  loadPacksAK("DM")
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## See examples for indent() first.
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 mm <- matrix(1:9, 3)
 indentr(mm)           ## indented with 0 times 3 spaces i.e. nothing will happen by default
 indentr(mm, 1)         ## indented with times 3 spaces
@@ -334,7 +334,7 @@ indentr(mod, rm="lm", omit=c("qr", "call"), delete=c("terms", "model"), vsep=1)
 
 indentr(mod, rm="lm", omit=c("qr", "call"), delete=c("terms", "model"), vsep=1, ind="|  ", attributes=T)
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ## list of messages
 ll0 <- list( b = c("message0\n", "message1\nqq", "message2", "m3") , "a"
            , c = c("message1\n", "message2", "m3"), d = c("message1", "message2"), "empty_list"=list())
@@ -345,9 +345,9 @@ indentr(ll0, as.text=TRUE)
 indentr(ll0, info=FALSE, as.text=TRUE)    ## the best way to print nested messages
                                           ## BUT only when each message in a single vector
 
-###########################################################—•°
+## --------------------------------------------------------—•°
 ## See examples for compact() first.
-###########################################################—•°
+## --------------------------------------------------------—•°
 indentr(ll0, compact=TRUE)                ##    info about class and dim ;
                                           ## TRUE is coerced to 1 what means only the first element is displayed
 indentr(ll0, compact=TRUE, info=FALSE)    ## compact mode works always as if as.text=TRUE, i.e. all character vectors
@@ -372,7 +372,7 @@ indentr(infos, compact=c(0, 0), info=FALSE)      ## NO info about class and dim
 
 indentr(infos, compact=c(0, 0), info=FALSE, vsep=1)
 
-#####
+## --
 
 indentr(mod)
 indentr(mod, compact=TRUE)        ## in a compact mode indentr() dwelves into a list, even if it inherits from leaves;
@@ -402,7 +402,7 @@ indentr(mod, rm="lm", ind="|  ", vsep=1, compact=c(5, 2), info=F)
 indentr(mod, rm="lm", ind="|  ", vsep=1, compact=c(5, 2), info=F, digits=4)     ## only 4 significant digits
 
 
-###############################################################################—•°
+## ----------------------------------------------------------------------------—•°
 ll <- list(
    list("a", b = c("message0\n", "message1\nqq", "message2", "m3"), c = c("message1\n", "message2", "m3"), d = c("message1", "message2"))
 , two = 1:3
@@ -456,7 +456,7 @@ indentr(quote({x<-1;sin(x)}))
 class(quote({x<-1;sin(x)}))
 
 
-########################################
+## -------------------------------------
 cdl <- structure( list(
     "a" = list( variables = "b", conditions = quote(x<a) , substitute = quote(0) )
   , "b" = list( variables = "c", conditions = quote(x>=a) , substitute = quote(0) )
@@ -468,5 +468,5 @@ cdl
 indentr(cdl)
 
 }
-########################################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 rm(dummy)

@@ -1,4 +1,4 @@
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## FUNCTIONS HERE
 ##  split.df.by.nas()
 ##  split.df.by.nas.first()
@@ -6,9 +6,9 @@
 ##
 ## DEPENDENCIES
 ##
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 split.df.by.nas = function(datfram , variables = NULL){
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## Splitting given data frame into a number of data frames such that for each variable from 'variables'
 ## each data frame has only NAs or no NAs at all.
 ## Variables with only NAs are removed from given data frame, hence we obtain a list of data frames
@@ -57,7 +57,7 @@ split.df.by.nas = function(datfram , variables = NULL){
 ##  3. Could be made in a different way to work (perhaps!) faster: use apply() - see a draft in a dummy() below.
 ##  Some day later... 
 ##
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
 
 df.name = deparse(substitute(datfram))
@@ -101,9 +101,9 @@ if(length(list.df)==1){
 list.df
 } ##----END----##
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 stats.df.list = function( df.list , use.df.names = FALSE , message = TRUE ){
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## Basic statistics about data frames which are elements of the list 'df.list'.
 ## Two tables are created: one giving the number of NAs for each variable in each data frame,
 ## the second table is incidence table, where 1 indicates that a variable is in a data frame,
@@ -127,7 +127,7 @@ stats.df.list = function( df.list , use.df.names = FALSE , message = TRUE ){
 ##                      obviously NAs appear for these variables which are not present in relevant data frame.
 ##    var.names.table   incidence of variables for each data frame and variable.
 ##
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
 var.names.df = data.frame( var_name = character(0) , data_frame = numeric(0) , NAs = numeric(0) )
 
@@ -147,7 +147,7 @@ for( k in 1:length(df.list) ){
     nobs = c(nobs,nrow(df.list[[k]]))
 }
 
-###################
+## ----------------
 
 if(use.df.names){
   df.names = names(df.list)
@@ -155,7 +155,7 @@ if(use.df.names){
   names(nobs) = df.names
 }
 
-###################
+## ----------------
 
 var.names.table =
     with(   var.names.df
@@ -169,7 +169,7 @@ var.names.table = cbind( "sum" = row.sums , var.names.table )
 var.names.table =  var.names.table[row.sums.ord,]
 
 
-###################
+## ----------------
 
 NAs.table =
     with(   var.names.df
@@ -187,7 +187,7 @@ NAs.table = rbind( "(nr of variables)" = nr_of_variables ,  NAs.table  )
 
 colnames(NAs.table)[1:2] = c("nr_of_df","NAs_sum")
 
-###################
+## ----------------
 
 if(message){
     cat("NAs statistics\n")
@@ -198,7 +198,7 @@ if(message){
 #       cat("\n")
 }
 
-###################
+## ----------------
 
 stat.list = list( NAs.table = NAs.table , var.names.table = var.names.table )
 #stat.list
@@ -206,9 +206,9 @@ stat.list = list( NAs.table = NAs.table , var.names.table = var.names.table )
 
 
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 split.df.by.nas.first = function( datfram , variables = NULL  , no.na.list = TRUE, no.split.name = NULL ){
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## Splitting given data frame into two data frames in the following manner:
 ##  1. searching for a variable (from 'variables') having any NA value;
 ##     searching finnishes when any such variable is found;
@@ -238,7 +238,7 @@ split.df.by.nas.first = function( datfram , variables = NULL  , no.na.list = TRU
 ## Notes
 ##  This function is used in a loop in split.df.by.nas().
 ##
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
 if(is.null(variables)) variables = names(datfram)
 
@@ -294,20 +294,20 @@ if( length(variables)>0 ){
 df.list
 
 } ##----END----##
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## EXAMPLES ############################################################################################################•°
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
-##############################################################################################•°
+## -------------------------------------------------------------------------------------------•°
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-##############################################################################################•°
+## -------------------------------------------------------------------------------------------•°
 
 nulls.table(data.new)
 lista1 = split.df.by.nas.first(data.new[,1:4],no.split.name="barabara")
@@ -329,7 +329,7 @@ for(k in 1:length(lista0)){    print(nulls.table(lista0[[k]])$NAs)  }
 grep('END$',names(lista0))
 length(grep('END$',names(data.new)))
 
-###############
+## ------------
 ## a draft of using apply()  for the problem
 
 dim(apply( data.new,2,
@@ -338,4 +338,4 @@ function(x){ z = ifelse( is.na(x) , paste0(deparse(substitute(x)) , "_NA" ) , pa
 )   )
 
 }
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°

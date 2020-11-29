@@ -1,10 +1,10 @@
 barplot.confint = function(x, y, main=NULL, namx=NULL, namy=NULL,...){
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## Draws a barplot with confidence intervalse for the values of coefficients in the model
 ##    lm( y ~ x )
 ## where y is supposed to be a numeric variable and x a factor.
 ## x and y may be passed as names (charavters of length 1) of variables in parent env.
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
 if(is.null(namx)){namx = deparse(substitute(x))}
 if(is.null(namy)){namy = deparse(substitute(y))}

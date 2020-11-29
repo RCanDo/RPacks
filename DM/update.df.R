@@ -1,4 +1,4 @@
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## FUNCTIONS HERE
 ##  update.df()
 ##
@@ -6,9 +6,9 @@
 ##  addid.R
 ##   names2id() with alias   addid2df()
 ##   var2vec()  with alias   addid2vec()
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 update.df = function(  datfram      ## data frame
 							, data                ## vector or data frame to be used to update 'datfram'
 							, id = NULL           ## which variable of 'datfram' will be used as an ID variable
@@ -27,7 +27,7 @@ update.df = function(  datfram      ## data frame
                      , suffix_start = 1  ## starting value for suffixes added to names of appended variables
                                     ## having the same as some variable in datfram
 							){
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 ## Updating data frame 'datfram' by appending or replacing given variable with care for order of observations
 ## implied by some key in 'datfram' (its rownames or so called "ID variable")
 ## and [row]names of 'data' (vector or data frame).
@@ -102,12 +102,12 @@ update.df = function(  datfram      ## data frame
 ##  You cannot update ID variable.
 ##  If id='name', variable='name' the function will automatically adjust ID name,
 ##  and id.variable will be appended even if at the same time action="update" or action="replace".
-########################################################################################################################•°
+## ---------------------------------------------------------------------------------------------------------------------•°
 
 
 rm.id = FALSE
 
-#######################################
+## ------------------------------------
 ##  id
 ##
 
@@ -116,12 +116,12 @@ if(is.null(id)){
 	id = 0
 }
 
-#######################################
+## ------------------------------------
 
 datfram0.attr.names = names(attributes(datfram))
 datfram0.attr = attributes(datfram)
 
-#######################################
+## ------------------------------------
 if(is.numeric(id)){
    if(id == 0){ ## we must use rownames as ID variable BUT we need to add it to datfram's columns before
 
@@ -160,16 +160,16 @@ if(is.numeric(id)){
 #! names.datfram  has all column names together with ID variable
 #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 
-#################################################
+## ----------------------------------------------
 ## needed for retrieving order and rownames #####
 id.var = datfram[, id]	#<=>#  id.var = var2vec(datfram, id)
 rownams = rownames(datfram) ; names(rownams) = id.var		#<=>#	rownams = var2vec(datfram, variable=0, names=id.var)
-#################################################
+## ----------------------------------------------
 ## By the way:
 if(any(table(id.var)>1)){warning("Some values in ID variable are not unique! Result is unpredictable!")}
 
 
-#################################################
+## ----------------------------------------------
 ##  variable
 
 if(is.vector(data) | is.factor(data)){
@@ -189,7 +189,7 @@ if(is.vector(data) | is.factor(data)){
 
 }
 
-#######################################################################################
+## ------------------------------------------------------------------------------------
 ##  creating data frame from data with ID from (row)names
 ##
 id.old = id ## == names.datfram[id.pos]  ## it is needed to retrieve original id passed to function in case it will change below
@@ -222,7 +222,7 @@ names.datfram = names(datfram)
                                   #print(names.datfram)
                                   #print(names.data)
 
-#################################################
+## ----------------------------------------------
 ## type of   datfram XXX JOIN data
 if( join == "outer" ){
   all.x = TRUE ; all.y = TRUE
@@ -238,7 +238,7 @@ if( join == "outer" ){
 
                                     #  print(data.df)
                                     #  print(datfram)
-#######################################################################################
+## ------------------------------------------------------------------------------------
 j = which( names.datfram %in% names.data )  ## j >= 1 because ID variable is always in both data frames (with the same name)
    											#print(names.datfram[j])
 names.common = names.datfram[setdiff(j, id.pos)]  ## without ID -- may be empty
@@ -250,7 +250,7 @@ classes = as.list(sapply(datfram[, c(id, names.common), drop=FALSE], class))  ##
    #print(classes)
 levs = lapply( datfram[, c(id, names.common), drop=FALSE] , levels )
    #print(levs)
-#######################################################################################
+## ------------------------------------------------------------------------------------
 
 if(length(j)>1){
 
@@ -309,7 +309,7 @@ if(length(j)>1){
 
 }
 
-#######################################################################################
+## ------------------------------------------------------------------------------------
 
                                   # print(id)
                                   # print(id.old)
@@ -356,7 +356,7 @@ datfram = rbind(df.old, df.new)
     # print(names.datfram.final); cat("\n")
     # print(names(datfram))
 
-######################################################################################
+## -----------------------------------------------------------------------------------
 ## cleaning and ordering
 ##
 names.data = names.data[-1] ## the first of names.data is always ID variable made of rownames(data)
@@ -375,7 +375,7 @@ names.datfram.final = c(names.datfram, names.data)
 
 datfram = datfram[, names.datfram.final]  ## now all names of datfram are retrieved to original in the original order
 
-######################################################################################
+## -----------------------------------------------------------------------------------
 ## if "update" and na.omit = TRUE -- refilling NAs from 'data' when they've overwritten proper values in 'datfram'
 ##
 
@@ -406,7 +406,7 @@ if( action == "update" && na.omit && length(names.common)>0 ){
    }
 
 }
-######################################################################################
+## -----------------------------------------------------------------------------------
 ## retrieveing classes, especially factors
 ##
 ## print(names(classes)) ;  print(names(datfram)) ;   print(intersect(names(classes), names(datfram)))
@@ -421,7 +421,7 @@ for(nam_k in intersect(names(classes), names(datfram))){
    } ## else if("character" %in% class_k){ } ## not necessary
 }
 
-######################################################################################
+## -----------------------------------------------------------------------------------
 ## retrieveing attributes of datfram
 
 attributes(datfram) = c( attributes(datfram)
@@ -429,26 +429,26 @@ attributes(datfram) = c( attributes(datfram)
 
 class(datfram) <- union( class(datfram) , datfram0.attr[["class"]] ) 
 
-######################################################################################
+## -----------------------------------------------------------------------------------
 ## output
 ##
 
 datfram
 
 } ##----END----##
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 ## EXAMPLES ############################################################################################################
-########################################################################################################################
+## ---------------------------------------------------------------------------------------------------------------------
 
-##############################################################################################
+## -------------------------------------------------------------------------------------------
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-##############################################################################################
+## -------------------------------------------------------------------------------------------
 
 df1 = data.frame( aa = sample(1:6)
                 , bb = 4:9
@@ -483,7 +483,7 @@ update.df(df1, v2, join="right")
 update.df(df1, v2, join="outer")
 update.df(df1, v2, join="inner")
 
-##############################################
+## -------------------------------------------
 
 df2 = df1; rownames(df2) = sample(101:106)
   df2 ; v2
@@ -496,7 +496,7 @@ update.df(df2, v2, id="aa")  ## this works!  only (always) [row]names of v2 are 
 									## rownames of the df2 preserved and rows' order too
    sapply(update.df(df2, v2, id="aa"), class)
 
-##############################################
+## -------------------------------------------
 ## no common names(v2) with rownames(df2)
    df2 ; v2
 update.df(df2, v2)    ## it's OK
@@ -519,7 +519,7 @@ update.df(df2, v2, join="right")  ##  "
       sapply(update.df(df2, v2, join="right"), class)  ## OK
 
 
-##############################################
+## -------------------------------------------
 df1 ; v2
 ## no common entries of names(v2) with df1$cc
 ##
@@ -543,7 +543,7 @@ update.df(df1, v2, id="cc", join="right") ## == RIGHT JOIN
   rbind(df2, df2, df2)    ## notice how rownames changes
   rbind(df2, rbind(df2, df2))
 
-##############################################
+## -------------------------------------------
 ## ID as letters
 ##
 df3 = df2 ; rownames(df3) = sample(letters[11:16])
@@ -593,7 +593,7 @@ update.df(df3, v5, id="dd", join = "left")   ## == LEFT  JOIN
 update.df(df3, v5, id="dd", join = "right")  ## == RIGHT JOIN
 update.df(df3, v5, id="dd", join = "inner")  ## == INNER JOIN
 
-##############################################
+## -------------------------------------------
 df3 ; v4
 
 update.df(df3, v4)
@@ -605,8 +605,8 @@ update.df(df3, v4, variable = "aa", action = "update", join = "right") ##
 update.df(df3, v4, variable = "aa", action = "update", join = "outer") ##
 update.df(df3, v4, variable = "aa", action = "update", join = "inner") ##
 
-##############################################
-##############################################
+## -------------------------------------------
+## -------------------------------------------
 ## two data frames
 (df0 = update.df(df1, df1))    ## just repeated columns,  join according to rownames
    sapply(df0, class)
@@ -688,7 +688,7 @@ df12 ; sapply(df12, class)
 ## now the new values are inserted as characters:
 df0$cc   ## new cc is also character
 
-##################
+## ---------------
 ## na.omit
 df1 ;   sapply(df1, class) ; lapply(df1, levels)
 v5 = c("a", "a", NA, NA, "z", "")
@@ -716,9 +716,9 @@ v6 = as.factor(v5) ; v6
 (df0 = update.df(df1, v6, id="bb", variable = "dd", action="update", na.omit=TRUE) )
    sapply(df0, class) ; lapply(df0, levels)
 
-#############################################################################################
+## ------------------------------------------------------------------------------------------
 ## More on 'variable'
-##################
+## ---------------
 
 df1
 
@@ -736,9 +736,9 @@ update.df(df1, data1)     ## "aa", "bb", "cc" of df1 remained unchanged while "a
 update.df(df1, data1, action="update")  ## "aa", "bb", "cc" replaced and "pp", "qq", "rr" appended
 
 
-#############################################################################################
+## ------------------------------------------------------------------------------------------
 ## Other problems.
-##################
+## ---------------
 
 df1 ; df11
 ## 1. you need to update variable df1$cc with values of df11$bb  according to ID df1$aa
@@ -746,7 +746,7 @@ update.df(df1, df11[, "bb"], id="aa", variable="cc", action="update")   ## OK , 
 
 ## 2. BUT IF you try replacing ID variable:
 update.df(df1, df11[, "bb"], id="aa", variable="aa", action="update")   #!#! ID variable cannot be replaced
-###############################
+## ----------------------------
 ## when you try to replace ID variable
 update.df( df11 , df1 , id=4 , variable = 1:4 , action = "update" )  ## notice how cc has changed !!!
    ## id = 4 is dd and its values were not changed while new variable dd.1 appeared

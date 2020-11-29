@@ -83,7 +83,7 @@ seq1 = seq1[idx]
 seq1
 }
 
-##############################################
+## -------------------------------------------
 ## examples
 dummy=function(){
 
@@ -145,7 +145,7 @@ monetary(64736,base=100)
 monetary(64736,base=c(1,2.5,5))         ## not advised -- default base is much better!
 monetary(64736,base=round(runif(3),3))  ## a little nonsense, just possibility
 
-###################
+## ----------------
 ## power.range not null
 monetary(64736 , power.range = 2)
 monetary(64736 , power.range = -2) ## the same because sign is ignored
@@ -156,7 +156,7 @@ monetary(64736 , power.range = 10)  ## quite a long sequence
 monetary(64736 , min.power = 1 ) ##
 monetary(64736 , min.power = 1 , power.range = 2) ## min.power is ignored when  power.range is not null
 
-###################
+## ----------------
 ## sometimes we need to merge last or first intervals
 monetary(64736 , power.range = 2)
 monetary(64736 , power.range = 2, merge.last = 1)

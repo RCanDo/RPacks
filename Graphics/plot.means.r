@@ -1,4 +1,4 @@
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 ## FUNCTIONS HERE
 ##  plot.lm.means()  ## doda? wy?wietlanie ?redniej
 ##  plot.means.fit()
@@ -11,9 +11,9 @@
 ##    margins.my()
 ##    parMy()
 ##
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 plot.lm.means = function( formula , data = NULL ,... ){
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 ## This function is intended to plot means with confidence bars for one way ANOVA.
 ## ARGUMENTS
 ##  formula    formula for linear model which is one way ANOVA, ie. one factor regressor
@@ -29,7 +29,7 @@ plot.lm.means = function( formula , data = NULL ,... ){
 ##  df         degrees of freedom
 ##  alpha      significance level
 ##
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 if(is.null(data)){
    model = lm(formula, y=TRUE)
 }else{
@@ -41,19 +41,19 @@ result$model = model
 result = result[c("model", names.result)]
 result
 } ##----END----##
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 ## EXAMPLE
 dummy = function(){
 
 result = plot.lm.means(yy~variable.fun)
 
 }
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 
 
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 plot.means.fit = function(model, mean=NULL, sort = FALSE, labels=NULL,...){
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 ## For the linear model given in 'model' with ONE factor (one-way ANOVA) it plots
 ## estimated means for every level of this factor together with 1-alpha confidence interval,
 ## in the manner similar to plot.design().
@@ -65,16 +65,16 @@ plot.means.fit = function(model, mean=NULL, sort = FALSE, labels=NULL,...){
 ##              You may also set it to "asc" or "desc" to indicate which oreder you want (increasing or decreasing respectively).
 ##  labels      user defined names for each level name; if NULL (default) then names of levels are taken from model$xlevels[[1]].
 ##  ...         further arguments passed to plot.means()
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 
-#######################################
+## ------------------------------------
 means = model$coef
    n=length(means)
    means = means[1] + c(0, means[-1])
 df = model$df
 stderrs = summary.lm(model)$coef[, 2]
 
-#######################################
+## ------------------------------------
 if(!is.null(labels)){
    names(means) = labels
 }else{
@@ -82,7 +82,7 @@ if(!is.null(labels)){
 }
 ordr = 1:length(means)
 
-#######################################
+## ------------------------------------
 if(is.logical(sort) | is.character(sort)){
    if(is.logical(sort) && sort){
       sort = "asc"
@@ -109,22 +109,22 @@ if(is.logical(sort) | is.character(sort)){
 stderrs = stderrs[ordr]
 labels = names(means)
 
-#######################################
+## ------------------------------------
 results = plot.means(means, stderrs, df, mean, labels=labels,...)
 return(results)
 
 } ##----END----##
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 
 
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 plot.means = function(means, stderrs, df=NULL, mean = NULL,
                       main="", labels=NULL, ylab="means", xlab="", xlas = 0,
                       text=TRUE, pos = NULL , rotate = FALSE, cex.means = 1,
                       alpha=.05,
                       type = "", wdth =.2, lwd=1, ylim = NULL,
                       windows = FALSE , height = NULL , width = NULL, coldef = "black", parMy = TRUE, ... ){
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 ##  means       vector of means to be plotted.
 ##  stderrs     vector of respective standard errors. If shorter then means this will be
 ##              cyclically replicated to match the length of means.
@@ -196,7 +196,7 @@ plot.means = function(means, stderrs, df=NULL, mean = NULL,
 ##  coldef = "black" type of color definition. Default "black" means that background is black, plot lines and axes are yellow,
 ##                   axes labels and and other strings are white.
 ##  parMy = TRUE    if TRUE then graphical parameters set in funciton parMy() are in use.
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 
 if(is.null(df)){tq = qnorm(1-alpha/2)}else{ tq = qt(1-alpha/2, df)}
 n = length(means) # == length(unique(levels))
@@ -207,7 +207,7 @@ d = max(upper) - min(lower)
 #  nams = model$xlevels[[1]]
 
 
-###################################################################################################??
+## ------------------------------------------------------------------------------------------------??
 ##  winows() and graphical parameters
    max.length.level.name = max(unlist(lapply(strsplit(as.character(unique(labels)), split=""), length)))  ## in characters
    min.width = .5
@@ -235,7 +235,7 @@ if( xlas %in% c(0, 1) ){        ## horizontal
    multiple.width = min.width
 }else{ stop("'xlas' must be one of 0, 1, 2, 3.") }
 
-###########################################################??
+## --------------------------------------------------------??
 
 if(windows){
 
@@ -256,7 +256,7 @@ if(windows){
 }
 
 
-###################################################################################################??
+## ------------------------------------------------------------------------------------------------??
 
 
 if(is.null(ylim)){ylim=c(min(lower)-d/15, max(upper)+d/15)}        ## (2)
@@ -313,19 +313,19 @@ result.list = list( "labels"=labels , "means"=means , "SE"=stderrs , "intervals"
 if(windows){ result.list[["window.size"]] = c("height"=height, "width"=width) }
 return( result.list )
 } ##----END----##
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 ## EXAMPLES ############################################################################################################??
-########################################################################################################################??
+## ---------------------------------------------------------------------------------------------------------------------??
 
-##############################################################################################
+## -------------------------------------------------------------------------------------------
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-##############################################################################################
+## -------------------------------------------------------------------------------------------
 
 #   poz = c("ld", "lu", "rd", "ru", "r", "u", "d", "l")
 #   strsplit(poz, split="")
@@ -349,12 +349,12 @@ plot.lm.means(yy~xx, windows=TRUE)
 plot.lm.means(yy~xx, windows=TRUE, coldef="grey")
 plot.lm.means(yy~xx, windows=TRUE, coldef="white")
 
-###########################################################
+## --------------------------------------------------------
 ## more advanced example (random data)
 
 set.seed(1000)   ## for reproducibility
 
-###################
+## ----------------
 ## data
 
 n = sapply( letters[1:16], FUN=function(x){1000+sample(800, 1)-400} )
@@ -366,7 +366,7 @@ table(ww)
 means = runif(16)/3 + .1; names(means) = names(n); means
 zz = unlist( sapply( names(n) , FUN=function(x){ pmax( rexp( n[x], rate=1/means[x]), 0) } ) )  ## list
 
-###################
+## ----------------
 ## plots
 
 cols = rep(2:8, length=16); names(cols) = levels(ww); cols = cols[as.character(ww)]
@@ -404,7 +404,7 @@ plot.lm.means(zz~ww2, windows=TRUE, sort="desc", text=FALSE)
 anova(lm(zz~ww))
 anova(lm(zz~ww2))
 
-###########################################################
+## --------------------------------------------------------
 ## the same as above but with smaller differences between means
 
 set.seed(3000)

@@ -27,21 +27,23 @@ t <- function(x,...) UseMethod("t")
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-t.array <- function(x,swap=c(1,2)){
+t.array <- function(x, swap=c(1, 2)){
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## There is no standard t method for arrays; moreover t(array) returns error.
 ## Here t.array() is defined in a sense that it makes transposition of all pages of array
-## i.e. simply swaps rows and columns. In general case you may pass a series of dimensions which will be rearranged
-## in reverse order; hence this is special case of aperm().
+## i.e. simply swaps rows and columns.
+## In general case you may pass a series of dimensions which will be rearranged in reverse order;
+## hence this is special case of aperm().
 ##
 ##    Arguments
 ##  x             array
-##  swap=c(1,2)   dimensions to swap; vector of unique integers all of which must be in 1:length(dim(x));
+##  swap=c(1, 2)   dimensions to swap; vector of unique integers all of which must be in 1:length(dim(x));
 ##
 ##    Result
-##  x          array with rows and columns swaped when 'swap' is default; in general dimensions given in swap
-##             are rearranged in reversed order i.e. t.array() is a special case of aperm(x,perm) where
-##                   dims = 1:length(dim(x));   dims[swap] <- rev(swap);   x <- aperm(x,dims)
+##  x          array with rows and columns swaped when 'swap' is default;
+##             in general dimensions given in swap are rearranged in reversed order
+##             i.e. t.array() is a special case of aperm(x, perm) where
+##                   dims = 1:length(dim(x));   dims[swap] <- rev(swap);   x <- aperm(x, dims)
 ##
 ##    Description/Comments/Remarks
 ## Retains attributes as t() does.
@@ -59,7 +61,7 @@ attrs$dimnames <- NULL
 x <- unattr(x)
 
 dims[swap] <- rev(swap)
-x <- aperm(x,dims)
+x <- aperm(x, dims)
 
 attributes(x)[names(attrs)] <- attrs
 
@@ -79,20 +81,21 @@ dummy = function(){
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
 ## -------------------------------------------------------------------------------------------—•°
-## RELOADER — before it works you need to source("PacksAK.R"); it's best to use {package_name}.R within pack's dir.
+## RELOADER — before it works you need to source("RCanDo.R"); it's best to use {package_name}.R within pack's dir.
  loadPacksAK("DM")
 ## -------------------------------------------------------------------------------------------—•°
 
-mm <- array(1:100,dim=c(10,5,2))
+mm <- array(1:100, dim=c(10, 5, 2))
 mm
 t(mm)
-t(mm,swap=c(1,3))
-t(mm,c(2,3))
+t(mm, swap=c(1, 3))
+t(mm, c(2, 3))
 
-mm <- array(1:120,dim=c(5,4,3,2))
+mm <- array(1:120, dim=c(5, 4, 3, 2))
 mm
 t(mm)
-t(mm,1:4)
-t(mm,c(1,3))
+t(mm, 1:4)
+t(mm, c(1, 3))
 
-};rm(dummy)
+## ---------------------------------------------------------------------------------------------------------------------—•°
+}; rm(dummy)

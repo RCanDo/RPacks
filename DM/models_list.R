@@ -25,7 +25,7 @@
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 models_table <- function(x,...){UseMethod("models_table")}
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-models_table.default <- function(x,...){   ## NOT CHECKED !!! DO TESTS for  class(x) == "lm"
+models_table.default <- function(mlg,...){   ## NOT CHECKED !!! DO TESTS for  class(x) == "lm"
 structure(
    cbind(  coeff = t(sapply(mlg,'[[',"coefficients"))
       , rank = sapply(mlg,'[[',"rank")

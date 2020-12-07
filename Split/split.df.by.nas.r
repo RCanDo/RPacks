@@ -75,7 +75,7 @@ if(length(list.df)==1){
       control = FALSE
       for( k in 1:length(list.df) ){
           #  cat("\n"); print(k)
-          if( length(grep('END$',names(list.df[k])))==0 ){
+          if( length(grep('END$', names(list.df[k])))==0 ){
       
               list.df_k = split.df.by.nas.first( list.df[[k]] , variables , no.na.list = FALSE)
       
@@ -90,7 +90,7 @@ if(length(list.df)==1){
           }else{
               list.df_k = list.df[k]
           }
-          list.0 = c(list.0,list.df_k)
+          list.0 = c(list.0, list.df_k)
       }
       
       list.df = list.0
@@ -144,7 +144,7 @@ for( k in 1:length(df.list) ){
                       )
          )
 
-    nobs = c(nobs,nrow(df.list[[k]]))
+    nobs = c(nobs, nrow(df.list[[k]]))
 }
 
 ## ----------------
@@ -159,7 +159,7 @@ if(use.df.names){
 
 var.names.table =
     with(   var.names.df
-          , table(var_name,data_frame)
+          , table(var_name, data_frame)
     )
 var.names.table = rbind( "(nr of observations)" = nobs ,  var.names.table )
   row.sums = rowSums(var.names.table)    ## nr of data frames in which the variable is present ; the first value is the number of all observations
@@ -173,19 +173,19 @@ var.names.table =  var.names.table[row.sums.ord,]
 
 NAs.table =
     with(   var.names.df
-          , tapply( NAs , list(var_name,data_frame) , function(x)sum(as.numeric(as.character(x)),na.rm=TRUE) )
+          , tapply( NAs , list(var_name, data_frame) , function(x)sum(as.numeric(as.character(x)), na.rm=TRUE) )
                                                       ## nr of NAs for each variable within each data frame;
                                                       ## if the variable is not in a data frame then NA appears
     )
-  nr_of_variables = c(nrow(NAs.table),NA,colSums(apply(NAs.table,2,function(x)as.numeric(!is.na(x)))))
+  nr_of_variables = c(nrow(NAs.table), NA, colSums(apply(NAs.table, 2, function(x)as.numeric(!is.na(x)))))
 NAs.table = rbind( "(nr of observations)" = nobs ,  NAs.table  )
 NAs.table = NAs.table[row.sums.ord,]
-NAs.table = cbind( "NAs_sum" = c(NA,rowSums(NAs.table,na.rm=TRUE)[-1]) , NAs.table )
+NAs.table = cbind( "NAs_sum" = c(NA, rowSums(NAs.table, na.rm=TRUE)[-1]) , NAs.table )
 
-NAs.table = cbind( "nr_of_df" = var.names.table[,1] , NAs.table )
+NAs.table = cbind( "nr_of_df" = var.names.table[, 1] , NAs.table )
 NAs.table = rbind( "(nr of variables)" = nr_of_variables ,  NAs.table  )
 
-colnames(NAs.table)[1:2] = c("nr_of_df","NAs_sum")
+colnames(NAs.table)[1:2] = c("nr_of_df", "NAs_sum")
 
 ## ----------------
 
@@ -253,21 +253,21 @@ if(is.numeric(variables)){
 if( length(variables)>0 ){
 
   k = 1; nam = variables[k]
-  while( !is.na(nam) && sum( is.na(datfram[,nam]) )==0 ){
+  while( !is.na(nam) && sum( is.na(datfram[, nam]) )==0 ){
     # print(k)
     k = k+1
     nam = variables[k]
   }
 
   if(!is.na(nam)){
-    df.list = split( datfram , is.na(datfram[,nam]) )
+    df.list = split( datfram , is.na(datfram[, nam]) )
       kk = which( names(datfram)==nam )
-    df.list$'TRUE' = df.list$'TRUE'[,-kk]
+    df.list$'TRUE' = df.list$'TRUE'[, -kk, drop=FALSE]
     
     if( length(df.list)>1 ){
-       names(df.list) = paste(nam,c("OK","NA"),sep="_")
+       names(df.list) = paste(nam, c("OK", "NA"), sep="_")
     }else{
-       names(df.list) = paste(nam,"NA",sep="_")
+       names(df.list) = paste(nam, "NA", sep="_")
     }
 
   }else{
@@ -310,15 +310,15 @@ dummy = function(){
 ## -------------------------------------------------------------------------------------------•°
 
 nulls.table(data.new)
-lista1 = split.df.by.nas.first(data.new[,1:4],no.split.name="barabara")
+lista1 = split.df.by.nas.first(data.new[, 1:4], no.split.name="barabara")
 str(lista1)
-lista2 = split.df.by.nas.first(data.new,1:4,no.split.name="barabara")
+lista2 = split.df.by.nas.first(data.new, 1:4, no.split.name="barabara")
 str(lista2)
-lista22 = split.df.by.nas.first(data.new,1:4,no.split.name="barabara",no.na.list = FALSE)
+lista22 = split.df.by.nas.first(data.new, 1:4, no.split.name="barabara", no.na.list = FALSE)
 str(lista22)
-lista3 = split.df.by.nas.first(data.new,no.split.name="barabara")
+lista3 = split.df.by.nas.first(data.new, no.split.name="barabara")
 str(lista3)
-lista4 = split.df.by.nas.first(data.new,-5,no.split.name="barabara")
+lista4 = split.df.by.nas.first(data.new,-5, no.split.name="barabara")
 str(lista4)
 
 
@@ -326,15 +326,20 @@ lista0 = split.df.by.nas(data.new)
 str(lista0)
 for(k in 1:length(lista0)){    print(nulls.table(lista0[[k]])$NAs)  }
 
-grep('END$',names(lista0))
-length(grep('END$',names(data.new)))
+grep('END$', names(lista0))
+length(grep('END$', names(data.new)))
 
 ## ------------
 ## a draft of using apply()  for the problem
 
-dim(apply( data.new,2,
-function(x){ z = ifelse( is.na(x) , paste0(deparse(substitute(x)) , "_NA" ) , paste0(deparse(substitute(x)) , "_OK" ))
-}
+dim(apply( data.new, 2,
+    function(x){
+        z <- ifelse(
+            is.na(x),
+            paste0(deparse(substitute(x)) , "_NA" ),
+            paste0(deparse(substitute(x)) , "_OK" )
+            )
+    }
 )   )
 
 }

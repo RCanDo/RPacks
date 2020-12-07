@@ -32,13 +32,13 @@ Find(Negate(is.null),ll)
 
 ## (ak)
 `%+%` <- function(a,b) union(a,b)
-#   letters[1:4] %U% 1:4
-#   letters[1:4] %U% 1:4 %U% letters[3:6]
+#   letters[1:4] %+% 1:4
+#   letters[1:4] %+% 1:4 %+% letters[3:6]
 
 `%&%` <- function(a,b) intersect(a,b)
-#   letters[1:4] %A% 1:4
-#   letters[1:4] %A% letters[2:6]
-#   letters[1:4] %A% letters[2:6] %A% letters[3:8]
+#   letters[1:4] %&% 1:4
+#   letters[1:4] %&% letters[2:6]
+#   letters[1:4] %&% letters[2:6] %&% letters[3:8]
 
 `%||%` <- function(a,b) a&!b | !a&b
 # c(TRUE,TRUE,FALSE,FALSE) %||% c(TRUE,FALSE,FALSE,TRUE)
@@ -60,10 +60,8 @@ dummy = function(){
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
 ## -------------------------------------------------------------------------------------------—•°
-
- ## RELOADER —— before it works you need to source("PacksAK.R"); it's best to use EfficiencyCurves.R within pack's dir.
+## RELOADER —— before it works you need to source("PacksAK.R"); it's best to use EfficiencyCurves.R within pack's dir.
  loadPacksAK("DM")
-
 ## -------------------------------------------------------------------------------------------—•°
 
 NULL %C% 2
@@ -76,12 +74,24 @@ coalesce(NULL,NULL,2,"a")
 
 "a" %P% "b"
 
-letters[1:4] %U% 1:4
-letters[1:4] %U% 1:4 %U% letters[3:6]
+letters[1:4] %+% 1:4
+letters[1:4] %+% 1:4 %+% letters[3:6]
 
-letters[1:4] %A% 1:4
-letters[1:4] %A% letters[2:6]
-letters[1:4] %A% letters[2:6] %A% letters[3:8]
+letters[1:4] %&% 1:4
+letters[1:4] %&% letters[2:6]
+letters[1:4] %&% letters[2:6] %&% letters[3:8]
+
+# disjunction  (pl. dysjunkcja)
+c(TRUE,TRUE,FALSE,FALSE) %||% c(TRUE,FALSE,FALSE,TRUE)
+
+c(TRUE,FALSE)|c(TRUE,TRUE)
+c(TRUE,FALSE)||c(TRUE,TRUE)
+
+c(FALSE,FALSE)|c(FALSE,TRUE)
+c(FALSE,FALSE)||c(FALSE,TRUE)
+
+# symmetric difference
+letters[1:4] %|% letters[3:6]
 
 
 c(TRUE,FALSE)&c(TRUE,TRUE)
@@ -90,7 +100,7 @@ c(TRUE,FALSE)&c(TRUE,TRUE)
 !c(TRUE,FALSE)&!c(TRUE,FALSE)
 !c(TRUE,FALSE)&!c(FALSE,FALSE)
 
-}
-rm(dummy)
-## ---------------------------------------------------------------------------------------------------------------------—•°
+c(TRUE,FALSE)&&c(TRUE,TRUE)
 
+## ---------------------------------------------------------------------------------------------------------------------—•°
+}; rm(dummy)

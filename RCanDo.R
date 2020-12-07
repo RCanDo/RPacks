@@ -1,15 +1,19 @@
 ## --------------------------------------------------------------------------------------------------------------------
 ## LOADER OF ALL PacksAK to the separate environments
 ## --------------------------------------------------------------------------------------------------------------------
-#rm(list=ls())     ## czyszczenie przestrzeni roboczej
+#rm(list=ls())     ## clearing work space
 ## --------------------------------------------------------------------------------------------------------------------
 
+
 ## --------------------------------------------------------------------------------------------------------------------
+
+loadPacksAK <- local({
+
 ## LOADER FUNCTION ----------------------------------------------------------------------------------------------------
 
 r_files_in_path_from_list <- function(files, path){
-## Finding R files in the given directory (`path``)
-## which names agree with those from a list (`files``)
+## Finding R files in the given directory (`path`)
+## which names agree with those from a list (`files`)
 ## where extensions in the `files` may be wrong (.R or .r)
 ## or may not be present at all.
    
@@ -34,9 +38,6 @@ source_to_env <- function(files, path, env){
 }
 
 ## --------------------------------------------------------------------------------------------------------------------
-
-## --------------------------------------------------------------------------------------------------------------------
-loadPacksAK <- local({
 
 ## the main suffix for the names of packs (proto-pack_names)
 sig = "AK"
@@ -116,6 +117,7 @@ files[[pack]] = c(
    ,"models_list.R"   ## originaly in SumMod where it should be (now cannot because it is not seen there by print() called from indentr())
 ,"monetary.r"
 ,"methods.tm.R"
+   ,"nodes.R"
 ,"nulls.by.id.r"
 ,"nulls.table.r"
 ,"options.R"
@@ -125,9 +127,11 @@ files[[pack]] = c(
 ,"print.tm.R"
 ,"random.tables.r"
 ,"select_levels.R"
+   ,"subtable.R"      #!
 ,"t.array.R"
 ,"tm.R"
 ,"tm.attributes.R"
+#,"tm.methods.R"   # -> "methods.tm.R"
 ,"unravel.r"
 ,"update.binary.df.R"
 ,"update.df.R"
@@ -343,7 +347,7 @@ function( pack ){
       )
 }
 
-})
+})  ##----END----##
 ## --------------------------------------------------------------------------------------------------------------------
 
 #files = list(
@@ -363,4 +367,3 @@ function( pack ){
 #rm(list=intersect(ls(paste0(names(files),"_AK")),ls(pos=1)))
 #
 #rm(files)
-

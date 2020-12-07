@@ -13,23 +13,24 @@
 print.condlist = function(x,...){
 ## ------------------------------------------------------------------------------------------------—•°
 ## Print method for class "condlist" defined in Condapply package.
+## TODO: make use of "condlist" and "conditem" classes !!!
 ## ------------------------------------------------------------------------------------------------—•°
 if(length(x)>0){
       for( k in 1:length(x) ){
          nam_k <- names(x)[k]
          cat("\n")
-         cat(nam_k," (",k,") \n",sep="")
+         cat(nam_k, " (", k, ") \n", sep="")
          citem_k <- x[[k]]
          for( snum_j in names(citem_k)){
-            cat("\t",snum_j," : ")
+            cat("\t", snum_j, " : ")
             citem_kj <- citem_k[[snum_j]]
-            if( typeof(citem_kj) %in% c("language","symbol") ){
-               citem_kj <- gsub(' {2,}',' ; ',gsub('\\{ +','\\{ ',paste(deparse(citem_kj),collapse=" ")))
-               cat("\t",citem_kj,"\n",sep="")
+            if( typeof(citem_kj) %in% c("language", "symbol") ){
+               citem_kj <- gsub(' {2,}',' ; ', gsub('\\{ +','\\{ ', paste(deparse(citem_kj), collapse=" ")))
+               cat("\t", citem_kj, "\n", sep="")
             }else if(is.character(citem_kj)){
-               cat("\t");cat("\"");cat(citem_kj,sep="\", \"");cat("\"\n")     #"
+               cat("\t"); cat("\""); cat(citem_kj, sep="\", \""); cat("\"\n")     #"
             }else(
-               cat("\t",citem_kj,"\n")
+               cat("\t", citem_kj, "\n")
             )
          }
       }
@@ -52,10 +53,8 @@ dummy = function(){
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
 ## -------------------------------------------------------------------------------------------—•°
-
- ## RELOADER — before it works you need to source("PacksAK.R"); it's best to use DM.R within pack's dir.
+## RELOADER — before it works you need to source("PacksAK.R"); it's best to use DM.R within pack's dir.
  loadPacksAK("DM")
-
 ## -------------------------------------------------------------------------------------------—•°
 
 };rm(dummy)

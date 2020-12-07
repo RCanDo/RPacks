@@ -30,15 +30,16 @@ tm.class <- function(x){
 ## If not then removes "tm" from its class attribute.
 ## ------------------------------------------------------------------------------------------------—•°
    if( any( getOption("class.attributes")$tm %in% names(attributes(x)) ) ){
-      class(x) <- union("tm",class(x))
+      class(x) <- union("tm", class(x))
    }else{
-      class(x) <- setdiff(class(x),"tm")
+      class(x) <- setdiff(class(x), "tm")
    }
-   if(all(class(x)%in%unlist(getOption("class.groups")[c("language","implicite")]))){class(x)<-NULL}
+   if(all(class(x)%in%unlist(getOption("class.groups")[c("language", "implicite")]))){class(x)<-NULL}
    x
 }
+
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-is.tm <- function(x,fix=TRUE){
+is.tm <- function(x, fix=TRUE){
 ## ------------------------------------------------------------------------------------------------—•°
 ## Checks if x has any of the attributes which clasifies it as inheriting from "tm" class.
 ## If so then returns TRUE and adds "tm" to its class attribute.
@@ -56,11 +57,11 @@ is.tm <- function(x,fix=TRUE){
 
    if(fix){  ## fixing class "tm"
       if(check){
-         class(x) <- union("tm",class(x))
+         class(x) <- union("tm", class(x))
       }else{
-         class(x) <- setdiff(class(x),"tm")
+         class(x) <- setdiff(class(x), "tm")
       }
-      if(all(class(x)%in%unlist(getOption("class.groups")[c("language","implicite")]))){class(x)<-NULL}
+      if(all(class(x)%in%unlist(getOption("class.groups")[c("language", "implicite")]))){class(x)<-NULL}
 
       ## side effect
       assign( nam.x , x , pos = parent.frame() )
@@ -71,54 +72,54 @@ is.tm <- function(x,fix=TRUE){
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-`tm.attr<-` <- function(x,value){
-      attr(x,"margins")<-value$margins
-      attr(x,"head")<-value$head
-      attr(x,"round")<-value$round
-      attr(x,"transpose")<-value$transpose
+`tm.attr<-` <- function(x, value){
+      attr(x, "margins")<-value$margins
+      attr(x, "head")<-value$head
+      attr(x, "round")<-value$round
+      attr(x, "transpose")<-value$transpose
       tm.class(x)
 }
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-margins = function(x){ attr(x,"margins") }
+margins = function(x){ attr(x, "margins") }
 #> margins(aa)
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-`margins<-`<- function(x,value){
-      attr(x,"margins")<-value
-      tm.class(x)
-}
-## ---------------------------------------------------------------------------------------------------------------------—•°
-
-
-## ---------------------------------------------------------------------------------------------------------------------—•°
-head.attr = function(x){ attr(x,"head") }
-#> margins(aa)
-## ---------------------------------------------------------------------------------------------------------------------—•°
-`head.attr<-`<- function(x,value){
-      attr(x,"head")<-value
+`margins<-`<- function(x, value){
+      attr(x, "margins")<-value
       tm.class(x)
 }
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-round.attr = function(x){ attr(x,"round") }
+head.attr = function(x){ attr(x, "head") }
 #> margins(aa)
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-`round.attr<-`<- function(x,value){
-      attr(x,"round")<-value
+`head.attr<-`<- function(x, value){
+      attr(x, "head")<-value
       tm.class(x)
 }
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-transpose = function(x){ attr(x,"transpose") }
+round.attr = function(x){ attr(x, "round") }
 #> margins(aa)
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-`transpose<-`<- function(x,value){
-      attr(x,"transpose")<-value
+`round.attr<-`<- function(x, value){
+      attr(x, "round")<-value
+      tm.class(x)
+}
+## ---------------------------------------------------------------------------------------------------------------------—•°
+
+
+## ---------------------------------------------------------------------------------------------------------------------—•°
+transpose = function(x){ attr(x, "transpose") }
+#> margins(aa)
+## ---------------------------------------------------------------------------------------------------------------------—•°
+`transpose<-`<- function(x, value){
+      attr(x, "transpose")<-value
       tm.class(x)
 }
 ## ---------------------------------------------------------------------------------------------------------------------—•°

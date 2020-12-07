@@ -60,11 +60,12 @@ unattr(x)
 margins(x) <- 2
 x
 unattr(x)
+x
 
-
-(mm = matrix(sample(1:12),nrow=3))
+(mm = matrix(sample(1:12), nrow=3))
 comment(mm) <- "Just an example"
 attributes(mm)
+mm
 unattr(mm)
 
 colnames(mm) <- letters[1:4]
@@ -75,16 +76,18 @@ attributes(mm)
 unattr(mm)
 attributes(unattr(mm))
 
-## "margins" attribute defined in this file below
+## "margins" attribute defined in ...
 margins(mm) <- 1:2
 mm
+mm[]
+attributes(mm)
 unattr(mm)[]
 attributes(unattr(mm))
 unattr(mm)
 unattr(mm)[]
 class(unattr(mm))
 
-names(dimnames(mm)) <- c("X","Y")
+names(dimnames(mm)) <- c("X", "Y")
 mm
 mm[]
 attributes(mm)
@@ -96,32 +99,35 @@ mm[] <- rnorm(12)
 mm
 
 round.attr(mm) <- 3    ## now mm inherits from  "tm" and print.tm() method is used
-attr(mm,"a1") <-  1
-attr(mm,"a2") <-  2
-attr(mm,"ch1") <-  "a"
-attr(mm,"ch2") <-  letters[3:5]
+attr(mm, "a1") <-  1
+attr(mm, "a2") <-  2
+attr(mm, "ch1") <-  "a"
+attr(mm, "ch2") <-  letters[3:5]
 mm
 class(mm)
 mm[]
 
 unattr(mm)
-unattr(mm,c("a1","ch2"))
-unattr(mm,c("a1","ch2"))[]
+unattr(mm)[]
+unattr(mm, c("a1", "ch2"))
+unattr(mm, c("a1", "ch2"))[]
 
-unattr(mm,c("margins"))
-class(unattr(mm,c("margins")))
+unattr(mm, c("margins"))
+unattr(mm, c("margins"))[]
+class(unattr(mm, c("margins")))
 
-unattr(mm,c("margins","round"))
-class(unattr(mm,c("margins","round")))  ## no "tm" as attributes rendering it "tm" are removed
+unattr(mm, c("margins", "round"))
+class(unattr(mm, c("margins", "round")))  ## no "tm" as attributes rendering it "tm" are removed
 
-(ff <- factor(sample(letters[1:5],100,replace=T)))
+(ff <- factor(sample(letters[1:5], 100, replace=T)))
 ff[]
 attributes(ff)
 ff <- ordered(ff)
 ff
 attributes(ff)
+attributes(unattr(ff))
 
-};rm(dummy)
+}; rm(dummy)
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
@@ -172,7 +178,7 @@ attributes(y)   ## there are no attributes which would made y an "tm" object
 is.tm(y)
 class(y)       ## now y doesn't inherit from "tm"
 
-};rm(dummy)
+}; rm(dummy)
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 

@@ -137,7 +137,9 @@ variable = FUN(variable)
 if( is.factor(variable) ){
 ## ___factor___---  
 
-  plot.fac = function(variable, xlab, cex){ #, pch, breaks, breaks.lines, xlim=xlim){
+  if(is.null(main)){ main = var.name }
+
+  plot.fac = function(variable, xlab, cex, main){ #, pch, breaks, breaks.lines, xlim=xlim){
 	#      if(length(unique(variable))==1){  stop("Variable '", var.name, "' has only one value and it is not sensible to draw its plot.") }
 		##
       b = length(levels(variable))
@@ -152,8 +154,9 @@ if( is.factor(variable) ){
               , space=0
               #, xlim=xlim
               )
-      title("barplot for factor")
+      title(main)
       palette("default")
+
   }
 
   if(!user.window){
@@ -164,7 +167,8 @@ if( is.factor(variable) ){
     coldef(coldef)  
   }
   
-  plot.fac(variable, var.name, cex)
+  plot.fac(variable, var.name, cex, main)
+
 
 }else{
 ## ___numeric___---

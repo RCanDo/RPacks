@@ -30,7 +30,6 @@ subtable <- function(
     full = NULL,                    # 1 filter rows - only OKs for given variables
     OKs = NULL,       # at least    # 2 select columns - only
     NAs = NULL,       # at most     #    "
-    uniques = NULL,   # at least
     except = NULL
 ){
 ## -------------------------------------------------------------------------------------------------—•°
@@ -62,30 +61,11 @@ subtable <- function(
 ##                   AFTER filtering of rows is performed for `full` columns;
 ##                   `NAs` is cosidered only when `OKs == NULL`;
 ##                   if NULL then is not considered at all;
-##  except = NULL    which columns exclude from checking to all conditions above;
+##  except = NULL    which columns exclude from `OKs`/`NAs` thresholds checking described above;
 ##                   these columns will be always present in the final result;
-##                   if NULL then there are NO exceptions i.e. all columns must pass all the conditions;
-##                   if "" then all columns are excluded from checking making all conditions irrelevant
-##                   (nothing happens) -- this is for edge case.
-##                   BTW: Notice the difference between c() and character(0):
-##                   is.null(c(0)) == TRUE  while  is.null(character(0)) == FALSE  !
-##                   Nevertheless both can be used and will have the same effect as NULL.
-
-## -------------------------------------------------------------------------------------------------—•°
-## Removes from `datfram` all variables with nr of unique values less then or equal to `uniques`
-## which by default is 1 (hence name as this is most important case).
-##
-##    Arguments
-##  datfram       data.frame
-##  uniques = 1   integer, threshold of number of unique values (without NA) for a variable
-##                to be left in `datfram` - it must have MORE unique values than this threshold.
-##  except        which variables do not check; if NULL (default) all will be checked;
-##                if "" then all variables are excluded from checking i.e. nothing happens.
-##
-##    Remarks
-## Notice that it also removes empty variables i.e. without any values i.e. having onbly
-## -------------------------------------------------------------------------------------------------—•°
-
+##                   if NULL then there are NO exceptions i.e. all columns must pass the `OKs`/`NAs` threshold;
+##                   if "" then all columns are excluded from checking making `OKs`/`NAs` irrelevant
+##                   (nothing happens).
 ##
 ##    Result
 ##  `datfram` with rows filtered in such a way that all columns from `full` have no NA values,
@@ -100,61 +80,64 @@ subtable <- function(
 ##
 ## -------------------------------------------------------------------------------------------------—•°
 
-
-## ---------------------------------------------------------—•°
-## returns `todo` -- names of all columns of `datfram` except those mentioned in `except`;
-## columns from `todo` will be processed according to `full`, `OKs`, `NAs`, `uniques`
-
-if(is.null(except)){           ## no exceptions -- consider all variables
-    todo <- names(datfram)
-    ## Notice the difference between c() and character(0) (used below):
-    ##  is.null(c(0)) == TRUE  while  is.null(character(0)) == FALSE  !
-}else{   
-    if(is.character(except)){
-        if(length(except) == 1 && except[1] == ""){   ## == except all variables i.e. nothing to do -- for edge cases;
-            todo <- character(0)
-        }else{
-            todo <- setdiff(names(datfram), except)
-        }
-    }else{
-        stop("`except` must be character vector with selection of `datfram`s columns or left NULL.")
-    }
-}
-## `todo` is NEVER NULL ! is always character (even if empty).
-
 ## filter rows according to `full` -----------------------------------------------------------------—•°
 
 ## adjusting `full` ----------------------------------------—•°
-if(is.null(full)){
-    full <- character(0)
-}else{
+if(!is.null(full)){
     if(is.character(full)){
         if(length(full) == 1 && full == ""){
-            full <- todo
+            full <- names(datfram)
         }else{
-            full <- intersect(full, todo)
+            full <- intersect(full, names(datfram))
         }
     }else{
         stop("`full` must be character vector with selection of `datfram`s columns or left NULL.")
     }
+}else{
+    full <- c()
 }
+
 ## removing rows with NAs for `full` columns ---------------—•°
 if(length(full) > 0){
     for(column in full){
         datfram <- datfram[ !is.na(datfram[column]), ]
     }
 }
+
+
 if(nrow(datfram) == 0){
-    return(datfram)          ## it will stop here !
+    return(datfram)          #??? will stop here ?
+    # break
 }
 
 ## select columns according to `OKs` or `NAs` and `except` -----------------------------------------—•°
+
+## ---------------------------------------------------------—•°
+## adjusting `todo` accordinng to `full` and `accept`
+## -- each of these columns will be checked for amount of NAs
+## -- if too much wrt to `OKs` or `NAs`
+## then such a column will be removed from `datfram`
+
+if(!is.null(except)){
+    if(is.character(except)){
+        if(length(except) == 1 && except == ""){   ## == except all variables i.e. nothing to do more, see (*) -- just for consistence with `full`
+            todo <- c()
+        }else{
+            todo <- setdiff(names(datfram), union(except, full))
+        }
+    }else{
+        stop("`except` must be character vector with selection of `datfram`s columns or left NULL.")
+    }
+}else{   ## no exceptions -- consider all variables besides `full` (which are full and will satisfy all threshold)
+    todo <- setdiff(names(datfram), full)
+}
+
+## ---------------------------------------------------------—•°
 ## (*) removing columns from `todo` which have too much NAs
-todo_not_full <- setdiff(todo, full)
-if(length(todo_not_full) > 0 && !(is.null(OKs) & is.null(NAs))){
+if(length(todo) > 0 && !(is.null(OKs) & is.null(NAs))){
 
     nrows <- nrow(datfram)
-    OKs.vec <- sapply(todo_not_full, function(n) sum(!is.na(datfram[n])))
+    OKs.vec <- sapply(names(datfram), function(n) sum(!is.na(datfram[n])))
     NAs.vec <- nrows - OKs.vec
 
     if(!is.null(OKs)){
@@ -165,33 +148,54 @@ if(length(todo_not_full) > 0 && !(is.null(OKs) & is.null(NAs))){
     }else if(!is.null(NAs)){
         NAs <- ifelse(NAs > 1, as.integer(NAs), NAs)
         if(!is.integer(NAs)){
-            NAs <- round(nrows * NAs)      ## at most of NAs values
+            NAs <- round(nrows * NAs)
         }
         OKs <- nrows - NAs
     }
 
+    OKs.vec <- OKs.vec[todo]
     to_remove <- names(OKs.vec[OKs.vec < OKs])
 
+
     datfram <- datfram[setdiff(names(datfram), to_remove)]
-
-    todo <- setdiff(todo, to_remove)
-}
-
-
-
-## uniques -----------------------------------------------------------------------------------------—•°
-if(length(todo) > 0 && !is.null(uniques)){
-
-    mask <- sapply(names(datfram), is.character)    ## shortcut trick
-    uniques.vec <- sapply(datfram[todo], function(x){length(unique(x[ !is.na(x) ])) >= uniques})
-    mask[names(uniques.vec)] <- uniques.vec
-    datfram <- datfram[mask]
-
 }
 
 ## -------------------------------------------------------------------------------------------------—•°
+
 return(datfram)
 
+}  ##----END----##
+## ---------------------------------------------------------------------------------------------------------------------—•°
+
+## ---------------------------------------------------------------------------------------------------------------------—•°
+rm.onevals <- function(
+    datfram,
+    uniques = 1,
+    except = NULL
+){
+## -------------------------------------------------------------------------------------------------—•°
+## Removes from `datfram` all variables with nr of unique values less then or equal to `uniques`
+## which by default is 1 (hence name as this is most important case).
+##
+##    Arguments
+##  datfram       data.frame
+##  uniques = 1   integer, threshold of number of unique values (without NA) for a variable
+##                to be left in `datfram` - it must have MORE unique values than this threshold.
+##  except        which variables do not check; if NULL (default) all will be checked;
+##                if "" then all variables are excluded from checking i.e. nothing happens.
+##
+##    Remarks
+## Notice that it also removes empty variables i.e. without any values i.e. having onbly
+## -------------------------------------------------------------------------------------------------—•°
+uniques <- sapply(datfram, function(x){length(unique(x[ !is.na(x) ])) > uniques})
+if(!is.null(except)){
+    if(except[1] == ""){
+        except <- names(datfram)
+    }
+    uniques[except] <- TRUE
+}
+datfram <- datfram[uniques]
+return(datfram)
 }  ##----END----##
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
@@ -213,7 +217,7 @@ dummy = function(){
 
 set.seed(123)
 datfram = data.frame(
-    aa = sample(c(1, 2, NA), 10, replace=TRUE),
+    aa = sample(c(1, 2, 3, NA), 10, replace=TRUE),
     bb = sample(c('a', 'b', 'c', NA), 10, replace=TRUE),
     cc = sample(c(10, 20, 30, NA), 10, replace=TRUE),
     dd = sample(c('A', 'B', 'C', NA), 10, replace=TRUE),
@@ -221,50 +225,16 @@ datfram = data.frame(
     )
 datfram
 
-## filtering rows to obtain data.frame with selected columns full (without NAs)
 subtable(datfram)
-subtable(datfram, full="")       ## "" means we want all columns to be full, i.e. remove all records
-                                 ## with any NA; only one record full
+subtable(datfram, full="")
+subtable(datfram, full=c("aa", "bb"))
 
-datfram$ff <- rep(NA, 10)
-datfram
-subtable(datfram, full="")       ## empty data.frame
-subtable(datfram, full="", except=c("aa", "ff"))  ## we need all columns full wxcept "aa" and "ff"
+subtable(datfram, OKs=.7)
+subtable(datfram, OKs=8, except="bb")
 
-
-subtable(datfram, full=c("aa", "bb"))   ## we want only "aa" and "bb" to be full
-
-## selecting columns according to nr of NAs/OKs
-subtable(datfram, OKs=.7)               ## remove all columns which have LESS then 70% of OK values
-subtable(datfram, OKs=8, except="bb")   ## remove all columns which have LESS then 8 OK values
-                                        ## but do not check "bb" (leave it).
-
-subtable(datfram, NAs=.3)               ## remove all columns which have MORE then 30% of NA values
-subtable(datfram, NAs=2, except="bb")   ## remove all columns which have MORE then 2 NA values
-                                        ## but do not check "bb" (leave it).
-## i.e.  `NAs` works like "at most"
-## while `OKs`      "     "at least"
-
-## selecting columns according to nr of unique values
-subtable(datfram)
-subtable(datfram, uniques=0)     ## at least 0 unique values, i.e. even empty variable passes
-subtable(datfram, uniques=1)     ## at least 1 unique value, i.e. only empty variables are removed
-subtable(datfram, uniques=2)     ## at least 2 unique values, i.e. empty and 1 value variables are removed
-subtable(datfram, uniques=3)
-subtable(datfram, uniques=3, except=c("aa", "bb"))  ## do not check "aa" and "bb"
-subtable(datfram, uniques=3, except="")    ## except all columns i.e. check nothing -- just edge case :)
-
-##    Mixed examples
-## The basic rule is that:
-## checking (and applying) `full` condition precedes `OKs` and `NAs` which precedes `unique`;
-## If one wants to apply first `uniques` then `OKs` and already then `full`
-## then subtable() must be called separately for each condition:
-##  subtable(df, uniques=n); subtable(df, OKs=m); subtable(df, full=x)
-## When calling
-##  subtable(df, uniques=n, OKs=m, full=x)
-## `full` will be always applied first then `OKs` then `uniques` at the last place.
-## Also of the two `OKs` & `NAs` only one is used with precedence for `OKs` i.e. `OKs` overrides `NAs`.
-
+rm.onevals(datfram)
+rm.onevals(datfram, uniques=2)
+rm.onevals(datfram, uniques=2, except=c("aa", "bb"))
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 }; rm(dummy)

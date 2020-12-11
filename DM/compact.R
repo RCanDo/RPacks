@@ -55,6 +55,7 @@ compact <- function(x, n=NULL){ if(is.null(n)){ attr(x, "compact") }else{ if(is.
 ## Additionaly names of all lists' (and sublists') elements are printed,
 ## replaced with their numeric position if name doesn't exist.
 ## ------------------------------------------------------------------------------------------------—•°
+if(!is.null(x)){
    if(is.null(value)){
       class(x) <- setdiff(class(x), "compact")
       attr(x, "compact") <- NULL
@@ -66,7 +67,8 @@ compact <- function(x, n=NULL){ if(is.null(n)){ attr(x, "compact") }else{ if(is.
       if( !value[2] %in% c(0, 1, 2) ){ stop("Attribute compact[2] must be 0, 1 or 2.") }
       attr(x, "compact") <- value
    }
-   x
+}
+x
 }
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 uncompact <- function(x){compact(x) <- NULL; x}
@@ -79,13 +81,13 @@ compact.class <- function(x){
 ## If so then adds "compact" to its class attribute.
 ## If not then removes "compact" from its class attribute.
 ## ------------------------------------------------------------------------------------------------—•°
-   if( any( getOption("class.attributes")$compact %in% names(attributes(x)) ) ){
-      class(x) <- union("compact", class(x))
-   }else{
-      class(x) <- setdiff(class(x), "compact")
-   }
-   if(all(class(x) %in% unlist(getOption("class.groups")[c("language", "implicite")]))){ class(x) <- NULL }
-   x
+if( any( getOption("class.attributes")$compact %in% names(attributes(x)) ) ){
+  class(x) <- union("compact", class(x))
+}else{
+  class(x) <- setdiff(class(x), "compact")
+}
+if(all(class(x) %in% unlist(getOption("class.groups")[c("language", "implicite")]))){ class(x) <- NULL }
+x
 }
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 

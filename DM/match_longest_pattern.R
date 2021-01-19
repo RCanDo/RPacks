@@ -1,99 +1,36 @@
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-## nodes & lists of nodes
+## Finds longest pattern fitting to the given string.
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-## FUNCTIONS HERE    {dm}
-##  node()
+## FUNCTIONS HERE    {package}
+##  match_longest_pattern(patterns, string)
 ##
 ## DEPENDENCIES
-##  funa()        {package} file.R     [defalt {package} is the same; default file.R is the same as function name]
-##  funb()
 ##
 ## REMARKS/WARNINGS
-##  See other nodes and list of nodes:
-##  vars.node.R
-##  data.node.R
-##  model.node.R
 ##
 ## TODO
 ## •
 ##
 ## DESCRIPTION
-## In general x.list and x.node are NOT synonyms (for all the classes below in this module):
-## as by design x.node is a node of x.list.
-## BUT
-## config.list, config.node, par.list, par.node  ARE all synonyms !!!
+##  
+## -------------------------------------------------------------------------------------------------—•°
+## AUTHOR: Arkadiusz Kasprzyk; rcando@int.pl
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
-
-par.node <- function(...){
-structure(list(...), class=c("par.node", "list"))
-}
-
-print.par.node <- function(x){
-#indentr(pl, compact=TRUE)
-for(n in names(x)){
-    if(is.atomic(x[[n]])){
-        if(length(x[[n]])<=1){
-            out_n <- if(is.character(x[[n]])) paste0("\"", x[[n]],"\"") else as.character(x[[n]])
-            cat(n, " : ", out_n,"\n", sep="")
-        }else{
-            cat(n, " : ", sep=""); print(x[[n]])
-        }
-    }else{
-        cat(n, " :\n", sep="")
-        indent(x[[n]])
-    }
-}
-}
-
-par.list <- function(...){
-structure(list(...), class=c("par.list", "list"))
-}
-
-print.par.list <- function(x){
-print.par.node(x)
-}
-
+match_longest_pattern <- function(patterns, string){
+## -------------------------------------------------------------------------------------------------—•°
+## Finds longest pattern matching the given string.
+## Returns only first longest match
 ## -------------------------------------------------------------------------------------------------—•°
 
-config.node <- function(...){
-structure(list(...), class=c("config.node", "list"))
+res <- sapply(patterns, function(x)grep(x, string, value=TRUE))
+ok <- sapply(res, function(x)length(x)>0)
+nams <- names(res[ok])
+nams.length <- nchar(nams)
+idx = which(nams.length==max(nams.length))[1]
+nams[idx]
+
 }
-
-print.config.node <- function(x){
-print.par.node(x)
-}
-
-## config.list  - new name for par.list
-config.list <- function(...){
-structure(list(...), class=c("config.list", "list"))
-}
-
-print.config.list <- function(x){
-print.par.node(x)
-}
-
-
-## -------------------------------------------------------------------------------------------------—•°
-
-log.node <- function(...){
-structure(list(...), class=c("log.node", "list"))
-}
-
-print.log.node <- function(x){
-print.par.node(x)
-}
-
-log.list <- function(...){
-ll <- list(...)
-for(item in ll){
-    stopifnot(inherits(item, "log.node"))     ## so log.lists cannot be nested - log.list consists only of log.nodes.
-}
-structure(ll, class("log.list", "list"))
-}
-
-## ---------------------------------------------------------------------------------------------------------------------—•°
-
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## EXAMPLES ------------------------------------------------------------------------------------------------------------—•°
@@ -107,10 +44,16 @@ dummy = function(){
 ## They should be run line by line directly by the user.
 ## -------------------------------------------------------------------------------------------------—•°
 ## RELOADER — before it works you need to source("RCanDo.R"); it's best to use {package_name}.R within pack's dir.
- loadPacksAK("DM")
+ loadPacksAK("{package_name}")
 ## -------------------------------------------------------------------------------------------------—•°
 
+patterns <- c('aba', 'baba', 'var', 'Var', 'variable')
+string <- 'var_bin'
+match_longest_pattern(patterns, string)   ## 'var'
 
+patterns <- c('aba', 'baba', 'var', 'Var', 'varibaba')
+string <- 'aba_baba_varibaba'
+match_longest_pattern(patterns, string)   ## 'var'
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 }; rm(dummy)

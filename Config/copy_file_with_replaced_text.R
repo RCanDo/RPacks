@@ -1,12 +1,10 @@
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-## TITLE (descriptive).
+## copy_file_with_replaced_text
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE    {package}
-##  old2new.breaklines(in.file, out.file=FALSE)
+##  copy_file_with_replaced_text(in.file, out.file=FALSE, replace=list(c("", "")))
 ##
 ## DEPENDENCIES
-##  funa()        {package} file.R     [defalt {package} is the same; default file.R is the same as function name]
-##  funb()
 ##
 ## REMARKS/WARNINGS
 ##
@@ -14,31 +12,24 @@
 ## •
 ##
 ## DESCRIPTION
-##  The aim, the idea, problems, solutions... briefly!, concerning the whole set of functions
 ##
 ## -------------------------------------------------------------------------------------------------—•°
-## AUTHOR: Arkadiusz Kasprzyk; akasp@...
-## ver. 1.0
-## PATH: D:\ROBOCZY\...
-## start: 2020-mm-dd    last: 2020-mm-dd
+## AUTHOR: Arkadiusz Kasprzyk; rcando@int.pl
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
+copy_file_with_replaced_text <- function(in.file, out.file=FALSE, replace=list(c("", ""))){
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-old2new.breaklines <- function(in.file, out.file=FALSE){
-## ---------------------------------------------------------------------------------------------------------------------—•°
-## Changes line brek in .R file (by purpose) from
-## "####{n}" to "## -{n}" e.g. from "##########" to "## -------"
-## what is currently in common use e.g. RStudio uses the latter to create editor's 'foldings'.
 ##    Arguments
 ##  in.file             input .R file;
 ##  out.file = FALSE    output .R file; if FALSE then stdout() i.e. screen;
-##                      
+##  replace = list(c(find="", replace=""))
 ##
 ##    Result
 ##  NULL
 ##
 ##    Description/Comments/Remarks
-## Files are written via cat(), and `out.file = FALSE` is equivalent to cat()'s' `file = ""`.
+## Files are written via cat(), and `out.file = FALSE` is equivalent to cat()'s' `file = ""`
+## i.e.  std.out() == screen.
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 if(is.logical(out.file)){
     if(out.file){
@@ -50,12 +41,12 @@ if(is.logical(out.file)){
 
 file.text = readLines(in.file)
 
-for(n in grep('^###', file.text)){
-    ln <- file.text[n]
-    ln <- gsub("^###", "", ln)
-    ln <- gsub("#", "-", ln)
-    ln <- paste("##", ln)
-    file.text[n] <- ln
+for(n in 1:length(file.text)){
+    for(ll in replace){
+        if(ll[1] != ""){
+            file.text[n] <- gsub(ll[1], ll[2], file.text[n])
+        }
+    }
 }
 
 cat(file.text, sep="\n", file=out.file)
@@ -64,7 +55,6 @@ cat(in.file, "  written to  ", out.file, "\n")
 
 }  ##----END----##
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## EXAMPLES ------------------------------------------------------------------------------------------------------------—•°
@@ -89,33 +79,10 @@ dirs = list.dirs(recursive=FALSE)
 dirs
 
 ## ----------------------------------------------------------------------------—•°
-## one use function for correcting all breaklines in the whole RCanDo packs collection
-recursive_breaklines_correction <- function(start="."){
-
-    lf = list.files(start)
-
-    rfiles = grep("\\.r$", lf, ignore.case=TRUE, value=TRUE)
-    for(f in rfiles){
-        old2new.breaklines(file.path(start, f), TRUE)
-        #!!! we OVERWRITE files - so it's done in the new Git's topic branch !!!
-    }
-
-    subdirs = Filter(function(f){file.info(f)$isdir}, lf)
-
-    for(d in subdirs){
-        recursive_breaklines_correction(file.path(start, d))
-    }
+for(ll in list(c('a','b'), 1:3, list(c("v", "d"), 2:4))){
+    print(ll); print(class(ll))
 }
-
 ## ----------------------------------------------------------------------------—•°
-recursive_breaklines_correction(".")
-
-
-
-## ----------------------------------------------------------------------------—•°
-
-
-
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 }; rm(dummy)

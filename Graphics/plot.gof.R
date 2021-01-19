@@ -1,98 +1,43 @@
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-## nodes & lists of nodes
+## Goodness Of Fit for models' objects
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-## FUNCTIONS HERE    {dm}
-##  node()
+## FUNCTIONS HERE    {package}
+##  fun1( x , y , ... )
+##  fun2( ... )
 ##
 ## DEPENDENCIES
 ##  funa()        {package} file.R     [defalt {package} is the same; default file.R is the same as function name]
 ##  funb()
 ##
 ## REMARKS/WARNINGS
-##  See other nodes and list of nodes:
-##  vars.node.R
-##  data.node.R
-##  model.node.R
 ##
 ## TODO
 ## •
 ##
 ## DESCRIPTION
-## In general x.list and x.node are NOT synonyms (for all the classes below in this module):
-## as by design x.node is a node of x.list.
-## BUT
-## config.list, config.node, par.list, par.node  ARE all synonyms !!!
+##  Extracts the most important things from model object to asses goodness of fit.
+##
+## -------------------------------------------------------------------------------------------------—•°
+## AUTHOR: Arkadiusz Kasprzyk; rcando@int.pl
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
-
-par.node <- function(...){
-structure(list(...), class=c("par.node", "list"))
-}
-
-print.par.node <- function(x){
-#indentr(pl, compact=TRUE)
-for(n in names(x)){
-    if(is.atomic(x[[n]])){
-        if(length(x[[n]])<=1){
-            out_n <- if(is.character(x[[n]])) paste0("\"", x[[n]],"\"") else as.character(x[[n]])
-            cat(n, " : ", out_n,"\n", sep="")
-        }else{
-            cat(n, " : ", sep=""); print(x[[n]])
-        }
-    }else{
-        cat(n, " :\n", sep="")
-        indent(x[[n]])
-    }
-}
-}
-
-par.list <- function(...){
-structure(list(...), class=c("par.list", "list"))
-}
-
-print.par.list <- function(x){
-print.par.node(x)
-}
-
+plot.gof <- function(gof, xlab="y", ylab=c("fitted", "residuals"),
+    title=c("fitted vs true", "residuls vs true"), coldef="grey", ...){
+## -------------------------------------------------------------------------------------------------—•°
+##  gof    obj of class "gof" (Goodness Of Fit)
 ## -------------------------------------------------------------------------------------------------—•°
 
-config.node <- function(...){
-structure(list(...), class=c("config.node", "list"))
-}
+par(mfrow=c(2, 1))
+marginsMy(); coldef(coldef)
 
-print.config.node <- function(x){
-print.par.node(x)
-}
+plot(gof$y, gof$fitted, xlab=xlab, ylab=ylab[1], ...)
+title(title[1])  ## not very good
+abline(0, 1, col="red")
 
-## config.list  - new name for par.list
-config.list <- function(...){
-structure(list(...), class=c("config.list", "list"))
-}
-
-print.config.list <- function(x){
-print.par.node(x)
-}
-
-
-## -------------------------------------------------------------------------------------------------—•°
-
-log.node <- function(...){
-structure(list(...), class=c("log.node", "list"))
-}
-
-print.log.node <- function(x){
-print.par.node(x)
-}
-
-log.list <- function(...){
-ll <- list(...)
-for(item in ll){
-    stopifnot(inherits(item, "log.node"))     ## so log.lists cannot be nested - log.list consists only of log.nodes.
-}
-structure(ll, class("log.list", "list"))
-}
-
-## ---------------------------------------------------------------------------------------------------------------------—•°
+plot(gof$y, gof$residuals, xlab=xlab, ylab=ylab[2], ...)
+title(title[2])  ## not very good
+abline(0, 0, col="black")
+}  ##----END----##
 
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
@@ -107,10 +52,8 @@ dummy = function(){
 ## They should be run line by line directly by the user.
 ## -------------------------------------------------------------------------------------------------—•°
 ## RELOADER — before it works you need to source("RCanDo.R"); it's best to use {package_name}.R within pack's dir.
- loadPacksAK("DM")
+ loadPacksAK("{package_name}")
 ## -------------------------------------------------------------------------------------------------—•°
-
-
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 }; rm(dummy)

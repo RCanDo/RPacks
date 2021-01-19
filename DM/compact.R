@@ -176,12 +176,12 @@ dummy = function(){
 ## It contains a series of commands to test functions defined above in this file
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-## -------------------------------------------------------------------------------------------—•°
+## -------------------------------------------------------------------------------------------------—•°
 
  ## RELOADER ? before it works you need to source("PacksAK.R"); it's best to use DM.R within pack's dir.
  loadPacksAK("DM")
 
-## -------------------------------------------------------------------------------------------—•°
+## -------------------------------------------------------------------------------------------------—•°
 
 (aa <- sample(100))
 compact(aa, 10)

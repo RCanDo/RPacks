@@ -114,9 +114,9 @@ files[[pack]] = c(
 ,"m.triangles.r"
 ,"merge.ordered.r"
 ,"merge_factors.r"
+,"methods.tm.R"
    ,"models_list.R"   ## originaly in SumMod where it should be (now cannot because it is not seen there by print() called from indentr())
 ,"monetary.r"
-,"methods.tm.R"
    ,"nodes.R"
 ,"nulls.by.id.r"
 ,"nulls.table.r"

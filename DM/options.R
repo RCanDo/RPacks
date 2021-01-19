@@ -16,7 +16,8 @@ options(
     class.groups = list(
         language = c( "function", "call", "formula", "promise", "language", "{"),
         implicite = c("integer", "character", "numeric", "double", "complex", "logical", "matrix", "array"),
-        common = c("table", "data.frame", "factor")
+        common = c("table", "data.frame", "factor"),
+        model = c("lm", "glm", "gam", "tree", "rpart")
         )
 )
 

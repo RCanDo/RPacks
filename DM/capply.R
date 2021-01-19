@@ -84,23 +84,23 @@ if( is.null(FUN) | nrow == 0 ){
 
 result
 
-} ##----END----##
-## ---------------------------------------------------------------------------------------------------------------------•°
+}  ##----END----##
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
+## ---------------------------------------------------------------------------------------------------------------------—•°
+## EXAMPLES ############################################################################################################—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-## ---------------------------------------------------------------------------------------------------------------------•°
-## EXAMPLES ############################################################################################################•°
-## ---------------------------------------------------------------------------------------------------------------------•°
-
-
-
-## -------------------------------------------------------------------------------------------•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 dummy = function(){
 ## This is dummy function - it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
 ## - in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-## -------------------------------------------------------------------------------------------•°
+## -------------------------------------------------------------------------------------------------—•°
+ ## RELOADER - before it works you need to source("RCanDo.R"); it's best to use DM.R within pack's dir.
+ loadPacksAK("DM")
+## -------------------------------------------------------------------------------------------------—•°
 
  apply(Data.raw[1:10,30:39],2,function(x){c(sum(x),min(x))})
 
@@ -123,7 +123,7 @@ apply(datfram,2,class) ## ???
 ##
 capply( datfram , class="Date")
 capply( datfram , class="factor")
-capply( datfram , class="Date",within=TRUE )  ## nothing happens effectively
+capply( datfram , class="Date", within=TRUE)  ## nothing happens effectively
 
 capply( datfram , class="Date" , FUN = as.character)              ## only transformed variables; needed to be assigned to an object explicetly
 dfram = capply( datfram , class="Date" , FUN = as.character)      ## only transformed variables; needed to be assigned to an object explicetly
@@ -158,9 +158,7 @@ capply(datfram, class = "numeric" , is.numeric , within = TRUE)
 capply(datfram, class = "numeric" , summary , within = TRUE)
 capply(datfram, class = "numeric" , function(x)(x^2) , within = TRUE)
 
-}
+## ---------------------------------------------------------------------------------------------------------------------—•°
+}; rm(dummy)
 
-## ---------------------------------------------------------------------------------------------------------------------•°
-
-rm(dummy)
 

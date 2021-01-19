@@ -10,7 +10,7 @@
 ## REMARKS/WARNINGS
 ##
 ## TODO
-## • add service of TRUE/FALSE values for full
+## • 
 ##
 ## DESCRIPTION
 ##  The aim, the idea, problems, solutions... briefly!, concerning the whole set of functions
@@ -22,8 +22,43 @@
 ## start: 2020-12-02    last: 2020-12-02
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
+
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-subtable <- function(
+clear <- function(x, ...){UseMethod("clear")}
+## -------------------------------------------------------------------------------------------------—•°
+## In general a method for clearing object of NA values - a default method.
+## However for structured objects like data.frame this may be understood in number of ways,
+## thus specific methods do more sofisticaterd things; see e.g. clear.data.frame().
+## Notice that default method destroys dimensionality of x.
+## -------------------------------------------------------------------------------------------------—•°
+
+## ---------------------------------------------------------------------------------------------------------------------—•°
+clear.default <- function(x, ...){
+## -------------------------------------------------------------------------------------------------—•°
+## Clearing object of NA values;
+## Default method destroys structure of x.
+## -------------------------------------------------------------------------------------------------—•°
+x[!is.na(x)]
+}
+
+## ---------------------------------------------------------------------------------------------------------------------—•°
+clear.list <- function(x, length=TRUE, ...){
+## -------------------------------------------------------------------------------------------------—•°
+## Clearing object of NA values;
+## Default method destroys structure of x.
+## -------------------------------------------------------------------------------------------------—•°
+cls <- class(x)
+x <- x[!is.na(x)]
+x <- x[!is.null(x)]
+if(length){
+    x <- x[sapply(x, function(x){length(x)>0})]
+}
+class(x) <- cls
+x
+}
+
+## ---------------------------------------------------------------------------------------------------------------------—•°
+clear.data.frame <- function(
     datfram,
     full = NULL,                    # 1 filter rows - only OKs for given variables
     OKs = NULL,       # at least    # 2 select columns - only
@@ -91,10 +126,14 @@ subtable <- function(
 ##    Description/Comments/Remarks
 ## 1. `full`, `OKs`/`NAs` and `uniques` are always checked in that order;
 ##    if one needs to do `OKs`/`NAs` or `uniques` before `full` then one need to call
-##    subtable() twice: df %>% subtable(OKs=x) %>% subtable(full="...").
+##    clear.data.frame() twice: df %>% clear(OKs=x) %>% clear(full="...").
 ## 2. Remember: integers are passed with `L` e.g. `9L` is integer while `9` is float.
 ##    This is important for `OKs=1` and `OKs=1L` -- in the first case it is interpreted as 100%
 ##    and in the latter as just 1 OK (not NA) value.
+## 3. clear.data.frame() operates also on the multidimensinal variables, i.e. columns of `datfram`
+##    wihch itself are matrices as each data point consists of m values (where m is constant for
+##    such a variable). In such case, if for a given record NA value appears at any
+##    of the m possible entries then the whole record is treated as NA.
 ##
 ## -------------------------------------------------------------------------------------------------—•°
 
@@ -120,7 +159,8 @@ if(is.null(except)){           ## no exceptions -- consider all variables
 }
 ## `todo` is NEVER NULL ! is always character (even if empty).
 
-## filter rows according to `full` -----------------------------------------------------------------—•°
+## -------------------------------------------------------------------------------------------------—•°
+## filter rows according to `full` 
 
 full <- whileif(full, iffalse=NULL, iftrue="")
 
@@ -138,24 +178,42 @@ if(is.null(full)){
         stop("`full` must be character vector with selection of `datfram`s columns or left NULL.")
     }
 }
-## removing rows with NAs for `full` columns ---------------—•°
+
+## ---------------------------------------------------------—•°
+## searching for proper indices in case of uni- and multi- variate columns
+NAs_idx <- function(column){
+    ## logical index of NA values for uni-variate (standard) and multi-variate (rare) columns
+    ## for multivariate columns a row is considered to be NA if one of its elements is NA.
+    variable <- datfram[[column]]
+    if(is.null(dim(variable))){
+        idx <- is.na(variable)
+    }else{
+        idx <- apply(variable, 1, function(x)as.logical(sum(is.na(x))))
+    }
+    return(idx)
+}
+
+## ---------------------------------------------------------—•°
+## removing rows with NAs for `full` columns
 if(length(full) > 0){
     for(column in full){
-        datfram <- datfram[ !is.na(datfram[column]), ]
+        datfram <- datfram[ !NAs_idx(column), ]
     }
 }
 if(nrow(datfram) == 0){
     return(datfram)          ## it will stop here !
 }
 
-## select columns according to `OKs` or `NAs` and `except` -----------------------------------------—•°
+nrows <- nrow(datfram)
+
+## -------------------------------------------------------------------------------------------------—•°
+## select columns according to `OKs` or `NAs` and `except` 
 ## (*) removing columns from `todo` which have too much NAs
 todo_not_full <- setdiff(todo, full)
 if(length(todo_not_full) > 0 && !(is.null(OKs) & is.null(NAs))){
 
-    nrows <- nrow(datfram)
-    OKs.vec <- sapply(todo_not_full, function(n) sum(!is.na(datfram[n])))
-    NAs.vec <- nrows - OKs.vec
+    NAs.vec <- sapply(todo_not_full, function(column) sum(NAs_idx(column)))
+    OKs.vec <- nrows - NAs.vec
 
     if(!is.null(OKs)){
         OKs <- ifelse(OKs > 1, as.integer(OKs), OKs)
@@ -178,12 +236,28 @@ if(length(todo_not_full) > 0 && !(is.null(OKs) & is.null(NAs))){
 }
 
 
-
-## uniques -----------------------------------------------------------------------------------------—•°
+## -------------------------------------------------------------------------------------------------—•°
+## uniques 
 if(length(todo) > 0 && !is.null(uniques)){
 
+    count_uniques <- function(column){
+        variable <- datfram[[column]]
+        if(is.null(dim(variable))){
+            lgth <- length(unique(variable[ !is.na(variable) ]))
+        }else{
+            idx <- apply(variable, 1, function(x)as.logical(sum(is.na(x))))  #!#! ??? see NAs_idx()
+            lgth <- nrow(unique(variable[ !idx , ]))
+        }
+        return(lgth)
+    }
+
+    uniques <- ifelse(uniques > 1, as.integer(uniques), uniques)
+    if(!is.integer(uniques)){
+        uniques <- round(nrows * uniques)      ## at least of `uniques` values
+    }
+
     mask <- sapply(names(datfram), is.character)    ## shortcut trick
-    uniques.vec <- sapply(datfram[todo], function(x){length(unique(x[ !is.na(x) ])) >= uniques})
+    uniques.vec <- sapply(todo, function(column){ count_uniques(column) >= uniques})
     mask[names(uniques.vec)] <- uniques.vec
     datfram <- datfram[mask]
 
@@ -207,10 +281,23 @@ dummy = function(){
 ## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
 ## -------------------------------------------------------------------------------------------------—•°
-## RELOADER — before it works you need to source("PacksAK.R"); it's best to use {package_name}.R within pack's dir.
+## RELOADER — before it works you need to source("RCanDo.R"); it's best to use {package_name}.R within pack's dir.
  loadPacksAK("DM")
 ## -------------------------------------------------------------------------------------------------—•°
 
+
+## -----------------------------------------------------------------------------—•°
+## vector
+clear(c(NA, 1, NA, 2))
+
+## -----------------------------------------------------------------------------—•°
+## matrix
+clear(matrix(c(NA, 2, 3, 4, NA, NA), 2, 3))
+## the structure destroyed
+
+
+## -----------------------------------------------------------------------------—•°
+## data.frame
 set.seed(123)
 datfram = data.frame(
     aa = sample(c(1, 2, NA), 10, replace=TRUE),
@@ -222,51 +309,112 @@ datfram = data.frame(
 datfram
 
 ## filtering rows to obtain data.frame with selected columns full (without NAs)
-subtable(datfram)
-subtable(datfram, full="")       ## "" means we want all columns to be full, i.e. remove all records
+clear(datfram)
+clear(datfram, full="")       ## "" means we want all columns to be full, i.e. remove all records
                                  ## with any NA; only one record full
-subtable(datfram, full=TRUE)     ## the same
+clear(datfram, full=TRUE)     ## the same
 
 datfram$ff <- rep(NA, 10)
 datfram
-subtable(datfram, full="")       ## empty data.frame
-subtable(datfram, full=TRUE)
-subtable(datfram, full="", except=c("aa", "ff"))  ## we need all columns full wxcept "aa" and "ff"
+clear(datfram, full="")       ## empty data.frame
+clear(datfram, full=TRUE)
+clear(datfram, full="", except=c("aa", "ff"))  ## we need all columns full wxcept "aa" and "ff"
 
 
-subtable(datfram, full=c("aa", "bb"))   ## we want only "aa" and "bb" to be full
+clear(datfram, full=c("aa", "bb"))   ## we want only "aa" and "bb" to be full
 
 ## selecting columns according to nr of NAs/OKs
-subtable(datfram, OKs=.7)               ## remove all columns which have LESS then 70% of OK values
-subtable(datfram, OKs=8, except="bb")   ## remove all columns which have LESS then 8 OK values
+clear(datfram, OKs=.7)               ## remove all columns which have LESS then 70% of OK values
+clear(datfram, OKs=8, except="bb")   ## remove all columns which have LESS then 8 OK values
                                         ## but do not check "bb" (leave it).
 
-subtable(datfram, NAs=.3)               ## remove all columns which have MORE then 30% of NA values
-subtable(datfram, NAs=2, except="bb")   ## remove all columns which have MORE then 2 NA values
+clear(datfram, NAs=.3)               ## remove all columns which have MORE then 30% of NA values
+clear(datfram, NAs=2, except="bb")   ## remove all columns which have MORE then 2 NA values
                                         ## but do not check "bb" (leave it).
 ## i.e.  `NAs` works like "at most"
 ## while `OKs`      "     "at least"
 
 ## selecting columns according to nr of unique values
-subtable(datfram)
-subtable(datfram, uniques=0)     ## at least 0 unique values, i.e. even empty variable passes
-subtable(datfram, uniques=1)     ## at least 1 unique value, i.e. only empty variables are removed
-subtable(datfram, uniques=2)     ## at least 2 unique values, i.e. empty and 1 value variables are removed
-subtable(datfram, uniques=3)
-subtable(datfram, uniques=3, except=c("aa", "bb"))  ## do not check "aa" and "bb"
-subtable(datfram, uniques=3, except="")    ## except all columns i.e. check nothing -- just edge case :)
+clear(datfram)
+clear(datfram, uniques=0)     ## at least 0 unique values, i.e. even empty variable passes
+## !!!
+clear(datfram, uniques=1)     ## 1 is interpreted as 100% i.e. all values different (no ties)
+## to get 1 in a sense of "at least 1 unique value" use `L` notation to force integer
+clear(datfram, uniques=1L)     ## at least 1 unique value, i.e. only empty variables are removed
 
+clear(datfram, uniques=2)     ## at least 2 unique values, i.e. empty and 1 value variables are removed
+clear(datfram, uniques=3)
+clear(datfram, uniques=3, except=c("aa", "bb"))  ## do not check "aa" and "bb"
+clear(datfram, uniques=3, except="")    ## except all columns i.e. check nothing -- just edge case :)
+
+## -----------------------------------------------------------------------------—•°
 ##    Mixed examples
 ## The basic rule is that:
 ## checking (and applying) `full` condition precedes `OKs` and `NAs` which precedes `unique`;
 ## If one wants to apply first `uniques` then `OKs` and already then `full`
-## then subtable() must be called separately for each condition:
-##  subtable(df, uniques=n); subtable(df, OKs=m); subtable(df, full=x)
+## then clear.data.frame() must be called separately for each condition:
+##  clear(df, uniques=n); clear(df, OKs=m); clear(df, full=x)
 ## When calling
-##  subtable(df, uniques=n, OKs=m, full=x)
-## `full` will be always applied first then `OKs` then `uniques` at the last place.
+##  clear(df, uniques=n, OKs=m, full=x)
+## `full` will be always applied first then `OKs` then `uniques` at the end.
 ## Also of the two `OKs` & `NAs` only one is used with precedence for `OKs` i.e. `OKs` overrides `NAs`.
 
+## -----------------------------------------------------------------------------—•°
+##    Multidimensional variables
+set.seed(123)
+df1 <- data.frame(
+    yy = ((1:30) + sample(0:10, 30, replace=T)),
+    xx = 1:30
+    )
+df1
+plot(yy ~ xx, data=df1)
+
+(Yb <- success_failure_matrix(df1$yy))
+
+df1$xx[25:30] <- NA
+df1
+clear(df1, full=T)
+
+df2 <- df1
+df2$yb <- Yb
+df2
+dim(df2)
+names(df2)
+df2$yb
+dim(df2["yb"])
+dim(df2[["yb"]])
+dim(df2["xx"])
+dim(df2[["xx"]])
+
+is.na(df2[["xx"]])
+
+clear(df2, full=T)
+column <- "yb"
+is.na(df2[column])
+df2[!is.na(df2[column]),]  #! Error in xj[i, , drop = FALSE] : (subscript) logical subscript too long
+
+df2[column][3,]
+
+df2[[column]][t(rbind(c(1, 3, 5, 7), c(1, 2, 1, 2)))] <- NA
+df2
+
+which(is.na(df2[[column]]), arr.ind=T)
+
+apply(df2[[column]], 1, function(x)as.logical(sum(is.na(x))))
+clear(df2, full=T)
+
+clear(df2, NAs=1L)
+
+length(unique(df2$yb))
+
+clear(df2, NAs=4)
+clear(df2, NAs=3)
+
+df2$zz <- cbind(p=sample(1:3, 30, replace=T), q=sample(1:3, 30, replace=T))
+df2
+unique(df2$zz)
+clear(df2, uniques=9)
+clear(df2, uniques=10)
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 }; rm(dummy)

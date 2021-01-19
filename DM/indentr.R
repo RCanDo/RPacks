@@ -10,6 +10,7 @@
 ##  uncompact()           compact.R       ?
 ##  messages()       {DM} conditions.R
 ##  unattr()              attributes.R    ?
+##  whileif()
 ##
 ##
 ## REMARKS/WARNINGS
@@ -38,7 +39,8 @@ indentr = function( ll, level=0, ind="   "
                   , as.text=FALSE
                   , compact=NULL
                   , vsep=0
-                  , omit=NULL, delete = NULL
+                  , omit=NULL, delete=NULL
+                  , omit_class=NULL, delete_class=NULL
                   , attributes=FALSE
                   , ...
                   ){
@@ -83,7 +85,11 @@ indentr = function( ll, level=0, ind="   "
 ##               does not inherit from leaves (one of the class mentioned there).
 ##  omit = NULL   character vector of NAMES of objects (list's entries) the content of which will not be printed,
 ##                however their name (and info if info = TRUE) will be printed normaly;
+##  omit_class = NULL  character vector of CLASSES of objects (list's entries) the content of which will not be printed,
+##                however their name (and info if info = TRUE) will be printed normaly;
 ##  delete = NULL    character vector of NAMES of objects (list's entries) which will not be printer at all
+##                   as if they were deleted from the list; even name (and info) of the object will not be printed.
+##  delete_class = NULL    character vector of CLASSES of objects (list's entries) which will not be printer at all
 ##                   as if they were deleted from the list; even name (and info) of the object will not be printed.
 ##  attributes = FALSE  If FALSE (default) then no attributes will be printed (except maybe "class").
 ##             If TRUE then attributes will be normaly printed,
@@ -125,6 +131,9 @@ leaves <- union(getOption("class.groups")$language, leaves)
 
 messages.ll <- messages(ll)  ## see (*) near the end of the body
 
+omit_class <- whileif(omit_class, ifnull="")
+delete_class <- whileif(delete_class, ifnull="")
+
 if(is.null(ll)){
    ## NOTHING
 }else if( !any(union(class(ll), typeof(ll))%in%leaves) && length(ll)>0 ){  ## ll is not a leaf  &  not empty
@@ -143,7 +152,7 @@ if(is.null(ll)){
    if(info){     ## prints info about class  and  dim
       for(k in 1:length(ll)){
          nam <- names(ll)[k]
-         if(nam %in% delete){
+         if(nam %in% delete || inherits(ll[[k]], delete_class)){
             ## NOTHING
          }else{
 
@@ -162,12 +171,13 @@ if(is.null(ll)){
                , sep=""
                )
 
-            if(nam %in% omit){
+            if(nam %in% omit || inherits(ll[[k]], omit_class)){
                indentr(NULL, level+1, ind, vsep=vsep) #cat( separate )  ## NOTHING
             }else{
                if(!is.null(compact)){ compact[2] <- 0 }
-               indentr(ll[[k]], level+1, ind, leaves, messages=messages, info=info, as.text=as.text, compact=compact
-                      , vsep=vsep, omit=omit, delete=delete, attributes=attributes, ...)
+               indentr(ll[[k]], level+1, ind, leaves, messages=messages, info=info, as.text=as.text
+                      , compact=compact , vsep=vsep, attributes=attributes
+                      , omit=omit, omit_class=omit_class, delete=delete, delete_class=delete_class, ...)
 #               if( messages && !is.null(messages(ll[[k]])) ){
 #                  cat(separate, indent, sep="") ; indent( messages(ll[[k]]), times=level+1, ind=ind )
 #               }
@@ -178,7 +188,7 @@ if(is.null(ll)){
    }else{         ## do not print info about class
       for(k in 1:length(ll)){
          nam <- names(ll)[k]
-         if(nam %in% delete){
+         if(nam %in% delete || inherits(ll[[k]], delete_class)){
             ## NOTHING
          }else{
 
@@ -191,11 +201,12 @@ if(is.null(ll)){
                , sep=""
                )
 
-            if(nam %in% omit){
+            if(nam %in% omit || inherits(ll[[k]], omit_class)){
                indentr(NULL, level+1, ind, vsep=vsep) #cat( separate )  ## NOTHING
             }else{
-               indentr(ll[[k]], level+1, ind, leaves, messages=messages, info=info, as.text=as.text, compact=compact
-                      , vsep=vsep, omit=omit, delete=delete, attributes=attributes, ...)
+               indentr(ll[[k]], level+1, ind, leaves, messages=messages, info=info, as.text=as.text
+                      , compact=compact , vsep=vsep, attributes=attributes
+                      , omit=omit, omit_class=omit_class, delete=delete, delete_class=delete_class, ...)
 #               if( messages && !is.null(messages(ll[[k]])) ){
 #                  cat(separate, indent, sep="") ; indent( messages(ll[[k]]), times=level+1, ind=ind )
 #               }
@@ -215,7 +226,7 @@ if(is.null(ll)){
    }else{
       indent(x=compact(ll, compact), times=level, ind=ind, as.text=as.text, messages=FALSE, ...)
       uncompact(ll)  ## for functions — they are not copyable thus they are turned to "compact"
-                     ## even if they're primitive from base env. This is the source of some problems later...
+                     ## even if they're primitive from base env. This is the source of some problems later on...
    }
 }
 

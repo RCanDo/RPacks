@@ -14,16 +14,21 @@
 
 options(
     class.groups = list(
-        language = c( "function", "call", "formula", "promise", "language", "{"),
+        language = c("function", "call", "formula", "promise", "language", "{",
+                     "quosure"),   ## rlang
         implicite = c("integer", "character", "numeric", "double", "complex", "logical", "matrix", "array"),
-        common = c("table", "data.frame", "factor"),
+        common = c("table", "data.frame", "factor",
+                   "grouped_df", "tbl_df", "tbl"),    ## dplyr
         model = c("lm", "glm", "gam", "tree", "rpart")
         )
 )
 
 options(
     class.attributes = list(
-        basic = c("names", "dim", "dimnames", "colnames", "rownames", "row.names", "class", "levels"),
+        basic = c("names", "dim", "dimnames", "colnames", "rownames", "row.names", "class", "levels",
+                  "groups"),        ## dplyr -- it's really bad!  shouldn't be here !!!
+                                    ## see also attributes.R  unattr() comment at line ~44
+                                    ##      and indentr.R comment at `attrs.mustbe` line ~222
         tm =  c("transpose", "margins", "head", "round"),
         compact = "compact"
         )

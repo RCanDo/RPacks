@@ -42,6 +42,7 @@ indentr = function( ll, level=0, ind="   "
                   , omit=NULL, delete=NULL
                   , omit_class=NULL, delete_class=NULL
                   , attributes=FALSE
+                  , head=TRUE
                   , ...
                   ){
 ## ------------------------------------------------------------------------------------------------—•°
@@ -77,6 +78,9 @@ indentr = function( ll, level=0, ind="   "
 ##  compact = NULL   argument passed to compact() which is then applied to the whole list i.e. list is coerced to
 ##                   object of class "compact" with parameters passed via 'compact' and then is printed as such.
 ##                   See examples of how it works also in help on compact().
+##  head=TRUE  numeric or logical; apply head() method for each leaf? if numeric then is passed as argument to head(),
+##             except when 0 - then is set to FALSE; if TRUE then is set to 6 - default value for head size;
+##             `compact` prevails i.e. `head` works only if `compact` is NULL (which is by defaut);
 ##  vsep = 0   number of lines separating each item of the list. Notice that if vsep>0 then:
 ##             • messages are separated;
 ##             • in general if object inherits from leaves then separation does not work on its content and
@@ -136,7 +140,7 @@ delete_class <- whileif(delete_class, ifnull="")
 
 if(is.null(ll)){
    ## NOTHING
-}else if( !any(union(class(ll), typeof(ll))%in%leaves) && length(ll)>0 ){  ## ll is not a leaf  &  not empty
+}else if( !any(union(class(ll), typeof(ll)) %in% leaves) && length(ll)>0 ){  ## ll is not a leaf  &  not empty
 
    #      cat(paste0(rep("\n", vsep), collapse=""))  ## it doesn't work here... WHY???!!!
 
@@ -176,7 +180,7 @@ if(is.null(ll)){
             }else{
                if(!is.null(compact)){ compact[2] <- 0 }
                indentr(ll[[k]], level+1, ind, leaves, messages=messages, info=info, as.text=as.text
-                      , compact=compact , vsep=vsep, attributes=attributes
+                      , compact=compact, head=head, vsep=vsep, attributes=attributes
                       , omit=omit, omit_class=omit_class, delete=delete, delete_class=delete_class, ...)
 #               if( messages && !is.null(messages(ll[[k]])) ){
 #                  cat(separate, indent, sep="") ; indent( messages(ll[[k]]), times=level+1, ind=ind )
@@ -205,7 +209,7 @@ if(is.null(ll)){
                indentr(NULL, level+1, ind, vsep=vsep) #cat( separate )  ## NOTHING
             }else{
                indentr(ll[[k]], level+1, ind, leaves, messages=messages, info=info, as.text=as.text
-                      , compact=compact , vsep=vsep, attributes=attributes
+                      , compact=compact, head=head, vsep=vsep, attributes=attributes
                       , omit=omit, omit_class=omit_class, delete=delete, delete_class=delete_class, ...)
 #               if( messages && !is.null(messages(ll[[k]])) ){
 #                  cat(separate, indent, sep="") ; indent( messages(ll[[k]]), times=level+1, ind=ind )
@@ -218,10 +222,14 @@ if(is.null(ll)){
 
 }else{
    attrs.all <- names(attributes(ll))
-   attrs.mustbe <- union( unlist(getOption("class.attributes")[c("tm", "compact")]) , "class" )                  ##
+   attrs.mustbe <- union( unlist(getOption("class.attributes")[c("tm", "compact")]) , "class" )   ##  !?!?!?
+        ## this is bad as  `attrs.mustbe` should be dependent on the object class
+        ## while here they are becoming common for every object !!! :(
    attr.rm <- if( attributes ){ "messages" }else{ setdiff(attrs.all, attrs.mustbe) }    ## (*)
    ll <- unattr( ll, attr.rm )  ## fix.classes() works here
    if(is.null(compact)){
+      head <- whileif(head, iffalse=0, iftrue=6)
+      if(head){ ll <- head(ll, head) }
       indent(ll, times=level, ind=ind, as.text=as.text, messages=FALSE, ...)
    }else{
       indent(x=compact(ll, compact), times=level, ind=ind, as.text=as.text, messages=FALSE, ...)

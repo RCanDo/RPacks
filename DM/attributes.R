@@ -41,6 +41,11 @@ if(!is.null(attributes(x))){
    ## attrs.on   will be retained
 
    attributes(x)[attrs.off] <- NULL
+        ## this doesn't work for x being "goruped_df" (from dplyr) and attribute "groups"; try e.g.
+        ##   x <- dplyr::group_by(Iris, Species)
+        ## see options.R  class.attributes$basic  where "groups" where added (but shouldn't be relly there!)
+        ## only for this reason !
+        ## HOWEVER, see indentr.R comment at `attrs.mustbe` line ~222
 
 }
 

@@ -44,6 +44,12 @@ sig = "AK"
 sep = "_"
 
 ## FOLDERS ------------------------------------------------------------------------------------------------------------
+
+if(!exists("PATH")){
+PATH <- list()
+PATH$packs <- "."
+}
+
 PATH$functions = list()
 PATH$functions[[sig]] = PATH$packs  ## from .GlobalEnv   ?? demanded main packs directory
 

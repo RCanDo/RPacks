@@ -8,7 +8,7 @@
 agg.df <- function(datfram,
     summary=list(
         'nas'=quote(sum(is.na(x))),
-        oks=quote(sum(!is.na(x))),
+        'oks'=quote(sum(!is.na(x))),
         'oks/all'=quote(sum(!is.na(x))/length(x)),
         class=quote(class(x))
         ),

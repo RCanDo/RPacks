@@ -129,9 +129,9 @@ clear.data.frame <- function(
 ##    clear.data.frame() twice: df %>% clear(OKs=x) %>% clear(full="...").
 ## 2. Remember: integers are passed with `L` e.g. `9L` is integer while `9` is float.
 ##    This is important for `OKs=1` and `OKs=1L` -- in the first case it is interpreted as 100%
-##    and in the latter as just 1 OK (not NA) value.
+##    and in the latter as just 1 OK (non-NA) value.
 ## 3. clear.data.frame() operates also on the multidimensinal variables, i.e. columns of `datfram`
-##    wihch itself are matrices as each data point consists of m values (where m is constant for
+##    which itself are matrices as each data point consists of m values (where m is constant for
 ##    such a variable). In such case, if for a given record NA value appears at any
 ##    of the m possible entries then the whole record is treated as NA.
 ##
@@ -353,7 +353,7 @@ clear(datfram, uniques=3, except="")    ## except all columns i.e. check nothing
 ## checking (and applying) `full` condition precedes `OKs` and `NAs` which precedes `unique`;
 ## If one wants to apply first `uniques` then `OKs` and already then `full`
 ## then clear.data.frame() must be called separately for each condition:
-##  clear(df, uniques=n); clear(df, OKs=m); clear(df, full=x)
+##  df %>% clear(uniques=n) %>% clear(OKs=m) %>% clear(full=x)
 ## When calling
 ##  clear(df, uniques=n, OKs=m, full=x)
 ## `full` will be always applied first then `OKs` then `uniques` at the end.

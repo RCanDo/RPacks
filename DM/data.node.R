@@ -109,6 +109,22 @@ return(data)
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
+`[.data.node` <- function(x, value, drop=TRUE){
+    if(!is.null(x$data)){
+        res <- x$data[value, drop=drop]
+    }else if(!is.null(x$parent)){
+        if(all(value %in% x$colnames)){
+            res <- get(x$parent, pos=1)[x$rownames, value, drop=drop]
+        }else{
+            v0s <- value[! value %in% x$colnames]
+            v0s <- paste(paste0("\"", v0s, "\""), collapse=", ")
+            stop( paste0(v0s," are not present in this data.node$colnames."))
+        }
+    }else{
+        stop("`data.node$data` and `data.node$parent` are NULL thus data.frame cannot be retrieved.")
+    }
+    res
+}
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## EXAMPLES ------------------------------------------------------------------------------------------------------------—•°

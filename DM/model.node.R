@@ -213,21 +213,28 @@ form
 }  ##----END----##
 
 ## -------------------------------------------------------------------------------------------------—•°
-data.model.node <- function(mn, Y="Y", X="X", bin=NULL, crop=TRUE, data=NULL, ...){
+data.model.node <- function(mn, Y="Y", X="X", bin=NULL, crop=TRUE, data=NULL, oryginal_Y=TRUE, ...){
 ## -------------------------------------------------------------------------------------------------—•°
-## mn      model.node
-## bin    if character - name of the variable to transform it into its binomial version
-##        for gam(family=binomial);
-##        "_bin" suffix will be added automatically to the name of transformed version;
-##        if TRUE - ...
-##        if NULL - ...
-##        if FALSE - ...
-## crop   leaves only Y/Ybin and Xs variables (according to x$vars$Y and x$vars$X)
-## data   as in data.data.node()
+## mn           model.node
+## Y="Y"
+## X="X"
+## bin=NULL     if character - name of the variable to transform it into its binomial version
+##              for gam(family=binomial);
+##              "_bin" suffix will be added automatically to the name of transformed version;
+##              if NULL  then is transformed to TRUE or FALSE depending on Y="Ybin" or not;
+##              if TRUE  then variable indicated in `Y` is transformed into its binomial form ("_bin" suffix added);
+##              if FALSE then `Y` will not be transformed and used as it is;
+## crop=TRUE   leaves only Y/Ybin and Xs variables (according to x$vars$Y and x$vars$X)
+## data=NULL   as in data.data.node()
+## oryginal_Y=TRUE  logical; relevant when crop=TRUE; does include original Y
+##             (i.e. variable indicated in `mn$vars$Y`) into final data?
+##             usually it's not a big burdern to leave this variable even if not finally used;
 ## ...    passed to  success_failure_matrix()  for creating binomial form of target (when relevant)
 ##
 ##   Remarks
 ## The assumption is that model$vars are all within model$data$colnames;  see  data.node().
+## `bin` is left NULL to automatically be set to TRUE or FALSE - it might be said that `bin` setup
+## prevails over `Y` if not left NULL.
 ## -------------------------------------------------------------------------------------------------—•°
 
 data <- data(mn$data, data)
@@ -237,11 +244,7 @@ data <- data(mn$data, data)
 ## here we 'generate' the data (binomial version if needed) not the formula
 
 if(is.null(bin)){
-    if(Y=="Ybin"){
-        bin <- TRUE
-    }else{
-        bin <- FALSE
-    }
+    bin <- Y=="Ybin"
 }
 
 if(is.character(bin)){
@@ -264,7 +267,11 @@ if(is.logical(bin)){
 
 ## ---------------------------------------------------------—•°
 if(crop){
-    data <- data[c(Yname, mn$vars[[X]])]
+    if( (Yname != mn$vars$Y) && oryginal_Y ){
+        data <- data[c(Yname, mn$vars$Y, mn$vars[[X]])]
+    }else{
+        data <- data[c(Yname, mn$vars[[X]])]
+    }
 }
 
 return(data)

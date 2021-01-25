@@ -26,7 +26,7 @@
 gof <- function(x, ...){ UseMethod("gof") }
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-gof.gam = function(model, ...)
+gof.gam = function(model)
 {
 ## -------------------------------------------------------------------------------------------------—•°
 ## Goodness of fit for gam model.
@@ -64,9 +64,15 @@ Y <- model$model[[Yname]]
 ## the basic "problem"
 
 if(model$family$family=="binomial"){
-    maxY <- max(apply(Y, 1, sum))
-    Y <- Y[,1]
-    Yhat <- model$fitted.values * maxY     ##                        #???
+    sumY <- apply(Y, 1, sum)
+    if(length(unique(sumY)) > 1){
+        Yhat <- model$fitted.values
+        Y <- Y[,1]/sumY
+    }else{
+        maxY <- max(apply(Y, 1, sum))                                    #!!!
+        Y <- Y[,1]
+        Yhat <- model$fitted.values * maxY     ##                        #???
+    }
 }else{
     maxY <- max(Y)
     Yhat <- model$fitted.values
@@ -75,12 +81,12 @@ resids <- Y - Yhat
 
 ## -----------------------------------------------------------------------------—•°
 
-n <- length(Y)
+n.obs <- length(Y)
 df.null <- model$df.null
 df.residual <- model$df.residual
 
-n_vars <- length(colnames(model$model)) - 1
-n_smooth <- length(model$smooth)
+n.vars <- length(colnames(model$model)) - 1
+n.smooth <- length(model$smooth)
 
 ## -----------------------------------------------------------------------------—•°
 
@@ -88,7 +94,7 @@ TSS <- sum((Y-mean(Y))^2)
 MSS <- sum((Yhat-mean(Yhat))^2)
 RSS <- sum((resids-mean(resids))^2)
 
-MAE <- sum(abs(resids))/n
+MAE <- sum(abs(resids))/n.obs
 
 VTSS <- TSS / df.null
 VMSS <- MSS / (df.null - df.residual)
@@ -103,8 +109,8 @@ deviance_explained = 1 - model$deviance / model$null.deviance
 
 result <- structure( list(
     y = Y, fitted = Yhat, residuals = resids,
-    n_obs = n, df.null = df.null, df.residual = df.residual, df.model = df.null - df.residual,
-    n_vars = n_vars, n_smooth = n_smooth,
+    n.obs = n.obs, df.null = df.null, df.residual = df.residual, df.model = df.null - df.residual,
+    n.vars = n.vars, n.smooth = n.smooth,
     deviance_explained = deviance_explained,
     MAE = MAE,
     adjR2 = adjR2,
@@ -115,33 +121,40 @@ result <- structure( list(
 return(result)
 
 }  ##----END----##
-## ---------------------------------------------------------------------------------------------------------------------—•°
-
-summary.gof.gam <- function(gg, round=4, ...){
-
-nams <- c( "adjR2", "R2", "deviance_explained", "MAE",  "n", "n_vars", "n_smooth",
-    "df.null", "df.residual", "df.model" )
-
-result <- round(unlist(gg[nams]), round)
-class(result) <- c("summary.gof.gam", "summary")
-result
-
-}  ##----END----##
 
 ## -------------------------------------------------------------------------------------------------—•°
-print.summary.gof.gam <- function(sgg, ...){
-for(n in names(sgg)){
-    cat(n, " : ", sgg[n],"\n", sep="")
-}
-}
-
-## ---------------------------------------------------------------------------------------------------------------------—•°
-gof.Gam = function(model, ...){
-## Gam is a result of gam package.
+gof.Gam = function(model){
+## "Gam" is a result of gam package.
 gof <- gof.gam(model)
 gof$n_smooth <- length(colnames(model$smooth))
 gof
 }
+
+## ---------------------------------------------------------------------------------------------------------------------—•°
+
+summary.gof.gam <- function(gg, round=3){
+
+nams <- c( "adjR2", "R2", "deviance_explained", "MAE",
+    "n.obs", "n.vars", "n.smooth",
+    "df.null", "df.model", "df.residual" )
+
+result <- round(unlist(gg[nams]), round)
+class(result) <- c("summary.gof.gam", "summary")
+result
+}  ##----END----##
+
+## -------------------------------------------------------------------------------------------------—•°
+summary.gof.Gam <- function(gg, round=3){
+summary.gof.gam(gg, round)
+}
+
+## -------------------------------------------------------------------------------------------------—•°
+print.summary.gof.gam <- function(sgg){
+for(n in names(sgg)){
+    cat(n, " : ", sgg[n], "\n", sep="")
+}
+}
+
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 

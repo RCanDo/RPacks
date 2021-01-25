@@ -38,7 +38,6 @@ if(mod$family$family=="binomial"){
         stop("There is no target variable in data provided (must have the same name as in `mod$formula`.)")
     }
 }
-
 ## -------------------------------------------------------------------------------------------------—•°
 
 mod$model <- data[names(attr(mod$terms, "dataClasses"))]      ## strange but true

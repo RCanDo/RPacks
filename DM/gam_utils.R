@@ -7,8 +7,7 @@
 ##  gof_binomial()        #! change it !!!
 ##
 ## DEPENDENCIES
-##  funa()        {package} file.R     [defalt {package} is the same; default file.R is the same as function name]
-##  funb()
+##  whileif()
 ##
 ## REMARKS/WARNINGS
 ##  See other nodes and list of nodes:

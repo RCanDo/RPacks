@@ -26,9 +26,11 @@ Find(Negate(is.null),ll)
 #   coalesce(NULL,2,"a")
 #   coalesce(NULL,NULL,2,"a")
 
-
 `%P%` <- function(a, b) paste0(a, b)             ## backticks !!!
 # "a" %P% "b" #> [1] "ab"
+
+## -------------------------------------------------------------------------------------------------—•°
+## set operators
 
 ## (ak)
 `%+%` <- function(a,b) union(a,b)
@@ -40,12 +42,15 @@ Find(Negate(is.null),ll)
 #   letters[1:4] %&% letters[2:6]
 #   letters[1:4] %&% letters[2:6] %&% letters[3:8]
 
+`%|%` <- function(a,b) setdiff(union(a,b),intersect(a,b))
+# letters[1:4] %|% letters[3:6]
+
+## -------------------------------------------------------------------------------------------------—•°
+## logical operators
+
 `%||%` <- function(a,b) a&!b | !a&b
 # c(TRUE,TRUE,FALSE,FALSE) %||% c(TRUE,FALSE,FALSE,TRUE)
 
-
-`%|%` <- function(a,b) setdiff(union(a,b),intersect(a,b))
-# letters[1:4] %|% letters[3:6]
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 

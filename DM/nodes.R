@@ -37,7 +37,7 @@ for(n in names(x)){
             out_n <- if(is.character(x[[n]])) paste0("\"", x[[n]],"\"") else as.character(x[[n]])
             cat(n, " : ", out_n,"\n", sep="")
         }else{
-            cat(n, " : ", sep=""); print(x[[n]])
+            cat(n, " :\n", sep=""); indent(x[[n]])
         }
     }else{
         cat(n, " :\n", sep="")
@@ -75,6 +75,7 @@ print.par.node(x)
 
 
 ## -------------------------------------------------------------------------------------------------—•°
+## probably not used...
 
 log.node <- function(...){
 structure(list(...), class=c("log.node", "list"))
@@ -86,9 +87,7 @@ print.par.node(x)
 
 log.list <- function(...){
 ll <- list(...)
-for(item in ll){
-    stopifnot(inherits(item, "log.node"))     ## so log.lists cannot be nested - log.list consists only of log.nodes.
-}
+stopifnot(all(ll, inherits,  "log.node"))     ## so log.lists cannot be nested - log.list consists only of log.nodes.
 structure(ll, class("log.list", "list"))
 }
 

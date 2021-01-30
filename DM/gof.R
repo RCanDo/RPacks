@@ -48,7 +48,10 @@ gof.gam = function(model)
 ##  df.residual         degrees of freedom for residuals
 ##  df.model            df.null - df.residuals
 ##  deviance_explained  how much of the deviance was explained in %
-##  MAE                 Mean Absolute Error
+##  RMSE                Root Mean Squared Error $\sqrt{\sum_i |y_i - yhat_i|^2 / n}$ -- everybody knows;
+##  MAE                 Mean Absolute Error  $\sum_i |y_i - yhat_i| / n$ -- scale sensitive
+##  MAEp                Mean Absolute Error % i.e. percentage change  $\frac{\sum_i |y_i - yhat_i|}{ \sum_i y_i }$ -- good, scale agnostic
+##  MAPE                Mean Absolute Percentage Error $\sum_i \frac{|y_i - yhat_i|}{y_i} / n$ -- not good! overshoots meand
 ##  adjR2               adjusted R2
 ##  R2                  R2
 ##
@@ -94,7 +97,10 @@ TSS <- sum((Y-mean(Y))^2)
 MSS <- sum((Yhat-mean(Yhat))^2)
 RSS <- sum((resids-mean(resids))^2)
 
-MAE <- sum(abs(resids))/n.obs
+RMSE <- sqrt(TSS / n.obs)
+MAE <- mean(abs(resids))
+MAEp <- MAE / mean(Y)
+MAPE <- mean(abs(resids)/Y)
 
 VTSS <- TSS / df.null
 VMSS <- MSS / (df.null - df.residual)
@@ -112,7 +118,7 @@ result <- structure( list(
     n.obs = n.obs, df.null = df.null, df.residual = df.residual, df.model = df.null - df.residual,
     n.vars = n.vars, n.smooth = n.smooth,
     deviance_explained = deviance_explained,
-    MAE = MAE,
+    RMSE, MAE = MAE, MAEp = MAEp, MAPE = MAPE,
     adjR2 = adjR2,
     R2 = R2),
     class=c("gof.gam", "gof")
@@ -124,7 +130,10 @@ return(result)
 
 ## -------------------------------------------------------------------------------------------------—•°
 gof.Gam = function(model){
+## ---------------------------------------------------------
 ## "Gam" is a result of gam package.
+## Returns "gof.gam" -- the same as `gof.gam()` method.
+## ---------------------------------------------------------
 gof <- gof.gam(model)
 gof$n_smooth <- length(colnames(model$smooth))
 gof
@@ -134,19 +143,27 @@ gof
 
 summary.gof.gam <- function(gg, round=3){
 
-nams <- c( "adjR2", "R2", "deviance_explained", "MAE",
+nams <- c( "adjR2", "R2", "deviance_explained", "MAE", "MAEp", "MAPE", "RMSE",
     "n.obs", "n.vars", "n.smooth",
     "df.null", "df.model", "df.residual" )
 
 result <- round(unlist(gg[nams]), round)
-class(result) <- c("summary.gof.gam", "summary")
+class(result) <- c("summary.gof.gam", "summary.gof", "summary")
 result
 }  ##----END----##
 
 ## -------------------------------------------------------------------------------------------------—•°
-summary.gof.Gam <- function(gg, round=3){
-summary.gof.gam(gg, round)
+#summary.gof.Gam <- function(gg, round=3){    #! not necessary -- there is no "gof.Gam" only always "gof.gam"
+#summary.gof.gam(gg, round)
+#}
+
+## -------------------------------------------------------------------------------------------------—•°
+print.summary.gof <- function(sg){
+for(n in names(sg)){
+    cat(n, " : ", sg[n], "\n", sep="")
 }
+}
+
 
 ## -------------------------------------------------------------------------------------------------—•°
 print.summary.gof.gam <- function(sgg){
@@ -155,6 +172,32 @@ for(n in names(sgg)){
 }
 }
 
+## -------------------------------------------------------------------------------------------------—•°
+summary.gof.list <- function(...){
+ll <- list(...)
+stopifnot(all(ll, inherits, "summary.gof"))
+structure(ll, class("summary.gof.list", "list"))
+}
+
+## -------------------------------------------------------------------------------------------------—•°
+summary.gof.gam.list <- function(...){
+ll <- list(...)
+stopifnot(all(ll, inherits, "summary.gof.gam"))
+structure(ll, class("summary.gof.gam.list", "list"))
+}
+
+## -------------------------------------------------------------------------------------------------—•°
+summary.summary.gof.list <- function(sgl){
+sgl.df <- as.data.frame(t(sapply(lapply(sgl, '['), unlist)))
+class(sgl.df) <- union(class(sgl.df), "summary.gof.table")
+}
+
+## -------------------------------------------------------------------------------------------------—•°
+summary.summary.gof.gam.list <- function(sggl){
+sggl.df <- as.data.frame(t(sapply(lapply(sggl, '['), unlist)))
+class(sggl.df) <- union(class(sggl.df), "summary.gof.gam.table")
+sggl.df
+}
 
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 

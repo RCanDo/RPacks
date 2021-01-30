@@ -229,7 +229,8 @@ if(is.null(ll)){
    ll <- unattr( ll, attr.rm )  ## fix.classes() works here
    if(is.null(compact)){
       head <- whileif(head, iffalse=0, iftrue=6)
-      if(head){ ll <- head(ll, head) }
+      if(head){ ll <- tryCatch( head(ll, head), error=function(e){ll} ) }
+                      ## some types of objects (e.g. `name`) returns error on head() and it's not clear which!
       indent(ll, times=level, ind=ind, as.text=as.text, messages=FALSE, ...)
    }else{
       indent(x=compact(ll, compact), times=level, ind=ind, as.text=as.text, messages=FALSE, ...)

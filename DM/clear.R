@@ -2,7 +2,7 @@
 ## Filtering rows and selecting columns according to number of allowed NAs and unique values.
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE    {DM}
-##  subtable( datafram, full=NULL, OKs=NULL, NAs=NULL, uniques=NULL, except=NULL)
+##  clear( datafram, full=NULL, OKs=NULL, NAs=NULL, uniques=NULL, except=NULL)
 ##
 ## DEPENDENCIES
 ##  whileif()        DM::whileif.R
@@ -18,7 +18,7 @@
 ## -------------------------------------------------------------------------------------------------—•°
 ## AUTHOR: Arkadiusz Kasprzyk; akasp@...
 ## ver. 1.0
-## PATH: ./DM/subtable.R
+## PATH: ./DM/clear.R
 ## start: 2020-12-02    last: 2020-12-02
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
@@ -71,7 +71,8 @@ clear.data.frame <- function(
 ## in `full` (i.e. these columns will beacome "full" of data) and AFTER this removing all
 ## columns (negative selecting) having not enough non-NA values (OKs), according to parameters `OKs` or `NAs`,
 ## and having not enough unique-values, according to `uniques`;
-## `OKs`/`NAs` and `uniques` are checked for all columns except those mentioned in `except`.
+## `full`, `OKs`/`NAs` and `uniques` are checked for all columns except those mentioned in `except`
+## - these columns are not considered at all.
 ##
 ##    Arguments
 ##  datfram          data.frame
@@ -309,7 +310,7 @@ datfram = data.frame(
 datfram
 
 ## filtering rows to obtain data.frame with selected columns full (without NAs)
-clear(datfram)
+clear(datfram)                ## nothing happens
 clear(datfram, full="")       ## "" means we want all columns to be full, i.e. remove all records
                                  ## with any NA; only one record full
 clear(datfram, full=TRUE)     ## the same
@@ -325,8 +326,8 @@ clear(datfram, full=c("aa", "bb"))   ## we want only "aa" and "bb" to be full
 
 ## selecting columns according to nr of NAs/OKs
 clear(datfram, OKs=.7)               ## remove all columns which have LESS then 70% of OK values
-clear(datfram, OKs=8, except="bb")   ## remove all columns which have LESS then 8 OK values
-                                        ## but do not check "bb" (leave it).
+clear(datfram, OKs=8, except="ee")   ## remove all columns which have LESS then 8 OK values
+                                        ## but do not check "ee" (leave it).
 
 clear(datfram, NAs=.3)               ## remove all columns which have MORE then 30% of NA values
 clear(datfram, NAs=2, except="bb")   ## remove all columns which have MORE then 2 NA values

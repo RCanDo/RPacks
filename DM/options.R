@@ -14,7 +14,7 @@
 
 options(
     class.groups = list(
-        language = c("function", "call", "formula", "promise", "language", "{", "name",
+        language = c("function", "call", "formula", "promise", "language", "{",
                      "quosure"),   ## rlang
         implicite = c("integer", "character", "numeric", "double", "complex", "logical", "matrix", "array"),
         common = c("table", "data.frame", "factor",

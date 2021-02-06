@@ -1,4 +1,4 @@
-## ---------------------------------------------------------------------------------------------------------------------??
+## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE
 ##  extract.variable()
 ##
@@ -6,7 +6,7 @@
 ##  ....r
 ##    ...() , ...
 ##
-## ---------------------------------------------------------------------------------------------------------------------??
+## ---------------------------------------------------------------------------------------------------------------------—•°
 extract.variable = function(
          variable.name      	## variable name
         , datfram            	## data frame
@@ -28,12 +28,12 @@ extract.variable = function(
         , full.return	= FALSE	##	should the variable be returned full (with all outliers and NAs)? 
 		  								## default is FALSE and then only these values are returned which are non-NA and satisfy rules described below;
       )
-## ---------------------------------------------------------------------------------------------------------------------??
+## ---------------------------------------------------------------------------------------------------------------------—•°
 {
 ## Extracting variable with 'variable.name' from 'datfram' data frame in the following manner:
-#! 	? only non-NA values and only these which:
-## 	? are within [lft, rgt] interval BEFORE being transformed by the function passed to FUN (by name or call)  AND
-## 	? are also within [lft.fun, rgt.fun] interval AFTER being transformed by the function passed to FUN (by name or call).
+#! 	• only non-NA values and only these which:
+## 	• are within [lft, rgt] interval BEFORE being transformed by the function passed to FUN (by name or call)  AND
+## 	• are also within [lft.fun, rgt.fun] interval AFTER being transformed by the function passed to FUN (by name or call).
 ## If FUN is null then the second condition is ignored.
 ## By default lft = rgt = lft.fun = rgt.fun = NULL what means that min and max of the variable are taken.
 ## For numeric variable 'min.counts' is ignored.
@@ -86,7 +86,8 @@ extract.variable = function(
 ## with the following elements:
 ##    variable    	values of the returned variable (selected according to rules described above);
 ##    NAs         	= is.na( FUN( datfram[, variable.name] ) )
-##								indicates position of NAs of the variable in the data frame (after transformation by FUN if FUN is not NULL and 'transform' is TRUE);
+##						indicates position of NAs of the variable in the data frame
+##                      (after transformation by FUN if FUN is not NULL and 'transform' is TRUE);
 ##    selected    	indicates position of selected values of the variable in the data frame;
 #!                   	NA values are NOT within selected, thus if also NA values are needed use
 #!                   	datfram[ extract$selected | extract$NAs , variable.name ].
@@ -102,7 +103,7 @@ extract.variable = function(
 ##                      , selected = sum(selected)
 ##                      , rejected = sum(!(selected|NAs)) )   ## neither selected nor NA
 ##
-## ---------------------------------------------------------------------------------------------------------------------??
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
 if(!variable.name%in%names(datfram)){
    stop("Data frame does not contain variable with the given name.")
@@ -381,24 +382,27 @@ extract$log = log.datfram[nrow(log.datfram),]
    
 
 
-## ----------------------------------------------------------------------------------??
+## ----------------------------------------------------------------------------------—•°
 
 extract
-} ##----END----##
-## ---------------------------------------------------------------------------------------------------------------------??
+}  ##----END----##
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
 
-## ---------------------------------------------------------------------------------------------------------------------??
-## EXAMPLES ############################################################################################################??
-## ---------------------------------------------------------------------------------------------------------------------??
+## ---------------------------------------------------------------------------------------------------------------------—•°
+## EXAMPLES ------------------------------------------------------------------------------------------------------------—•°
+## ---------------------------------------------------------------------------------------------------------------------—•°
 
-## -------------------------------------------------------------------------------------------??
+## ---------------------------------------------------------------------------------------------------------------------—•°
 dummy = function(){
-## This is dummy function - it is not considered to be run.
+## This is dummy function — it is not considered to be run.
 ## It contains a series of commands to test functions defined above in this file
-## - in such a form you do not need to (un)comment it every session.
+## — in such a form you do not need to (un)comment it every session.
 ## They should be run line by line directly by the user.
-## -------------------------------------------------------------------------------------------??
+## -------------------------------------------------------------------------------------------------—•°
+## RELOADER — before it works you need to source("RCanDo.R"); it's best to use {package_name}.R within pack's dir.
+ loadPacksAK("Variable")
+## -------------------------------------------------------------------------------------------------—•°
 
 log.variables.df.old = log.variables.df
 
@@ -417,6 +421,5 @@ log.variables.df
 
 class(log.variables.df$FUNbody[1][[1]])
 
-}
-
-rm(dummy)
+## ---------------------------------------------------------------------------------------------------------------------—•°
+}; rm(dummy)

@@ -1,5 +1,5 @@
 ## ---------------------------------------------------------------------------------------------------------------------—•°
-## Goodness Of Fit for models' objects
+## Goodness Of Fit measures for models' objects
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 ## FUNCTIONS HERE    {package}
 ##  gof( ... )
@@ -17,7 +17,8 @@
 ## •
 ##
 ## DESCRIPTION
-##  Extracts the most important things from model object to asses goodness of fit.
+##  Extracts the most important things from model object i.e. Y, Yhat, residuals,
+##  to assess goodness of fit measures.
 ##
 ## -------------------------------------------------------------------------------------------------—•°
 ## AUTHOR: Arkadiusz Kasprzyk; rcando@int.pl
@@ -52,6 +53,7 @@ gof.gam = function(model)
 ##  MAE                 Mean Absolute Error  $\sum_i |y_i - yhat_i| / n$ -- scale sensitive
 ##  MAEp                Mean Absolute Error % i.e. percentage change  $\frac{\sum_i |y_i - yhat_i|}{ \sum_i y_i }$ -- good, scale agnostic
 ##  MAPE                Mean Absolute Percentage Error $\sum_i \frac{|y_i - yhat_i|}{y_i} / n$ -- not good! overshoots meand
+##  Max                 Maximum absolute error $\max_i(|y_i|)$
 ##  adjR2               adjusted R2
 ##  R2                  R2
 ##
@@ -72,7 +74,7 @@ if(model$family$family=="binomial"){
         Yhat <- model$fitted.values
         Y <- Y[,1]/sumY
     }else{
-        maxY <- max(apply(Y, 1, sum))                                    #!!!
+        maxY <- sumY[1]                                                  #!!!
         Y <- Y[,1]
         Yhat <- model$fitted.values * maxY     ##                        #???
     }
@@ -101,10 +103,11 @@ RMSE <- sqrt(TSS / n.obs)
 MAE <- mean(abs(resids))
 MAEp <- MAE / mean(Y)
 MAPE <- mean(abs(resids)/Y)
+Max <- max(abs(resids))
 
-VTSS <- TSS / df.null
-VMSS <- MSS / (df.null - df.residual)
-VRSS <- RSS / df.residual
+VTSS <- TSS / df.null                   ## Total
+VMSS <- MSS / (df.null - df.residual)   ## Model
+VRSS <- RSS / df.residual               ## Residual
 
 adjR2 <- 1 - VRSS / VTSS
 R2 <- 1 - RSS / TSS
@@ -117,10 +120,11 @@ result <- structure( list(
     y = Y, fitted = Yhat, residuals = resids,
     n.obs = n.obs, df.null = df.null, df.residual = df.residual, df.model = df.null - df.residual,
     n.vars = n.vars, n.smooth = n.smooth,
+    ## Goodness Of Fit measures ("metrics")
     deviance_explained = deviance_explained,
-    RMSE, MAE = MAE, MAEp = MAEp, MAPE = MAPE,
-    adjR2 = adjR2,
-    R2 = R2),
+    RMSE = RMSE, MAE = MAE, MAEp = MAEp, MAPE = MAPE, Max = Max,
+    adjR2 = adjR2, R2 = R2
+    ),
     class=c("gof.gam", "gof")
     )
 
@@ -142,13 +146,14 @@ gof
 ## ---------------------------------------------------------------------------------------------------------------------—•°
 
 summary.gof.gam <- function(gg, round=3){
-
-nams <- c( "adjR2", "R2", "deviance_explained", "MAE", "MAEp", "MAPE", "RMSE",
+##
+nams <- c( "adjR2", "R2", "deviance_explained",
+    "Max", "MAE", "MAEp", "MAPE", "RMSE",
     "n.obs", "n.vars", "n.smooth",
     "df.null", "df.model", "df.residual" )
 
 result <- round(unlist(gg[nams]), round)
-class(result) <- c("summary.gof.gam", "summary.gof", "summary")
+class(result) <- c("summary.gof.gam", "summary.gof", "summary", "list")  ## but it's not a list !!!
 result
 }  ##----END----##
 
@@ -164,7 +169,6 @@ for(n in names(sg)){
 }
 }
 
-
 ## -------------------------------------------------------------------------------------------------—•°
 print.summary.gof.gam <- function(sgg){
 for(n in names(sgg)){
@@ -175,26 +179,28 @@ for(n in names(sgg)){
 ## -------------------------------------------------------------------------------------------------—•°
 summary.gof.list <- function(...){
 ll <- list(...)
-stopifnot(all(ll, inherits, "summary.gof"))
-structure(ll, class("summary.gof.list", "list"))
+stopifnot(all(sapply(ll, inherits, "summary.gof")))
+structure(ll, class=c("summary.gof.list", "list"))
 }
 
 ## -------------------------------------------------------------------------------------------------—•°
 summary.gof.gam.list <- function(...){
 ll <- list(...)
-stopifnot(all(ll, inherits, "summary.gof.gam"))
-structure(ll, class("summary.gof.gam.list", "list"))
+stopifnot(all(sapply(ll, inherits, "summary.gof.gam")))
+structure(ll, class=c("list", "summary.gof.gam.list", "summary.gof.list"))
 }
 
 ## -------------------------------------------------------------------------------------------------—•°
 summary.summary.gof.list <- function(sgl){
-sgl.df <- as.data.frame(t(sapply(lapply(sgl, '['), unlist)))
+sgl.df <- as.data.frame(t(sapply(lapply(sgl, '['), unlist)))  ## tricky staff found by trials and errors
 class(sgl.df) <- union(class(sgl.df), "summary.gof.table")
+sgl.df
 }
 
 ## -------------------------------------------------------------------------------------------------—•°
 summary.summary.gof.gam.list <- function(sggl){
-sggl.df <- as.data.frame(t(sapply(lapply(sggl, '['), unlist)))
+## the same
+sggl.df <- as.data.frame(t(sapply(lapply(sggl, '['), unlist)))  ## tricky staff found by trials and errors
 class(sggl.df) <- union(class(sggl.df), "summary.gof.gam.table")
 sggl.df
 }
